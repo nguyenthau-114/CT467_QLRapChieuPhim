@@ -11,7 +11,7 @@ public class Phim_truycap {
 
     public List<phim> getAllPhim() {
         List<phim> dsPhim = new ArrayList<>();
-        String sql = "SELECT * FROM Phim";
+        String sql = "SELECT * FROM phim";
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -19,13 +19,13 @@ public class Phim_truycap {
 
             while (rs.next()) {
                 phim p = new phim(
-                    rs.getString("maphim"),
-                    rs.getString("tenphim"),
-                    rs.getString("theloai"),
-                    rs.getString("daodien"),
-                    rs.getInt("thoiluong"),
-                    rs.getString("ngaykhoichieu"),
-                    rs.getInt("dotuoichophep")
+                    rs.getString("maPhim"),
+                    rs.getString("tenPhim"),
+                    rs.getString("theLoai"),
+                    rs.getString("daoDien"),
+                    rs.getInt("thoiLuong"),
+                    rs.getString("ngayKhoiChieu"),
+                    rs.getInt("doTuoiChoPhep")
                 );
                 dsPhim.add(p);
             }
