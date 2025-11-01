@@ -1,0 +1,94 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+/* Toàn màn hình nền gradient */
+.root {
+    -fx-background-color: linear-gradient(to bottom, rgb(242,164,175), rgb(255,200,210));
+
+}
+
+/* Hộp đăng nhập */
+.login-box {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}
+
+/* Nút đăng nhập */
+.login-button {
+    -fx-background-color: linear-gradient(to bottom, #d3d3d3, #a9a9a9);
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 14px;
+    -fx-pref-width: 200;
+}
+
+/* Trường nhập */
+.text-field {
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+.top-bar {
+    -fx-background-color: #333333;
+    -fx-padding: 10;
+}
+
+.top-bar Label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Phần dưới thanh tiêu đề (sidebar + nội dung chính) */
+.dashboard-root {
+    -fx-background-color: linear-gradient(to bottom, rgb(242,164,175), rgb(255,200,210));
+}
+
+/* Sidebar menu (giữ tông hồng nhạt riêng) */
+.sidebar {
+    -fx-background-color: rgba(255, 240, 245, 0.95);
+    -fx-padding: 15;
+}
+
+/* Các nút trong sidebar */
+.side-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 6 12 6 12;
+}
+.side-btn:hover {
+    -fx-background-color: #f8b8c2;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+/* Ô thống kê trắng bo góc */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);
+    -fx-padding: 15;
+    -fx-min-width: 120;
+    -fx-min-height: 80;
+    -fx-alignment: CENTER;
+}
+.card Label {
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
+
+/* Tiêu đề phần nội dung */
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}

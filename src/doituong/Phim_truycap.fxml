@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="doituong.Phim_truycapController"
+            prefWidth="850.0" prefHeight="500.0">
+
+    <children>
+        <VBox spacing="10.0"
+              AnchorPane.topAnchor="10.0"
+              AnchorPane.leftAnchor="10.0"
+              AnchorPane.rightAnchor="10.0"
+              AnchorPane.bottomAnchor="10.0">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Label text="🎬 Danh sách phim"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="tablePhim" prefHeight="400.0">
+                <columns>
+                    <TableColumn fx:id="colMaPhim" text="Mã phim" prefWidth="90.0"/>
+                    <TableColumn fx:id="colTenPhim" text="Tên phim" prefWidth="200.0"/>
+                    <TableColumn fx:id="colTheLoai" text="Thể loại" prefWidth="100.0"/>
+                    <TableColumn fx:id="colDaoDien" text="Đạo diễn" prefWidth="130.0"/>
+                    <TableColumn fx:id="colThoiLuong" text="Thời lượng (phút)" prefWidth="120.0"/>
+                    <TableColumn fx:id="colNgayKhoiChieu" text="Ngày khởi chiếu" prefWidth="120.0"/>
+                    <TableColumn fx:id="colDoTuoi" text="Độ tuổi" prefWidth="80.0"/>
+                </columns>
+            </TableView>
+
+            <Button fx:id="btnTaiDuLieu"
+                    text="Tải dữ liệu"
+                    onAction="#taiDuLieu"
+                    style="-fx-background-color: #2c7be5; -fx-text-fill: white; -fx-font-weight: bold;"
+                    prefWidth="150.0"/>
+        </VBox>
+    </children>
+</AnchorPane>
+
