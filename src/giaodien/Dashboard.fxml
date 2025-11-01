@@ -2,52 +2,79 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600" prefWidth="1000" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600" prefWidth="1000"
+            stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="giaodien.DashboardController">
+
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #333; -fx-padding: 10;">
-            <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="🎬 Quản trị Rạp Chiếu Phim" />
-                <Pane HBox.hgrow="ALWAYS" />
-                <Label style="-fx-text-fill: white;" text="Xin chào, Admin" />
-                <Button style="-fx-background-color: #ff7070; -fx-text-fill: white; -fx-font-weight: bold;" stylesheets="@fxml.css" text="Đăng xuất" />
-            </children>
+        <HBox spacing="20" style="-fx-background-color:#333; -fx-padding:10;">
+            <Label style="-fx-text-fill:white; -fx-font-size:18px; -fx-font-weight:bold;"
+                   text="🎬 Quản trị Rạp Chiếu Phim"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label style="-fx-text-fill:white;" text="Xin chào, Admin"/>
+            <Button style="-fx-background-color:#ff7070; -fx-text-fill:white; -fx-font-weight:bold;"
+                    text="Đăng xuất"/>
         </HBox>
     </top>
 
+    <!-- LEFT: các nút kéo tự do -->
     <left>
-        <VBox prefHeight="553.0" prefWidth="192.0" spacing="10" style="-fx-background-color: #fff9e6; -fx-padding: 15;">
-            <children>
-                <Button text="🏠 Trang chủ" />
-                <Button text="🎞️ Quản lý phim" />
-                <Button text="🕒 Suất chiếu" />
-                <Button text="🎟️ Vé" />
-                <Button text="💰 Doanh thu" />
-            </children>
-        </VBox>
+        <AnchorPane fx:id="leftPane" prefWidth="192.0" style="-fx-background-color:#fff9e6; -fx-padding:15;">
+            <Button text="🏠 Trang chủ"            layoutX="16" layoutY="16"   styleClass="draggable-left"/>
+            <Button layoutX="16" layoutY="64"      text=" Quản lý phim"        styleClass="draggable-left"
+                    contentDisplay="LEFT" graphicTextGap="8">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true" pickOnBounds="true">
+                        <image><Image url="@icons/plastic-wrap.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button text="🕒 Quản lý suất chiếu"   layoutX="16" layoutY="112"  styleClass="draggable-left"/>
+            <Button layoutX="16" layoutY="160"     text=" Quản lý vé"          styleClass="draggable-left"
+                    contentDisplay="LEFT" graphicTextGap="8">
+                <graphic>
+                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true" pickOnBounds="true">
+                        <image><Image url="@icons/movie.png"/></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button text="💰 Quản lý doanh thu"    layoutX="16" layoutY="208"  styleClass="draggable-left"/>
+        </AnchorPane>
     </left>
 
+    <!-- CENTER: các khung kéo tự do -->
     <center>
-        <VBox alignment="TOP_CENTER" prefHeight="553.0" prefWidth="829.0" spacing="20" stylesheets="@fxml.css">
-            <children>
-                <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Tổng quan hệ thống" />
-                <HBox alignment="CENTER" spacing="15">
-                    <children>
-                        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-                            <Label text="🎞️ Phim" />
-                            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="24" />
-                        </VBox>
-                        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-                            <Label text="🎟️ Vé đã bán" />
-                            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="540" />
-                        </VBox>
-                    </children>
-                </HBox>
-            </children>
-        </VBox>
+        <AnchorPane fx:id="centerPane" style="-fx-background-color: transparent; -fx-padding:16;">
+            <Label fx:id="lblTitle" layoutX="0" layoutY="0"
+                   text="Tổng quan hệ thống"
+                   style="-fx-font-size:22px; -fx-font-weight:bold;"
+                   styleClass="draggable-center"/>
+
+            <VBox fx:id="cardPhim" layoutX="0" layoutY="40"
+                  style="-fx-background-color:white; -fx-background-radius:10; -fx-padding:15;
+                         -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.1),8,0,0,2);"
+                  styleClass="draggable-center">
+                <Label text="🎞️ Phim"/>
+                <Label text="24" style="-fx-font-size:20px; -fx-font-weight:bold;"/>
+            </VBox>
+
+            <VBox fx:id="cardVe" layoutX="190" layoutY="40"
+                  style="-fx-background-color:white; -fx-background-radius:10; -fx-padding:15;
+                         -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.1),8,0,0,2);"
+                  styleClass="draggable-center">
+                <Label text="🎟️ Vé đã bán"/>
+                <Label text="540" style="-fx-font-size:20px; -fx-font-weight:bold;"/>
+            </VBox>
+        </AnchorPane>
     </center>
 </BorderPane>

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class DBConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/htql_rap_phim";
     private static final String USER = "root";
-    private static final String PASSWORD = "Thau41120@";
+    private static final String PASSWORD = "NTDiemMy221105@";
 
     // 🔹 Hàm tạo kết nối, gọi ở bất kỳ đâu
     public static Connection getConnection() {
