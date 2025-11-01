@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+
 
 <AnchorPane prefHeight="600" prefWidth="800" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -16,36 +18,53 @@
 
             <children>
                 <!-- Icon người -->
-                <ImageView fx:id="avatarIcon" fitHeight="60" fitWidth="60" />
+                <ImageView fx:id="avatarIcon" fitHeight="60" fitWidth="60">
+                    <image>
+                        <Image url="@icons/user.png" />
+                    </image>
+                </ImageView>
 
+                
                 <!-- Tiêu đề -->
                 <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Đăng nhập" />
 
                 <!-- Email -->
                 <VBox alignment="CENTER_LEFT" spacing="5">
-                    <children>
-                        <Label style="-fx-font-weight: bold;" text="Email" />
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <children>
-                                <ImageView fx:id="mailIcon" fitHeight="18.0" fitWidth="18.0" />
-                                <TextField fx:id="emailField" prefHeight="33.0" prefWidth="328.0" promptText="Nhập email" styleClass="text-field" />
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="5">
+            <children>
+                <ImageView fx:id="mailIcon" fitHeight="18.0" fitWidth="18.0">
+                    <image>
+                        <Image url="@icons/gmail.png" />
+                    </image>
+                </ImageView>
+                <Label style="-fx-font-weight: bold;" text="Email" />
+            </children>
+        </HBox>
+        <TextField fx:id="emailField" prefHeight="33.0" prefWidth="403.0"
+                   promptText="Nhập email" styleClass="text-field" />
+    </children>
+</VBox>
+
 
                 <!-- Mật khẩu -->
                 <VBox alignment="CENTER_LEFT" spacing="5">
-                    <children>
-                        <Label style="-fx-font-weight: bold;" text="Mật khẩu" />
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <children>
-                                <ImageView fx:id="lockIcon" fitHeight="18" fitWidth="18" />
-                                <PasswordField fx:id="passwordField" prefHeight="33.0" prefWidth="403.0" promptText="Nhập mật khẩu" styleClass="text-field" />
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="5">
+            <children>
+                <ImageView fx:id="lockIcon" fitHeight="18" fitWidth="18">
+                    <image>
+                        <Image url="@icons/padlock.png" />
+                    </image>
+                </ImageView>
+                <Label style="-fx-font-weight: bold;" text="Mật khẩu" />
+            </children>
+        </HBox>
+        <PasswordField fx:id="passwordField" prefHeight="33.0" prefWidth="403.0"
+                       promptText="Nhập mật khẩu" styleClass="text-field" />
+    </children>
+</VBox>
+
 
                 <!-- Nút đăng nhập -->
                 <Button fx:id="loginButton" styleClass="login-button" text="Đăng nhập" />

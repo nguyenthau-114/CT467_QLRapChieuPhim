@@ -10,7 +10,7 @@ public class Mainapp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Load file movie.fxml (đảm bảo file này nằm trong cùng package hoặc dùng đường dẫn tuyệt đối)
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Phim_truycap.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/doituong/Phim_truycap.fxml"));
 Parent root = loader.load();
 
 //Phim_truycapController controller = loader.getController();
