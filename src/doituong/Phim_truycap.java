@@ -35,4 +35,44 @@ public class Phim_truycap {
 
         return dsPhim;
     }
+    public boolean insertPhim(phim p) {
+    String sql = "INSERT INTO phim(maPhim, tenPhim, theLoai, daoDien, thoiLuong, ngayKhoiChieu, doTuoiChoPhep) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try (Connection conn = DBConnection.getConnection();
+         java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, p.getMaPhim());
+        ps.setString(2, p.getTenPhim());
+        ps.setString(3, p.getTheLoai());
+        ps.setString(4, p.getDaoDien());
+        ps.setInt(5, p.getThoiLuong());
+        ps.setString(6, p.getNgayKhoiChieu());
+        ps.setInt(7, p.getDoTuoiChoPhep());
+        return ps.executeUpdate() > 0;
+    } catch (Exception e) { e.printStackTrace(); return false; }
+}
+
+    public boolean updatePhim(phim p) {
+        String sql = "UPDATE phim SET tenPhim=?, theLoai=?, daoDien=?, thoiLuong=?, ngayKhoiChieu=?, doTuoiChoPhep=? " +
+                     "WHERE maPhim=?";
+        try (Connection conn = DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, p.getTenPhim());
+            ps.setString(2, p.getTheLoai());
+            ps.setString(3, p.getDaoDien());
+            ps.setInt(4, p.getThoiLuong());
+            ps.setString(5, p.getNgayKhoiChieu());
+            ps.setInt(6, p.getDoTuoiChoPhep());
+            ps.setString(7, p.getMaPhim());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
+    public boolean deletePhim(String maPhim) {
+        String sql = "DELETE FROM phim WHERE maPhim=?";
+        try (Connection conn = DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maPhim);
+             return ps.executeUpdate() > 0;
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
 }
