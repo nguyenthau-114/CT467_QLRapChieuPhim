@@ -1,0 +1,31 @@
+.sidebar {
+    -fx-background-color: #1e293b;
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.sidebtn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.sidebtn-ghost:hover {
+    -fx-background-color: #334155;
+}
+
+.sidebtn-ghost.selected {
+    -fx-background-color: #475569;
+    -fx-font-weight: bold;
+}
+
+.header-red { -fx-background-color: #ef4444; -fx-text-fill: white; }
+.header-green { -fx-background-color: #22c55e; -fx-text-fill: white; }
+.header-blue { -fx-background-color: #3b82f6; -fx-text-fill: white; }
+.header-orange { -fx-background-color: #f97316; -fx-text-fill: white; }
+.header-yellow { -fx-background-color: #eab308; -fx-text-fill: black; }
