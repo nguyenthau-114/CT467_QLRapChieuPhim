@@ -79,10 +79,10 @@
 
                 <!-- Các nút thao tác -->
                 <HBox layoutX="94.0" layoutY="255.0" spacing="10">
-                    <Button fx:id="btnThem" onAction="#themPhong" text="Thêm" />
-                    <Button fx:id="btnSua" onAction="#suaPhong" text="Sửa" />
-                    <Button fx:id="btnXoa" onAction="#xoaPhong" text="Xóa" />
-                    <Button fx:id="btnTai" onAction="#taiDuLieu" text="Tải dữ liệu" />
+                    <Button fx:id="btnThem" onAction="#themPhong" text="Thêm" styleClass="action-btn" />
+                    <Button fx:id="btnSua" onAction="#suaPhong" text="Sửa" styleClass="action-btn" />
+                    <Button fx:id="btnXoa" onAction="#xoaPhong" text="Xóa" styleClass="action-btn" />
+                    <Button fx:id="btnTai" onAction="#taiDuLieu" text="Tải dữ liệu" styleClass="action-btn" />
                 </HBox>
 
                 <!-- Bảng dữ liệu -->

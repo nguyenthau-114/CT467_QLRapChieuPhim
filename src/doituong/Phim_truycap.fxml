@@ -52,26 +52,24 @@
             </padding>
          <AnchorPane>
             <children>
+                <Label layoutX="20" layoutY="20" style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#333;" text="QUẢN LÝ PHIM" />
                   <!-- HEADER -->
-                  <HBox spacing="20">
-                      <children>
-                     <Label text="Tìm kiếm" />
-                      </children>
-                  </HBox>
+                  <HBox spacing="20" />
                <Button layoutX="925.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="sidebtn" text="Đăng xuất" />
-               <TextField fx:id="tfThoiLuong1" layoutX="96.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="171.0" />
+               <TextField fx:id="tfThoiLuong1" layoutX="621.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="231.0" />
+               <Label layoutX="536.0" layoutY="15.0" text="Tìm kiếm" />
             </children>
          </AnchorPane>
-         <AnchorPane>
+         <AnchorPane prefHeight="238.0" prefWidth="789.0">
             <children>
       
                   <!-- FORM NHẬP -->
-                  <GridPane hgap="15" layoutX="12.0" layoutY="34.0" vgap="10">
+                  <GridPane hgap="30.0" layoutX="22.0" layoutY="16.0" vgap="10.0">
                       <columnConstraints>
-                          <ColumnConstraints percentWidth="15" />
-                          <ColumnConstraints percentWidth="35" />
-                          <ColumnConstraints percentWidth="15" />
-                          <ColumnConstraints percentWidth="35" />
+                          <ColumnConstraints percentWidth="15.0" />
+                          <ColumnConstraints percentWidth="35.0" />
+                          <ColumnConstraints percentWidth="15.0" />
+                          <ColumnConstraints percentWidth="35.0" />
                       </columnConstraints>
                       <padding>
                           <Insets bottom="10" left="10" right="10" top="10" />
@@ -98,7 +96,7 @@
                           <Label text="Đạo diễn:" GridPane.rowIndex="3" />
                           <TextField fx:id="tfDaoDien" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       
-                          <Button onAction="#onChonAnh" text="Chọn hình ảnh" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                          <Button onAction="#onChonAnh" prefHeight="23.0" prefWidth="116.0" text="Chọn hình ảnh" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                           <TextField fx:id="tfThoiLuong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="171.0" GridPane.columnIndex="3" />
                       </children>
                   <rowConstraints>
@@ -112,12 +110,12 @@
          </AnchorPane>
 
             <!-- HÀNG NÚT -->
-            <HBox alignment="CENTER_LEFT" spacing="15">
+            <HBox layoutX="94.0" layoutY="255.0" spacing="15">
                 <children>
-                    <Button onAction="#onThem" styleClass="btn" text="Thêm" />
-                    <Button onAction="#onXoa" styleClass="btn" text="Xóa" />
-                    <Button onAction="#onSua" styleClass="btn" text="Sửa" />
-                    <Button onAction="#onTaiDuLieu" styleClass="btn-blue" text="Tải dữ liệu" />
+                    <Button fx:id="btnThemPhim" onAction="#onThem" text="Thêm" styleClass="action-btn"/>
+                    <Button fx:id="btnSuaPhim" onAction="#onSua" text="Sửa" styleClass="action-btn"/>
+                    <Button fx:id="btnXoaPhim" onAction="#onXoa" text="Xóa" styleClass="action-btn"/>
+                    <Button fx:id="btnTaiPhim" onAction="#onTaiDuLieu" text="Tải dữ liệu" styleClass="action-btn"/>
                 </children>
             </HBox>
 

@@ -1,11 +1,13 @@
 package Phong;
 
 public class PhongChieu {
+
     private String maphong;
     private String tenphong;
     private int soghe;
     private String loaiphong;
 
+    // ----------- CONSTRUCTOR -----------
     public PhongChieu(String maphong, String tenphong, int soghe, String loaiphong) {
         this.maphong = maphong;
         this.tenphong = tenphong;
@@ -13,6 +15,7 @@ public class PhongChieu {
         this.loaiphong = loaiphong;
     }
 
+    // ----------- GETTER & SETTER -----------
     public String getMaphong() {
         return maphong;
     }
@@ -43,5 +46,16 @@ public class PhongChieu {
 
     public void setLoaiphong(String loaiphong) {
         this.loaiphong = loaiphong;
+    }
+
+    // ----------- TO STRING (TÙY CHỌN) -----------
+    @Override
+    public String toString() {
+        return "PhongChieu{" +
+                "maphong='" + maphong + '\'' +
+                ", tenphong='" + tenphong + '\'' +
+                ", soghe=" + soghe +
+                ", loaiphong='" + loaiphong + '\'' +
+                '}';
     }
 }
