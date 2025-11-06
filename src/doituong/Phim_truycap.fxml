@@ -26,10 +26,11 @@
             </padding>
             <children>
                 <Label styleClass="sidebar-title" text="Quản trị" />
-                <Button styleClass="sidebtn" text="Doanh Thu" />
-                <Button styleClass="sidebtn" text="Dữ Liệu" />
-                <Button styleClass="sidebtn" text="Nhân Viên" />
-                <Button styleClass="sidebtn" text="Khách Hàng" />
+                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-red" text="Doanh Thu" />
+                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-green" text="Dữ Liệu" />
+                 <Button prefHeight="23.0" prefWidth="108.0" styleClass="header-blue" text="Khách Hàng" />
+                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-orange" text="Nhân Viên" />
+                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-yellow" text="Tài Khoản" />
                 <Separator />
                 <Button styleClass="sidebtn-ghost" text="Loại màn hình" />
                 <Button styleClass="sidebtn-ghost" text="Phòng Chiếu" />
@@ -51,12 +52,9 @@
             <!-- HEADER -->
             <HBox spacing="20">
                 <children>
-                    <Button styleClass="header-red" text="Doanh Thu" />
-                    <Button styleClass="header-green" text="Dữ Liệu" />
-                    <Button styleClass="header-orange" text="Nhân Viên" />
-                    <Button styleClass="header-blue" text="Khách Hàng" />
-                    <Button styleClass="header-yellow" text="Tài Khoản" />
                <Button styleClass="sidebtn" text="Đăng xuất" />
+               <Label text="Tìm kiếm" />
+               <TextField fx:id="tfThoiLuong1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="171.0" />
                 </children>
             </HBox>
 
