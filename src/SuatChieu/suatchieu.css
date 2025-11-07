@@ -1,0 +1,127 @@
+/* ===========================
+   SIDEBAR
+   =========================== */
+.sidebar {
+    -fx-background-color: #1e293b; /* Nền xanh đen */
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Các nút menu bên trái */
+.sidebtn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 5 10;
+}
+
+.sidebtn-ghost:hover {
+    -fx-background-color: #334155;
+}
+
+.sidebtn-ghost.selected {
+    -fx-background-color: #475569;
+    -fx-font-weight: bold;
+}
+
+/* Nút đầu mục (Doanh Thu, Dữ Liệu,...) */
+.header-red { -fx-background-color: #ef4444; -fx-text-fill: white; }
+.header-green { -fx-background-color: #22c55e; -fx-text-fill: white; }
+.header-blue { -fx-background-color: #3b82f6; -fx-text-fill: white; }
+.header-orange { -fx-background-color: #f97316; -fx-text-fill: white; }
+.header-yellow { -fx-background-color: #eab308; -fx-text-fill: black; }
+
+/* ===========================
+   NÚT THAO TÁC (Thêm, Sửa, Xóa, Tải dữ liệu)
+   =========================== */
+.action-btn {
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-padding: 6 14;
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* Hiệu ứng khi rê chuột */
+.action-btn:hover {
+    -fx-background-color: #0078D7; /* Xanh sáng khi hover */
+    -fx-text-fill: white;          /* Chữ trắng */
+    -fx-border-color: #0078D7;     /* Viền cùng màu */
+    -fx-effect: dropshadow(gaussian, rgba(0,120,215,0.4), 8, 0.2, 0, 0);
+}
+
+/* ===========================
+   LABEL & TIÊU ĐỀ
+   =========================== */
+.label {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+.label.title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* ===========================
+   TEXTFIELD & DATEPICKER
+   =========================== */
+.text-field, .date-picker {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #ccc;
+    -fx-padding: 4 8;
+    -fx-background-color: white;
+}
+
+.text-field:focused, .date-picker:focused {
+    -fx-border-color: #0078D7;
+    -fx-effect: dropshadow(gaussian, rgba(0,120,215,0.3), 5, 0.3, 0, 0);
+}
+
+/* ===========================
+   TABLEVIEW
+   =========================== */
+.table-view {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f1f5f9;
+}
+
+.table-view .column-header, 
+.table-view .filler {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #111;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #ffffff;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f8fafc;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+}

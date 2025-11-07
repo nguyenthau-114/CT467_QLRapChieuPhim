@@ -65,8 +65,7 @@ public class PhongChieuController {
                 ));
             }
             tablePhong.setItems(dsPhong);
-
-        } catch (SQLException e) {
+            } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -205,7 +204,7 @@ public class PhongChieuController {
         String maPhong = txtMaPhong.getText().trim();
 
         if (maPhong.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn phòng chiếu cần xóa!", Alert.AlertType.WARNING);
+        showAlert("Thiếu thông tin", "Vui lòng chọn phòng chiếu cần xóa!", Alert.AlertType.WARNING);
             return;
         }
 
@@ -257,4 +256,5 @@ public class PhongChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-}
+}    
+        
