@@ -1,5 +1,5 @@
 package Phong;
-
+import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -256,5 +256,9 @@ public class PhongChieuController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    @FXML
+    private void dangXuat(ActionEvent event) {
+        System.out.println("Đăng xuất thành công!");
     }
 }

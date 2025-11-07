@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 
 <BorderPane prefHeight="650" prefWidth="1100" stylesheets="@phongchieu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Phong.PhongChieuController">
 
@@ -41,14 +42,28 @@
             </children>
         </VBox>
     </left>
-   <right>
+    <center>
         <AnchorPane style="-fx-background-color: #e6fff0; -fx-padding: 20;" BorderPane.alignment="CENTER">
             <children>
+
                 <!-- Tiêu đề -->
                 <Label layoutX="20" layoutY="20" style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#333;" text="QUẢN LÝ PHÒNG CHIẾU" />
 
+                <!-- HEADER GỌN GÀNG, ĐẸP HƠN -->
+                <HBox layoutY="60" spacing="15" alignment="CENTER_RIGHT" 
+                      prefHeight="40" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+                    <children>
+                        <Label text="Tìm kiếm:" style="-fx-font-size: 13px; -fx-text-fill: #333;" />
+                        <TextField fx:id="tfTimKiem" promptText="Nhập tên phòng cần tìm..." prefWidth="220" />
+                        <Button text="🔍" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnDangXuat" onAction="#dangXuat"
+                                text="Đăng xuất"
+                                style="-fx-background-color: #ff5252; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15 5 15; -fx-background-radius: 6;" />
+                    </children>
+                </HBox>
                 <!-- Form nhập liệu -->
-                <GridPane hgap="50.0" layoutX="47.0" layoutY="89.0" prefHeight="140.0" prefWidth="900.0" vgap="20.0">
+                <GridPane hgap="50.0" layoutX="47.0" layoutY="120.0" prefHeight="140.0" prefWidth="900.0" vgap="20.0">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="18.0" />
                         <ColumnConstraints percentWidth="25.0" />
@@ -58,27 +73,18 @@
 
                     <children>
                         <Label text="Mã phòng:" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: P001)" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" />
-
+                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: P001)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="Tên phòng:" GridPane.rowIndex="3" />
                         <TextField fx:id="txtTenPhong" promptText="Nhập tên phòng" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-                        <Label prefHeight="18.0" prefWidth="55.0" text="Số ghế:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label text="Số ghế:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField fx:id="txtSoGhe" promptText="Nhập số ghế" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-
-                        <Label prefHeight="18.0" prefWidth="80.0" text="Loại phòng:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Label text="Loại phòng:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                         <TextField fx:id="txtLoaiPhong" promptText="2D / 3D / IMAX" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                     </children>
-               <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints />
-                  <RowConstraints maxHeight="42.66669616699218" minHeight="25.866644287109374" prefHeight="25.866644287109374" />
-                  <RowConstraints maxHeight="26.13335571289062" minHeight="8.533303833007821" prefHeight="26.13335571289062" />
-               </rowConstraints>
                 </GridPane>
 
                 <!-- Các nút thao tác -->
-                <HBox layoutX="94.0" layoutY="255.0" spacing="10">
+                <HBox layoutX="94.0" layoutY="290.0" spacing="10">
                     <Button fx:id="btnThem" onAction="#themPhong" text="Thêm" styleClass="action-btn" />
                     <Button fx:id="btnSua" onAction="#suaPhong" text="Sửa" styleClass="action-btn" />
                     <Button fx:id="btnXoa" onAction="#xoaPhong" text="Xóa" styleClass="action-btn" />
@@ -86,15 +92,16 @@
                 </HBox>
 
                 <!-- Bảng dữ liệu -->
-                <TableView fx:id="tablePhong" layoutX="40" layoutY="320" prefHeight="300" prefWidth="950">
+                <TableView fx:id="tablePhong" layoutX="40" layoutY="350" prefHeight="300" prefWidth="950">
                     <columns>
-                        <TableColumn fx:id="colMaPhong" prefWidth="231.4667205810547" text="Mã phòng" />
-                        <TableColumn fx:id="colTenPhong" prefWidth="235.73333740234375" text="Tên phòng" />
-                        <TableColumn fx:id="colSoGhe" prefWidth="253.0665283203125" text="Số ghế" />
-                        <TableColumn fx:id="colLoaiPhong" prefWidth="233.33331298828125" text="Loại phòng" />
+                        <TableColumn fx:id="colMaPhong" prefWidth="231.4667" text="Mã phòng" />
+                        <TableColumn fx:id="colTenPhong" prefWidth="235.7333" text="Tên phòng" />
+                        <TableColumn fx:id="colSoGhe" prefWidth="253.0665" text="Số ghế" />
+                        <TableColumn fx:id="colLoaiPhong" prefWidth="233.3333" text="Loại phòng" />
                     </columns>
                 </TableView>
+
             </children>
         </AnchorPane>
-   </right>
+   </center>
 </BorderPane>

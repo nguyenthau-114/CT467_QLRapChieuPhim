@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="700" prefWidth="1200" stylesheets="@Phim.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doituong.Phim_truycapController">
 
@@ -26,19 +27,19 @@
                 <Insets bottom="15" left="10" right="10" top="15" />
             </padding>
             <children>
-                <Label styleClass="sidebar-title" text="Quản trị" />
-                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-red" text="Doanh Thu" />
-                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-green" text="Dữ Liệu" />
-                 <Button prefHeight="23.0" prefWidth="108.0" styleClass="header-blue" text="Khách Hàng" />
-                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-orange" text="Nhân Viên" />
-                 <Button prefHeight="23.0" prefWidth="107.0" styleClass="header-yellow" text="Tài Khoản" />
+                <Label prefHeight="50.0" prefWidth="158.0" style="-fx-font: 200;" styleClass="sidebar-title" text="Quản trị">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+                 <Button prefHeight="32.0" prefWidth="107.0" styleClass="header-red" text="Doanh Thu" />
+                 <Button prefHeight="34.0" prefWidth="107.0" styleClass="header-green" text="Dữ Liệu" />
+                 <Button prefHeight="35.0" prefWidth="108.0" styleClass="header-blue" text="Khách Hàng" />
+                 <Button prefHeight="34.0" prefWidth="107.0" styleClass="header-orange" text="Nhân Viên" />
+                 <Button prefHeight="34.0" prefWidth="107.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE" />
                 <Separator />
-                <Button styleClass="sidebtn-ghost" text="Loại màn hình" />
-                <Button styleClass="sidebtn-ghost" text="Phòng Chiếu" />
-                <Button styleClass="sidebtn-ghost" text="Thể Loại" />
                 <Button styleClass="sidebtn-ghost selected" text="Phim" />
-                <Button styleClass="sidebtn-ghost" text="Định Dạng" />
-                <Button styleClass="sidebtn-ghost" text="Lịch Chiếu" />
+                <Button styleClass="sidebtn-ghost" text="Suất Chiếu" />
+                <Button styleClass="sidebtn-ghost" text="Phòng Chiếu" />
                 <Button styleClass="sidebtn-ghost" text="Vé" />
             </children>
         </VBox>
@@ -96,7 +97,7 @@
                           <Label text="Đạo diễn:" GridPane.rowIndex="3" />
                           <TextField fx:id="tfDaoDien" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       
-                          <Button onAction="#onChonAnh" prefHeight="23.0" prefWidth="116.0" text="Chọn hình ảnh" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                          <Button onAction="#onChonAnh" prefHeight="23.0" prefWidth="116.0" text="Chọn hình ảnh" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                           <TextField fx:id="tfThoiLuong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="171.0" GridPane.columnIndex="3" />
                       </children>
                   <rowConstraints>
@@ -112,10 +113,10 @@
             <!-- HÀNG NÚT -->
             <HBox layoutX="94.0" layoutY="255.0" spacing="15">
                 <children>
-                    <Button fx:id="btnThemPhim" onAction="#onThem" text="Thêm" styleClass="action-btn"/>
-                    <Button fx:id="btnSuaPhim" onAction="#onSua" text="Sửa" styleClass="action-btn"/>
-                    <Button fx:id="btnXoaPhim" onAction="#onXoa" text="Xóa" styleClass="action-btn"/>
-                    <Button fx:id="btnTaiPhim" onAction="#onTaiDuLieu" text="Tải dữ liệu" styleClass="action-btn"/>
+                    <Button fx:id="btnThemPhim" onAction="#onThem" styleClass="action-btn" text="Thêm" />
+                    <Button fx:id="btnSuaPhim" onAction="#onSua" styleClass="action-btn" text="Sửa" />
+                    <Button fx:id="btnXoaPhim" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
+                    <Button fx:id="btnTaiPhim" onAction="#onTaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
                 </children>
             </HBox>
 
