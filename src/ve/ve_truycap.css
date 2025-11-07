@@ -145,3 +145,6 @@
     -fx-background-color: #bfdbfe;
     -fx-text-fill: #111827;
 }
+.topbar-button:hover {
+    -fx-background-color: #c0392b;
+}

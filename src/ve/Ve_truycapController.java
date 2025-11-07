@@ -1,0 +1,187 @@
+package ve;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import java.sql.*;
+import ketnoi_truyxuat.DBConnection;
+
+public class Ve_truycapController {
+
+    @FXML private TextField tfMaVe, tfGiaVe, tfTrangThai, tfMaSuatChieu, tfMaKhachHang, tfMaGhe, tfTimKiem;
+    @FXML private DatePicker dpNgayDat;
+    @FXML private TableView<ve> tableVe;
+    @FXML private TableColumn<ve, String> colMaVe, colTrangThai, colMaSuatChieu, colMaKhachHang, colMaGhe;
+    @FXML private TableColumn<ve, Date> colNgayDat;
+    @FXML private TableColumn<ve, Double> colGiaVe;
+
+    private ObservableList<ve> danhSachVe = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+        colMaVe.setCellValueFactory(cell -> cell.getValue().maveProperty());
+        colNgayDat.setCellValueFactory(cell -> cell.getValue().ngaydatProperty());
+        colGiaVe.setCellValueFactory(cell -> cell.getValue().giaveProperty().asObject());
+        colTrangThai.setCellValueFactory(cell -> cell.getValue().trangthaiProperty());
+        colMaSuatChieu.setCellValueFactory(cell -> cell.getValue().suatchieu_masuatchieuProperty());
+        colMaKhachHang.setCellValueFactory(cell -> cell.getValue().khachhang_makhachhangProperty());
+        colMaGhe.setCellValueFactory(cell -> cell.getValue().ghe_magheProperty());
+
+        //taiDuLieu();
+
+        // Khi chọn 1 dòng thì đổ lên form
+        tableVe.setOnMouseClicked(event -> {
+            ve selected = tableVe.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                tfMaVe.setText(selected.getMave());
+                dpNgayDat.setValue(selected.getNgaydat().toLocalDate());
+                tfGiaVe.setText(String.valueOf(selected.getGiave()));
+                tfTrangThai.setText(selected.getTrangthai());
+                tfMaSuatChieu.setText(selected.getSuatchieu_masuatchieu());
+                tfMaKhachHang.setText(selected.getKhachhang_makhachhang());
+                tfMaGhe.setText(selected.getGhe_maghe());
+            }
+        });
+    }
+
+    // ===========================
+    // 🔹 TẢI DỮ LIỆU
+    // ===========================
+    @FXML
+    private void taiDuLieu() {
+        danhSachVe.clear();
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM ve")) {
+
+            while (rs.next()) {
+                ve ve = new ve(
+                        rs.getString("mave"),
+                        rs.getDate("ngaydat"),
+                        rs.getDouble("giave"),
+                        rs.getString("trangthai"),
+                        rs.getString("suatchieu_masuatchieu"),
+                        rs.getString("khachhang_makhachhang"),
+                        rs.getString("ghe_maghe")
+                );
+                danhSachVe.add(ve);
+            }
+            tableVe.setItems(danhSachVe);
+        } catch (SQLException e) {
+            showAlert("Lỗi", "Không thể tải dữ liệu vé:\n" + e.getMessage());
+        }
+    }
+
+    // ===========================
+    // 🔹 THÊM
+    // ===========================
+    @FXML
+    private void onThem() {
+        if (tfMaVe.getText().isEmpty()) {
+            showAlert("Thông báo", "Vui lòng nhập mã vé!");
+            return;
+        }
+
+        String sql = "INSERT INTO ve (mave, ngaydat, giave, trangthai, suatchieu_masuatchieu, khachhang_makhachhang, ghe_maghe) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, tfMaVe.getText());
+            ps.setDate(2, Date.valueOf(dpNgayDat.getValue()));
+            ps.setDouble(3, Double.parseDouble(tfGiaVe.getText()));
+            ps.setString(4, tfTrangThai.getText());
+            ps.setString(5, tfMaSuatChieu.getText());
+            ps.setString(6, tfMaKhachHang.getText());
+            ps.setString(7, tfMaGhe.getText());
+
+            ps.executeUpdate();
+            showAlert("Thành công", "Đã thêm vé mới!");
+            taiDuLieu();
+            clearForm();
+
+        } catch (SQLException e) {
+            showAlert("Lỗi", "Không thể thêm vé:\n" + e.getMessage());
+        }
+    }
+
+    // ===========================
+    // 🔹 SỬA
+    // ===========================
+    @FXML
+    private void onSua() {
+        ve selected = tableVe.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Thông báo", "Vui lòng chọn vé cần sửa!");
+            return;
+        }
+
+        String sql = "UPDATE ve SET ngaydat=?, giave=?, trangthai=?, suatchieu_masuatchieu=?, khachhang_makhachhang=?, ghe_maghe=? WHERE mave=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(dpNgayDat.getValue()));
+            ps.setDouble(2, Double.parseDouble(tfGiaVe.getText()));
+            ps.setString(3, tfTrangThai.getText());
+            ps.setString(4, tfMaSuatChieu.getText());
+            ps.setString(5, tfMaKhachHang.getText());
+            ps.setString(6, tfMaGhe.getText());
+            ps.setString(7, tfMaVe.getText());
+
+            ps.executeUpdate();
+            showAlert("Thành công", "Đã cập nhật thông tin vé!");
+            taiDuLieu();
+            clearForm();
+
+        } catch (SQLException e) {
+            showAlert("Lỗi", "Không thể sửa vé:\n" + e.getMessage());
+        }
+    }
+
+    // ===========================
+    // 🔹 XÓA
+    // ===========================
+    @FXML
+    private void onXoa() {
+        ve selected = tableVe.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Thông báo", "Vui lòng chọn vé cần xóa!");
+            return;
+        }
+
+        String sql = "DELETE FROM ve WHERE mave=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, selected.getMave());
+            ps.executeUpdate();
+            showAlert("Thành công", "Đã xóa vé!");
+            taiDuLieu();
+            clearForm();
+
+        } catch (SQLException e) {
+            showAlert("Lỗi", "Không thể xóa vé:\n" + e.getMessage());
+        }
+    }
+
+    // ===========================
+    // 🔹 HÀM TIỆN ÍCH
+    // ===========================
+    private void clearForm() {
+        tfMaVe.clear();
+        tfGiaVe.clear();
+        tfTrangThai.clear();
+        tfMaSuatChieu.clear();
+        tfMaKhachHang.clear();
+        tfMaGhe.clear();
+        dpNgayDat.setValue(null);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+}
