@@ -14,8 +14,8 @@
 .sidebar-title {
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
-    -fx-font-size: 22;
-    -fx-padding: 0 0 10 0;
+    -fx-font-size: 18;
+    -fx-padding: 0 0 10 4;
 }
 
 /* Nút ở sidebar */
@@ -144,4 +144,7 @@
 .table-row-cell:selected {
     -fx-background-color: #bfdbfe;
     -fx-text-fill: #111827;
+}
+.topbar-button:hover {
+    -fx-background-color: #c0392b;
 }
