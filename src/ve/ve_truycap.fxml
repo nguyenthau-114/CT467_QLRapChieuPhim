@@ -13,9 +13,8 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="700" prefWidth="1200" stylesheets="@ve_truycap.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ve.Ve_truycapController">
@@ -47,103 +46,87 @@
 
     <!-- NỘI DUNG CHÍNH -->
     <center>
-        <!-- StackPane cho phép thanh đen nằm full width -->
-        <StackPane style="-fx-background-color:#c8f0d0;">
-            <children>
-                <VBox prefHeight="Infinity" prefWidth="Infinity" spacing="0">
+    <AnchorPane style="-fx-background-color: #e6fff0; -fx-padding: 20;" BorderPane.alignment="CENTER">
+        <children>
 
-                    <!-- THANH ĐEN FULL TRONG KHUNG XANH -->
-                    <HBox alignment="CENTER_LEFT" maxWidth="Infinity" spacing="20" style="-fx-background-color:linear-gradient(to right, #1c1c1c, #333);                                  -fx-padding:10 25;                                  -fx-background-radius:0;                                  -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.3), 6,0,0,1);">
-                        <children>
-                            <Label style="-fx-text-fill:white; -fx-font-size:25px; -fx-font-weight:bold;" text="🎬 Quản Lí Vé " />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Label style="-fx-text-fill:white; -fx-font-size:13px;" />
-                            <Button style="-fx-background-color:#e74c3c; -fx-text-fill:white;                                            -fx-font-weight:bold; -fx-background-radius:6;                                            -fx-cursor:hand;" text="Đăng xuất" />
-                        </children>
-                    </HBox>
+            <!-- Tiêu đề -->
+            <Label layoutX="20" layoutY="20" style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#333;" text="QUẢN LÝ VÉ" />
 
-                    <!-- KHỐI NỘI DUNG -->
-                    <VBox spacing="15" styleClass="main-content">
-                        <padding>
-                            <Insets bottom="20" left="20" right="20" top="20" />
-                        </padding>
+            <!-- Thanh tìm kiếm + nút đăng xuất -->
+            <HBox alignment="CENTER_RIGHT" layoutY="60" prefHeight="40" spacing="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+                <children>
+                    <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
+                    <TextField fx:id="tfTimKiem" prefWidth="220" promptText="Nhập mã vé, khách hàng..." />
+                    <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 5 12 5 12; -fx-background-radius: 6;" text="🔍" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Button fx:id="btnDangXuat" onAction="#dangXuat" style="-fx-background-color: #ff5252; -fx-text-fill: white; -fx-font-weight: bold;                                    -fx-padding: 5 15 5 15; -fx-background-radius: 6;" text="Đăng xuất" />
+                </children>
+            </HBox>
 
-                        <!-- HEADER -->
-                        <AnchorPane>
-                            <children>
-                                <Label layoutX="199.0" layoutY="4.0" text="Tìm kiếm" />
-                                <TextField fx:id="tfTimKiem" layoutX="272.0" layoutY="3.0" prefWidth="231" />
-                            </children>
-                        </AnchorPane>
+            <!-- FORM NHẬP LIỆU -->
+            <GridPane hgap="50" layoutX="47" layoutY="120" prefHeight="140" prefWidth="900" vgap="20">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="18.0" />
+                    <ColumnConstraints percentWidth="25.0" />
+                    <ColumnConstraints percentWidth="18.0" />
+                    <ColumnConstraints percentWidth="25.0" />
+                </columnConstraints>
+                <children>
+                    <Label text="Mã vé:" GridPane.rowIndex="0" />
+                    <TextField fx:id="tfMaVe" promptText="Nhập mã vé" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <!-- FORM NHẬP -->
-                        <AnchorPane prefHeight="238" prefWidth="900">
-                            <children>
-                                <GridPane hgap="30" layoutX="10" layoutY="15" vgap="10" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="15">
-                                    <columnConstraints>
-                                        <ColumnConstraints percentWidth="20" />
-                                        <ColumnConstraints percentWidth="35" />
-                                        <ColumnConstraints percentWidth="20" />
-                                        <ColumnConstraints percentWidth="30" />
-                                    </columnConstraints>
+                    <Label text="Ngày đặt:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <DatePicker fx:id="dpNgayDat" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                                    <children>
-                                        <Label text="Mã vé:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                        <TextField fx:id="tfMaVe" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label text="Giá vé:" GridPane.rowIndex="1" />
+                    <TextField fx:id="tfGiaVe" promptText="Nhập giá vé" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                        <Label text="Ngày đặt:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                                        <DatePicker fx:id="dpNgayDat" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                    <Label text="Trạng thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <TextField fx:id="tfTrangThai" promptText="Đã thanh toán / Hủy" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                                        <Label text="Giá vé:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                        <TextField fx:id="tfGiaVe" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label text="Mã suất chiếu:" GridPane.rowIndex="2" />
+                    <TextField fx:id="tfMaSuatChieu" promptText="VD: SC001" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                                        <Label text="Trạng thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <TextField fx:id="tfTrangThai" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label text="Mã khách hàng:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <TextField fx:id="tfMaKhachHang" promptText="VD: KH01" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-                                        <Label text="Mã suất chiếu:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                        <TextField fx:id="tfMaSuatChieu" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label text="Mã ghế:" GridPane.rowIndex="3" />
+                    <TextField fx:id="tfMaGhe" promptText="VD: PC01_A01" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                </children>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+            </GridPane>
 
-                                        <Label text="Mã khách hàng:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                        <TextField fx:id="tfMaKhachHang" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <!-- NÚT THAO TÁC -->
+            <HBox layoutX="94" layoutY="290" spacing="10">
+                <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
+                <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
+                <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
+                <Button fx:id="btnTaiDuLieu" onAction="#taiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
+               <padding>
+                  <Insets top="25.0" />
+               </padding>
+            </HBox>
 
-                                        <Label text="Mã ghế:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                        <TextField fx:id="tfMaGhe" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    </children>
-                           <rowConstraints>
-                              <RowConstraints />
-                              <RowConstraints />
-                              <RowConstraints />
-                              <RowConstraints />
-                           </rowConstraints>
-                                </GridPane>
-                            </children>
-                        </AnchorPane>
+            <!-- BẢNG DỮ LIỆU (responsive) -->
+            <TableView fx:id="tableVe" layoutX="24.0" layoutY="407.2" prefHeight="290.0" prefWidth="1005.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="350.0" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colMaVe" text="Mã vé" />
+                    <TableColumn fx:id="colNgayDat" text="Ngày đặt" />
+                    <TableColumn fx:id="colGiaVe"  text="Giá vé" />
+                    <TableColumn fx:id="colTrangThai"  text="Trạng thái" />
+                    <TableColumn fx:id="colMaSuatChieu"  text="Mã suất chiếu" />
+                    <TableColumn fx:id="colMaKhachHang" text="Mã khách hàng" />
+                    <TableColumn fx:id="colMaGhe" text="Mã ghế" />
+                </columns>
+            </TableView>
 
-                        <!-- HÀNG NÚT -->
-                        <HBox alignment="CENTER" spacing="15">
-                            <children>
-                                <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
-                                <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
-                                <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
-                                <Button fx:id="btnTaiDuLieu" onAction="#taiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
-                            </children>
-                        </HBox>
+        </children>
+    </AnchorPane>
+</center>
 
-                        <!-- BẢNG DỮ LIỆU -->
-                        <TableView fx:id="tableVe" prefHeight="350">
-                            <columns>
-                                <TableColumn fx:id="colMaVe" text="Mã vé" />
-                                <TableColumn fx:id="colNgayDat" text="Ngày đặt" />
-                                <TableColumn fx:id="colGiaVe" text="Giá vé" />
-                                <TableColumn fx:id="colTrangThai" text="Trạng thái" />
-                                <TableColumn fx:id="colMaSuatChieu" text="Suất chiếu" />
-                                <TableColumn fx:id="colMaKhachHang" text="Khách hàng" />
-                                <TableColumn fx:id="colMaGhe" text="Ghế" />
-                            </columns>
-                        </TableView>
-                    </VBox>
-                </VBox>
-            </children>
-        </StackPane>
-    </center>
 </BorderPane>

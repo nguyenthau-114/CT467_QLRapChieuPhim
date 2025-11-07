@@ -148,3 +148,16 @@
 .topbar-button:hover {
     -fx-background-color: #c0392b;
 }
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 10;
+    -fx-padding: 4;
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
+}
