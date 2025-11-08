@@ -43,6 +43,13 @@ public class Ve_truycapController {
                 tfMaGhe.setText(selected.getGhe_maghe());
             }
         });
+        tableVe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    
+    // 🔹 Mẹo thêm — tự động chia đều kích thước cột
+    tableVe.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+        double width = newWidth.doubleValue() / tableVe.getColumns().size();
+        tableVe.getColumns().forEach(col -> col.setPrefWidth(width));
+    });
     }
 
     // ===========================
@@ -176,6 +183,32 @@ public class Ve_truycapController {
         tfMaGhe.clear();
         dpNgayDat.setValue(null);
     }
+@FXML
+private void dangXuat(javafx.event.ActionEvent event) {
+    // Hiển thị thông báo đơn giản
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle("Đăng xuất");
+    alert.setHeaderText(null);
+    alert.setContentText("Bạn đã đăng xuất khỏi hệ thống!");
+    alert.showAndWait();
+
+    // (Tùy chọn) Đóng cửa sổ hiện tại
+    ((javafx.stage.Stage) ((javafx.scene.Node) event.getSource())
+            .getScene().getWindow()).close();
+
+    // (Hoặc mở lại màn hình đăng nhập nếu bạn có file login.fxml)
+    /*
+    try {
+        Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle("Đăng nhập");
+        stage.setScene(new Scene(root));
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    */
+}
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
