@@ -7,15 +7,20 @@
 
 /* ==================== SIDEBAR ==================== */
 .sidebar {
-    -fx-background-color: linear-gradient(to bottom, #1f2937, #111827);
+    -fx-background-color: linear-gradient(from 0px 0px to 0px 700px, #1f2937 0%, #111827 100%);
     -fx-padding: 15;
+}
+.header-bar {
+    -fx-background-color: linear-gradient(from 0px 0px to 0px 700px, #1f2937 0%, #111827 100%);
+    -fx-padding: 2 20 2 20;
+    -fx-pref-width: 100%;
 }
 
 .sidebar-title {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size: 18;
-    -fx-padding: 0 0 10 4;
+    -fx-font-size: 50px;
+    -fx-padding: 0 0 10 0;
 }
 
 /* Nút ở sidebar */
@@ -48,70 +53,73 @@
     -fx-text-fill: white;
 }
 .sidebtn-ghost.selected {
-    -fx-background-color: rgba(37,99,235,0.3);
-    -fx-text-fill: #ffffff;
+    -fx-background-color: linear-gradient(to right, #ccf3e0, #b0e7ce);
+    -fx-text-fill: #0a3d2d;
     -fx-font-weight: bold;
-    -fx-border-color: #2563eb;
-    -fx-border-width: 0 0 0 3;
-    -fx-border-radius: 0;
+    -fx-background-radius: 10;
+    -fx-border-color: #2f9e44;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(47,158,68,0.3), 8, 0.3, 0, 1);
+}
+.sidebtn-ghost.selected:hover {
+    -fx-background-color: linear-gradient(to right, #b8ebd5, #9edfc1);
+    -fx-effect: dropshadow(gaussian, rgba(47,158,68,0.5), 10, 0.3, 0, 1);
 }
 
+
+
+
 /* Header màu nhóm trên sidebar */
-/* ==================== NÚT NHÓM MÀU TRÊN SIDEBAR ==================== */
-.header-red {
-    -fx-background-color: linear-gradient(to bottom, #ff6b6b, #c0392b);
-    -fx-text-fill: white;
+/* === Sidebar Buttons (Modern pastel theme – slightly stronger colors) === */
+.header-yellow {
+    -fx-background-color: #FFE999;   /* vàng pastel đậm hơn nhẹ */
+    -fx-text-fill: #665c00;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.3, 0, 1);
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,235,120,0.6), 8, 0.4, 0, 1);
 }
-.header-red:hover {
-    -fx-background-color: linear-gradient(to bottom, #ff7b7b, #d84315);
+.header-yellow:hover {
+    -fx-background-color: #FFE066;
+    -fx-effect: dropshadow(gaussian, rgba(255,224,102,0.8), 10, 0.3, 0, 0);
 }
 
 .header-green {
-    -fx-background-color: linear-gradient(to bottom, #34d399, #059669);
-    -fx-text-fill: white;
+    -fx-background-color: #B9EAC1;   /* xanh mint pastel rõ hơn */
+    -fx-text-fill: #1b4332;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0.3, 0, 1);
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(160,230,180,0.6), 8, 0.3, 0, 2);
 }
 .header-green:hover {
-    -fx-background-color: linear-gradient(to bottom, #4ade80, #047857);
-}
-
-.header-blue {
-    -fx-background-color: linear-gradient(to bottom, #60a5fa, #2563eb);
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.3, 0, 1);
-}
-.header-blue:hover {
-    -fx-background-color: linear-gradient(to bottom, #93c5fd, #1e40af);
+    -fx-background-color: #9FDFB0;
+    -fx-effect: dropshadow(gaussian, rgba(159,223,176,0.6), 10, 0.3, 0, 0);
 }
 
 .header-orange {
-    -fx-background-color: linear-gradient(to bottom, #fbbf24, #d97706);
-    -fx-text-fill: white;
+    -fx-background-color: #FFD199;   /* peach pastel tăng đậm */
+    -fx-text-fill: #7b3f00;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.3, 0, 1);
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,190,130,0.6), 8, 0.3, 0, 2);
 }
 .header-orange:hover {
-    -fx-background-color: linear-gradient(to bottom, #fcd34d, #b45309);
+    -fx-background-color: #FFC266;
+    -fx-effect: dropshadow(gaussian, rgba(255,194,102,0.8), 10, 0.3, 0, 0);
 }
 
-.header-yellow {
-    -fx-background-color: linear-gradient(to bottom, #facc15, #ca8a04);
-    -fx-text-fill: #fff;
+.header-blue {
+    -fx-background-color: #B6D5FF;   /* sky pastel đậm hơn chút */
+    -fx-text-fill: #003366;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0.3, 0, 1);
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(182,208,247,0.7), 8, 0.3, 0, 2);
 }
-.header-yellow:hover {
-    -fx-background-color: linear-gradient(to bottom, #fde047, #a16207);
+.header-blue:hover {
+    -fx-background-color: #9CC6FF;
+    -fx-effect: dropshadow(gaussian, rgba(156,198,255,0.8), 10, 0.3, 0, 0);
 }
+
 
 
 /* ==================== MAIN CONTENT ==================== */
