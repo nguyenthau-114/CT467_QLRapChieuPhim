@@ -17,8 +17,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@Phim.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doituong.Phim_truycapController">
+<?import javafx.scene.image.ImageView?>
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@Phim.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phim.Phim_truycapController">
 
     <!-- SIDEBAR TRÁI -->
     <left>
@@ -97,7 +97,18 @@
                           <Label text="Đạo diễn:" GridPane.rowIndex="3" />
                           <TextField fx:id="tfDaoDien" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       
-                          <Button onAction="#onChonAnh" prefHeight="23.0" prefWidth="116.0" text="Chọn hình ảnh" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <HBox spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                            <children>
+                                <ImageView fx:id="imgPoster" fitHeight="120.0" fitWidth="100.0" preserveRatio="true" styleClass="image-view" />
+                                <VBox alignment="CENTER" spacing="5">
+                                    <children>
+                                        <Button onAction="#onChonAnh" prefHeight="30.0" prefWidth="116.0" text="Chọn hình ảnh" textFill="WHITE" />
+                                        <Label text="(Xem trước hình)" style="-fx-font-size:10; -fx-text-fill:#555;" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
                           <TextField fx:id="tfThoiLuong" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="171.0" GridPane.columnIndex="3" />
                       </children>
                   <rowConstraints>

@@ -1,4 +1,4 @@
-package doituong;
+package phim;
 
 import ketnoi_truyxuat.DBConnection;
 import java.sql.Connection;

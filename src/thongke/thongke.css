@@ -1,0 +1,25 @@
+.main-content {
+    -fx-background-color: linear-gradient(to bottom right, #e0f2fe, #f0fdf4);
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+#btnThongKe {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+#btnBaoCao {
+    -fx-background-color: #f97316;
+    -fx-text-fill: white;
+}

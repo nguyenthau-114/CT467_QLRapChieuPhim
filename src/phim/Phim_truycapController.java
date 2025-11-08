@@ -1,4 +1,4 @@
-package doituong;
+package phim;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

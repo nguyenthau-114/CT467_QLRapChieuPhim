@@ -1,4 +1,4 @@
-package doituong;
+package phim;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

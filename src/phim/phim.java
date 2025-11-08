@@ -1,4 +1,4 @@
-package doituong;
+package phim;
 
 public class phim {
     private String maPhim;
