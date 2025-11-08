@@ -20,14 +20,30 @@
         <VBox prefWidth="200" spacing="8" styleClass="sidebar">
             <padding><Insets bottom="15" left="10" right="10" top="15" /></padding>
             <children>
-                <Label prefHeight="50" styleClass="sidebar-title" text="Quản trị">
-                    <font><Font size="18" /></font>
+                <Label text="Quản trị"
+                       alignment="CENTER"
+                       maxWidth="Infinity"
+                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
                 </Label>
-                <Button styleClass="header-red" text="Doanh Thu" />
-                <Button styleClass="header-green" text="Dữ Liệu" />
-                <Button styleClass="header-blue" text="Khách Hàng" />
-                <Button styleClass="header-orange" text="Nhân Viên" />
-                <Button styleClass="header-yellow selected" text="Thống kê" />
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="25.0" />
+               </VBox.margin></Button>
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-green" text="Dữ Liệu">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></Button>
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></Button>
+                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin></Button>
                 <Separator />
                 <Button styleClass="sidebtn-ghost" text="Phim" />
                 <Button styleClass="sidebtn-ghost" text="Suất Chiếu" />
@@ -40,6 +56,7 @@
     <!-- ========== PHẦN TRUNG TÂM ========== -->
     <center>
         <VBox spacing="15" styleClass="main-content">
+            
             <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
                <Button fx:id="btnBaoCao" style="-fx-background-color:#f97316; -fx-text-fill:white; -fx-background-radius:8; -fx-font-weight:bold;" text="Báo Cáo" />
 

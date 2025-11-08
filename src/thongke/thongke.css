@@ -2,6 +2,56 @@
     -fx-background-color: linear-gradient(to bottom right, #e0f2fe, #f0fdf4);
 }
 
+/* Header màu nhóm trên sidebar */
+/* === Sidebar Buttons (Modern pastel theme – slightly stronger colors) === */
+.header-yellow {
+    -fx-background-color: #FFE999;   /* vàng pastel đậm hơn nhẹ */
+    -fx-text-fill: #665c00;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,235,120,0.6), 8, 0.4, 0, 1);
+}
+.header-yellow:hover {
+    -fx-background-color: #FFE066;
+    -fx-effect: dropshadow(gaussian, rgba(255,224,102,0.8), 10, 0.3, 0, 0);
+}
+
+.header-green {
+    -fx-background-color: #B9EAC1;   /* xanh mint pastel rõ hơn */
+    -fx-text-fill: #1b4332;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(160,230,180,0.6), 8, 0.3, 0, 2);
+}
+.header-green:hover {
+    -fx-background-color: #9FDFB0;
+    -fx-effect: dropshadow(gaussian, rgba(159,223,176,0.6), 10, 0.3, 0, 0);
+}
+
+.header-orange {
+    -fx-background-color: #FFD199;   /* peach pastel tăng đậm */
+    -fx-text-fill: #7b3f00;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,190,130,0.6), 8, 0.3, 0, 2);
+}
+.header-orange:hover {
+    -fx-background-color: #FFC266;
+    -fx-effect: dropshadow(gaussian, rgba(255,194,102,0.8), 10, 0.3, 0, 0);
+}
+
+.header-blue {
+    -fx-background-color: #B6D5FF;   /* sky pastel đậm hơn chút */
+    -fx-text-fill: #003366;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(182,208,247,0.7), 8, 0.3, 0, 2);
+}
+.header-blue:hover {
+    -fx-background-color: #9CC6FF;
+    -fx-effect: dropshadow(gaussian, rgba(156,198,255,0.8), 10, 0.3, 0, 0);
+}
+
 .table-view {
     -fx-background-color: white;
     -fx-border-color: #cbd5e1;
