@@ -65,6 +65,20 @@ public class Phim_truycapController {
                 dsTheLoai.stream().filter(t -> t.getName().equalsIgnoreCase(s)).findFirst().ifPresent(t -> t.setSelected(true));
             }
         });
+         // --- Cấu hình dữ liệu cột ---
+    colMaPhim.setCellValueFactory(new PropertyValueFactory<>("maPhim"));
+    colTenPhim.setCellValueFactory(new PropertyValueFactory<>("tenPhim"));
+    colTheLoai.setCellValueFactory(new PropertyValueFactory<>("theLoai"));
+    colDaoDien.setCellValueFactory(new PropertyValueFactory<>("daoDien"));
+    colThoiLuong.setCellValueFactory(new PropertyValueFactory<>("thoiLuong"));
+    colNgayKhoiChieu.setCellValueFactory(new PropertyValueFactory<>("ngayKhoiChieu"));
+    colDoTuoi.setCellValueFactory(new PropertyValueFactory<>("doTuoiChoPhep"));
+
+    // --- Cho phép bảng co giãn đầy đủ ---
+    tablePhim.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+        // ListView checkbox
+        lvTheLoai.setItems(dsTheLoai);
+        lvTheLoai.setCellFactory(CheckBoxListCell.forListView(TheLoaiItem::selectedProperty));
     }
 
     @FXML
