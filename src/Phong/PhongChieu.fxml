@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -12,96 +13,188 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="650" prefWidth="1100" stylesheets="@phongchieu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Phong.PhongChieuController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@phongchieu.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Phong.PhongChieuController">
 
-    <!-- ====== SIDEBAR BÊN TRÁI ====== -->
+    <!-- 🔹 SIDEBAR -->
+    <!-- 🔹 SIDEBAR TRÁI -->
     <left>
-        <VBox prefWidth="192.0" spacing="8" styleClass="sidebar">
+        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
             <padding>
                 <Insets bottom="15" left="10" right="10" top="15" />
             </padding>
             <children>
-                <Label styleClass="sidebar-title" text="Quản trị" />
-                <Button styleClass="header-red" text="Doanh Thu" />
-                <Button styleClass="header-green" text="Dữ Liệu" />
-                <Button styleClass="header-blue" text="Khách Hàng" />
-                <Button styleClass="header-orange" text="Nhân Viên" />
-                <Button styleClass="header-yellow" text="Tài Khoản" />
+                <Label text="Quản trị"
+                       alignment="CENTER"
+                       maxWidth="Infinity"
+                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="25.0" />
+               </VBox.margin></Button>
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-green" text="Dữ Liệu">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></Button>
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin></Button>
+                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin></Button>
                 <Separator />
-                <Button styleClass="sidebtn-ghost" text="Loại màn hình" />
-                <Button styleClass="sidebtn-ghost selected" text="Phòng Chiếu" />
-                <Button styleClass="sidebtn-ghost" text="Thể Loại" />
+
                 <Button styleClass="sidebtn-ghost" text="Phim" />
-                <Button styleClass="sidebtn-ghost" text="Định Dạng" />
-                <Button styleClass="sidebtn-ghost" text="Lịch Chiếu" />
-                <Button styleClass="sidebtn-ghost" text="Vé" />
+                <Button styleClass="sidebtn-ghost" text="Suất Chiếu">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></Button>
+                <Button text="Phòng Chiếu">
+                    <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="sidebtn-ghost" />
+                        <String fx:value="selected" />
+                    </styleClass>
+                </Button>
+                <Button prefHeight="0.0" prefWidth="114.0" styleClass="sidebtn-ghost" text="Vé">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></Button>
             </children>
         </VBox>
     </left>
+
+    <!-- 🔹 NỘI DUNG CHÍNH -->
     <center>
-        <AnchorPane style="-fx-background-color: #e6fff0; -fx-padding: 20;" BorderPane.alignment="CENTER">
-            <children>
+        <VBox fillWidth="true" spacing="0">
 
-                <!-- Tiêu đề -->
-                <Label layoutX="20" layoutY="20" style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#333;" text="QUẢN LÝ PHÒNG CHIẾU" />
+            <!-- 🔸 HEADER -->
+            <AnchorPane VBox.vgrow="NEVER">
+                <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0"
+                          styleClass="header-bar"
+                          AnchorPane.leftAnchor="0"
+                          AnchorPane.rightAnchor="0"
+                          AnchorPane.topAnchor="0">
+                        <padding>
+                            <Insets bottom="3" left="20" right="20" top="3" />
+                        </padding>
+                        <children>
+                            <Label prefHeight="23.0" prefWidth="250.0"
+                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;"
+                                   text="🕋 Quản Lý Phòng Chiếu" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat"
+                                    prefHeight="28.0" prefWidth="104.0"
+                                    style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold; 
+                                           -fx-background-radius:6; -fx-padding:5 15 5 15;"
+                                    text="Đăng xuất" />
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
 
-                <!-- HEADER GỌN GÀNG, ĐẸP HƠN -->
-                <HBox layoutY="60" spacing="15" alignment="CENTER_RIGHT" 
-                      prefHeight="40" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+            <!-- 🔸 MAIN CONTENT -->
+            <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="15" left="0" right="0" top="0" />
+                </padding>
+
+                <!-- 🔹 THANH TÌM KIẾM -->
+                <HBox alignment="CENTER_LEFT"
+                      prefHeight="40"
+                      spacing="15"
+                      AnchorPane.leftAnchor="20"
+                      AnchorPane.rightAnchor="20">
+                    <VBox.margin>
+                        <Insets top="35.0" />
+                    </VBox.margin>
                     <children>
-                        <Label text="Tìm kiếm:" style="-fx-font-size: 13px; -fx-text-fill: #333;" />
-                        <TextField fx:id="tfTimKiem" promptText="Nhập tên phòng cần tìm..." prefWidth="220" />
-                        <Button text="🔍" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnDangXuat" onAction="#dangXuat"
-                                text="Đăng xuất"
-                                style="-fx-background-color: #ff5252; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15 5 15; -fx-background-radius: 6;" />
+                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
+                        <TextField fx:id="tfTimKiem" prefWidth="220"
+                                   promptText="Nhập mã phòng, loại phòng..." />
+                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
+                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
+                                text="🔍" />
                     </children>
                 </HBox>
-                <!-- Form nhập liệu -->
-                <GridPane hgap="50.0" layoutX="47.0" layoutY="120.0" prefHeight="140.0" prefWidth="900.0" vgap="20.0">
+
+                <!-- 🔹 FORM NHẬP LIỆU -->
+                <GridPane hgap="70" vgap="40" prefHeight="160" prefWidth="900">
+                    <VBox.margin>
+                        <Insets top="25" />
+                    </VBox.margin>
                     <columnConstraints>
                         <ColumnConstraints percentWidth="18.0" />
                         <ColumnConstraints percentWidth="25.0" />
                         <ColumnConstraints percentWidth="18.0" />
                         <ColumnConstraints percentWidth="25.0" />
                     </columnConstraints>
-
                     <children>
-                        <Label text="Mã phòng:" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: P001)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Tên phòng:" GridPane.rowIndex="3" />
-                        <TextField fx:id="txtTenPhong" promptText="Nhập tên phòng" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label text="Số ghế:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtSoGhe" promptText="Nhập số ghế" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Label text="Loại phòng:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <TextField fx:id="txtLoaiPhong" promptText="2D / 3D / IMAX" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Label text="Mã phòng:" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: PC01)"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Tên phòng:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtTenPhong" promptText="Nhập tên phòng"
+                                   GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                        <Label text="Số ghế:" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtSoGhe" promptText="Nhập số lượng ghế"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Loại phòng:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtLoaiPhong" promptText="2D / 3D / IMAX"
+                                   GridPane.columnIndex="3" GridPane.rowIndex="1" />
                     </children>
                 </GridPane>
 
-                <!-- Các nút thao tác -->
-                <HBox layoutX="94.0" layoutY="290.0" spacing="10">
-                    <Button fx:id="btnThem" onAction="#themPhong" text="Thêm" styleClass="action-btn" />
-                    <Button fx:id="btnSua" onAction="#suaPhong" text="Sửa" styleClass="action-btn" />
-                    <Button fx:id="btnXoa" onAction="#xoaPhong" text="Xóa" styleClass="action-btn" />
-                    <Button fx:id="btnTai" onAction="#taiDuLieu" text="Tải dữ liệu" styleClass="action-btn" />
+                <!-- 🔹 NÚT THAO TÁC -->
+                <HBox spacing="10">
+                    <VBox.margin>
+                        <Insets top="42.0" />
+                    </VBox.margin>
+                    <children>
+                        <Button fx:id="btnThem" onAction="#themPhong" styleClass="action-btn" text="Thêm" />
+                        <Button fx:id="btnSua" onAction="#suaPhong" styleClass="action-btn" text="Sửa" />
+                        <Button fx:id="btnXoa" onAction="#xoaPhong" styleClass="action-btn" text="Xóa" />
+                        <Button fx:id="btnTai" onAction="#taiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
+                    </children>
                 </HBox>
 
-                <!-- Bảng dữ liệu -->
-                <TableView fx:id="tablePhong" layoutX="40" layoutY="350" prefHeight="300" prefWidth="950">
+                <!-- 🔹 BẢNG DỮ LIỆU -->
+                <TableView fx:id="tablePhong"
+                           prefHeight="300.0"
+                           prefWidth="1005.0"
+                           VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets top="25.0" />
+                    </VBox.margin>
                     <columns>
-                        <TableColumn fx:id="colMaPhong" prefWidth="231.4667" text="Mã phòng" />
-                        <TableColumn fx:id="colTenPhong" prefWidth="235.7333" text="Tên phòng" />
-                        <TableColumn fx:id="colSoGhe" prefWidth="253.0665" text="Số ghế" />
-                        <TableColumn fx:id="colLoaiPhong" prefWidth="233.3333" text="Loại phòng" />
+                        <TableColumn fx:id="colMaPhong" text="Mã phòng" />
+                        <TableColumn fx:id="colTenPhong" text="Tên phòng" />
+                        <TableColumn fx:id="colSoGhe" text="Số ghế" />
+                        <TableColumn fx:id="colLoaiPhong" text="Loại phòng" />
                     </columns>
                 </TableView>
 
-            </children>
-        </AnchorPane>
-   </center>
+            </VBox>
+        </VBox>
+    </center>
 </BorderPane>

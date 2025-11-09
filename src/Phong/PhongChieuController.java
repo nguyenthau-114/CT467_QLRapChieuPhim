@@ -46,6 +46,30 @@ public class PhongChieuController {
                 originalLoaiphong = selected.getLoaiphong();
             }
         });
+            colMaPhong.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaphong()));
+            colTenPhong.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getTenphong()));
+            colSoGhe.setCellValueFactory(c -> new javafx.beans.property.SimpleIntegerProperty(c.getValue().getSoghe()).asObject());
+            colLoaiPhong.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getLoaiphong()));
+
+            // Khi click chọn 1 dòng trong bảng → tự hiển thị lên TextField + lưu bản gốc
+            tablePhong.setOnMouseClicked(event -> {
+                PhongChieu selected = tablePhong.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    txtMaPhong.setText(selected.getMaphong());
+                    txtTenPhong.setText(selected.getTenphong());
+                    txtSoGhe.setText(String.valueOf(selected.getSoghe()));
+                    txtLoaiPhong.setText(selected.getLoaiphong());
+
+                    // Lưu dữ liệu gốc
+                    originalMaphong = selected.getMaphong();
+                    originalTenphong = selected.getTenphong();
+                    originalSoghe = selected.getSoghe();
+                    originalLoaiphong = selected.getLoaiphong();
+                }
+            });
+
+            // 🔹 Cho bảng tự co giãn khi thay đổi kích thước cửa sổ
+            tablePhong.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     // ---------------- TẢI DỮ LIỆU ----------------
