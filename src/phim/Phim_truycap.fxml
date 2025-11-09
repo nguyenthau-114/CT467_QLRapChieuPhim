@@ -118,7 +118,7 @@
                     <children>
                         <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
                         <TextField fx:id="tfTimKiem" prefWidth="220"
-                                   promptText="Nhập mã vé, khách hàng..." />
+                                   promptText="Nhập mã phim" />
                         <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
                                        -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
                                 text="🔍" />
