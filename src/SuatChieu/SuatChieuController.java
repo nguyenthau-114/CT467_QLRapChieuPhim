@@ -69,6 +69,28 @@ public class SuatChieuController {
         });
 
         taiLaiDuLieu();
+        // ✅ Giúp bảng tự co giãn đầy vùng hiển thị khi phóng to/thu nhỏ cửa sổ
+        tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        // Lắng nghe thay đổi kích thước cửa sổ cha (stage)
+        tableSuatChieu.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obsWin, oldWin, newWin) -> {
+                    if (newWin != null) {
+                        Stage stage = (Stage) newWin;
+
+                        // Lắng nghe thay đổi chiều cao và chiều rộng của cửa sổ
+                        stage.widthProperty().addListener((o, oldW, newW) -> {
+                            tableSuatChieu.setPrefWidth(newW.doubleValue() - 250); // chừa khoảng sidebar
+                        });
+                        stage.heightProperty().addListener((o, oldH, newH) -> {
+                            tableSuatChieu.setPrefHeight(newH.doubleValue() - 250); // chừa khoảng header + form
+                        });
+                    }
+                });
+            }
+        });
+
     }
 
     // ====== TẢI DỮ LIỆU ======
