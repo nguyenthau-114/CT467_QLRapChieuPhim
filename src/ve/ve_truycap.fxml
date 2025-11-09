@@ -157,8 +157,8 @@
                         <TextField fx:id="tfMaVe" promptText="Nhập mã vé"
                                    GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Ngày đặt:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                        <DatePicker fx:id="dpNgayDat" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                        <Label text="Ngày đặt:" GridPane.columnIndex="2" GridPane.rowIndex="0"  />
+                        <DatePicker fx:id="dpNgayDat" GridPane.columnIndex="3" GridPane.rowIndex="0" prefWidth="300.0" />
 
                         <Label text="Giá vé:" GridPane.rowIndex="1" />
                         <TextField fx:id="tfGiaVe" promptText="Nhập giá vé"
