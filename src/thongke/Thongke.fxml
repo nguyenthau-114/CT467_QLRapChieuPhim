@@ -122,16 +122,19 @@
                         <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;" text="📈 Thống kê doanh thu theo phim" />
 
                         <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label prefHeight="18.0" prefWidth="60.0" style="-fx-font-weight:bold;" text="Chọn phim:" />
-                            <ComboBox fx:id="cboPhim" prefHeight="26.0" prefWidth="50.0">
-                        <opaqueInsets>
-                           <Insets />
-                        </opaqueInsets></ComboBox>
-                            <Label style="-fx-font-weight:bold;" text="Từ ngày:" />
-                            <DatePicker fx:id="dpTuNgay" prefHeight="37.0" prefWidth="130.0" />
-                            <Label style="-fx-font-weight:bold;" text="Đến ngày:" />
-                            <DatePicker fx:id="dpDenNgay" prefHeight="37.0" prefWidth="140.0" />
+                            <!-- Label và ô chọn phim -->
+                            <Label style="-fx-font-weight:bold;" minWidth="75" text="Chọn phim:" />
+                            <ComboBox fx:id="cboPhim" prefWidth="130" prefHeight="26" maxWidth="130" />
+
+                            <!-- Label và DatePicker Từ ngày -->
+                            <Label style="-fx-font-weight:bold;" minWidth="60" text="Từ ngày:" />
+                            <DatePicker fx:id="dpTuNgay" prefWidth="115" prefHeight="26" />
+
+                            <!-- Label và DatePicker Đến ngày -->
+                            <Label style="-fx-font-weight:bold;" minWidth="60" text="Đến ngày:" />
+                            <DatePicker fx:id="dpDenNgay" prefWidth="115" prefHeight="26" />
                         </HBox>
+
 
                         <TableView fx:id="tableThongKe" prefHeight="300">
                             <columns>
