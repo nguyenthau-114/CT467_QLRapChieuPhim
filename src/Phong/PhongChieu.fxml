@@ -18,10 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@phongchieu.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Phong.PhongChieuController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@phongchieu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Phong.PhongChieuController">
 
     <!-- 🔹 SIDEBAR -->
     <!-- 🔹 SIDEBAR TRÁI -->
@@ -31,10 +28,7 @@
                 <Insets bottom="15" left="10" right="10" top="15" />
             </padding>
             <children>
-                <Label text="Quản trị"
-                       alignment="CENTER"
-                       maxWidth="Infinity"
-                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;">
+                <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;" text="Quản trị">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -87,24 +81,14 @@
             <!-- 🔸 HEADER -->
             <AnchorPane VBox.vgrow="NEVER">
                 <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46.0"
-                          styleClass="header-bar"
-                          AnchorPane.leftAnchor="0"
-                          AnchorPane.rightAnchor="0"
-                          AnchorPane.topAnchor="0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                         <padding>
                             <Insets bottom="3" left="20" right="20" top="3" />
                         </padding>
                         <children>
-                            <Label prefHeight="23.0" prefWidth="250.0"
-                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;"
-                                   text="🕋 Quản Lý Phòng Chiếu" />
+                            <Label prefHeight="23.0" prefWidth="250.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="🕋 Quản Lý Phòng Chiếu" />
                             <Pane HBox.hgrow="ALWAYS" />
-                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat"
-                                    prefHeight="28.0" prefWidth="104.0"
-                                    style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold; 
-                                           -fx-background-radius:6; -fx-padding:5 15 5 15;"
-                                    text="Đăng xuất" />
+                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold;                                             -fx-background-radius:6; -fx-padding:5 15 5 15;" text="Đăng xuất" />
                         </children>
                     </HBox>
                 </children>
@@ -117,26 +101,19 @@
                 </padding>
 
                 <!-- 🔹 THANH TÌM KIẾM -->
-                <HBox alignment="CENTER_LEFT"
-                      prefHeight="40"
-                      spacing="15"
-                      AnchorPane.leftAnchor="20"
-                      AnchorPane.rightAnchor="20">
+                <HBox alignment="CENTER_LEFT" prefHeight="40" spacing="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
                     <VBox.margin>
                         <Insets top="35.0" />
                     </VBox.margin>
                     <children>
                         <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
-                        <TextField fx:id="tfTimKiem" prefWidth="220"
-                                   promptText="Nhập mã phòng, loại phòng..." />
-                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
-                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
-                                text="🔍" />
+                        <TextField fx:id="tfTimKiem" prefWidth="220" promptText="Nhập mã phòng, loại phòng..." />
+                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white;                                         -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;" text="🔍" />
                     </children>
                 </HBox>
 
                 <!-- 🔹 FORM NHẬP LIỆU -->
-                <GridPane hgap="70" vgap="40" prefHeight="160" prefWidth="900">
+                <GridPane hgap="70" prefHeight="112.0" prefWidth="954.0" vgap="35.0">
                     <VBox.margin>
                         <Insets top="25" />
                     </VBox.margin>
@@ -148,21 +125,21 @@
                     </columnConstraints>
                     <children>
                         <Label text="Mã phòng:" GridPane.rowIndex="0" />
-                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: PC01)"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng (VD: PC01)" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Tên phòng:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                        <TextField fx:id="txtTenPhong" promptText="Nhập tên phòng"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtTenPhong" promptText="Nhập tên phòng" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
                         <Label text="Số ghế:" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtSoGhe" promptText="Nhập số lượng ghế"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtSoGhe" promptText="Nhập số lượng ghế" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label text="Loại phòng:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtLoaiPhong" promptText="2D / 3D / IMAX"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtLoaiPhong" promptText="2D / 3D / IMAX" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                     </children>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
                 </GridPane>
 
                 <!-- 🔹 NÚT THAO TÁC -->
@@ -179,18 +156,15 @@
                 </HBox>
 
                 <!-- 🔹 BẢNG DỮ LIỆU -->
-                <TableView fx:id="tablePhong"
-                           prefHeight="300.0"
-                           prefWidth="1005.0"
-                           VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablePhong" prefHeight="300.0" prefWidth="1005.0" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets top="25.0" />
                     </VBox.margin>
                     <columns>
-                        <TableColumn fx:id="colMaPhong" text="Mã phòng" />
-                        <TableColumn fx:id="colTenPhong" text="Tên phòng" />
-                        <TableColumn fx:id="colSoGhe" text="Số ghế" />
-                        <TableColumn fx:id="colLoaiPhong" text="Loại phòng" />
+                        <TableColumn fx:id="colMaPhong" prefWidth="222.39995098114014" text="Mã phòng" />
+                        <TableColumn fx:id="colTenPhong" minWidth="0.0" prefWidth="274.9332733154297" text="Tên phòng" />
+                        <TableColumn fx:id="colSoGhe" prefWidth="204.26666259765625" text="Số ghế" />
+                        <TableColumn fx:id="colLoaiPhong" prefWidth="248.26657104492188" text="Loại phòng" />
                     </columns>
                 </TableView>
 
