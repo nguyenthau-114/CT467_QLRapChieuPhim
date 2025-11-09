@@ -128,7 +128,7 @@
             <!-- 🔸 FORM NHẬP -->
             <AnchorPane prefHeight="184.0" prefWidth="953.0">
                 <children>
-                    <GridPane hgap="50.0" layoutX="22" layoutY="15.0" prefHeight="165.0" prefWidth="736.0" vgap="10">
+                    <GridPane hgap="50.0" layoutX="22" layoutY="15.0" prefHeight="165.0" prefWidth="736.0" vgap="20">
                         <columnConstraints>
                             <ColumnConstraints percentWidth="14.0" />
                             <ColumnConstraints percentWidth="36.0" />
@@ -184,14 +184,14 @@
                           <Button layoutX="816.0" layoutY="154.0" onAction="#onChonAnh" prefHeight="30" prefWidth="116" text="Chọn hình ảnh" textFill="WHITE" />
                 </children>
                <VBox.margin>
-                  <Insets top="50.0" />
+                  <Insets top="20.0" />
                </VBox.margin>
             </AnchorPane>
 
             <!-- 🔸 CÁC NÚT CHỨC NĂNG -->
             <HBox spacing="10">
                     <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="23.0" />
                     </VBox.margin>
                     <children>
                         <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
@@ -202,20 +202,23 @@
                 </HBox>
 
             <!-- 🔸 BẢNG DỮ LIỆU -->
-            <TableView fx:id="tablePhim" prefHeight="300.0" prefWidth="953.0">
+            <TableView fx:id="tablePhim"
+                       
+                       VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colMaPhim" prefWidth="100" text="Mã phim" />
-                    <TableColumn fx:id="colTenPhim" prefWidth="250" text="Tên phim" />
-                    <TableColumn fx:id="colTheLoai" prefWidth="150" text="Thể loại" />
-                    <TableColumn fx:id="colDaoDien" prefWidth="180" text="Đạo diễn" />
-                    <TableColumn fx:id="colThoiLuong" prefWidth="150" text="Thời lượng (phút)" />
-                    <TableColumn fx:id="colNgayKhoiChieu" prefWidth="150" text="Ngày khởi chiếu" />
-                    <TableColumn fx:id="colDoTuoi" prefWidth="100" text="Độ tuổi" />
+                    <TableColumn fx:id="colMaPhim" text="Mã phim" />
+                    <TableColumn fx:id="colTenPhim" text="Tên phim" />
+                    <TableColumn fx:id="colTheLoai" text="Thể loại" />
+                    <TableColumn fx:id="colDaoDien" text="Đạo diễn" />
+                    <TableColumn fx:id="colThoiLuong" text="Thời lượng (phút)" />
+                    <TableColumn fx:id="colNgayKhoiChieu" text="Ngày khởi chiếu" />
+                    <TableColumn fx:id="colDoTuoi" text="Độ tuổi" />
                 </columns>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
+                <VBox.margin>
+                    <Insets top="25.0" />
+                </VBox.margin>
             </TableView>
+
         </VBox>
     </VBox>
 </center>

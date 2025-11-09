@@ -1,41 +1,27 @@
 package thongke;
 
-import ketnoi_truyxuat.DBConnection;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.collections.*;
+import javafx.beans.property.*;
 import java.sql.*;
 
-/**
- * Controller cho giao diện thống kê doanh thu và dashboard tổng quan
- */
+import ketnoi_truyxuat.DBConnection;
+
 public class ThongkeController {
 
-    // ---------------- PHẦN DASHBOARD ----------------
-    @FXML private Label lblTongPhim;
-    @FXML private Label lblTongVe;
-    @FXML private Label lblDoanhThu;
-    @FXML private Label lblSuatChieu;
-    @FXML private TableView<?> tableTopPhim;
-    @FXML private StackPane chartContainer;
-
-    // ---------------- PHẦN THỐNG KÊ DOANH THU ----------------
+    @FXML private Label lblTongPhim, lblTongVe, lblDoanhThu, lblSuatChieu, lblTongDoanhThu;
     @FXML private ComboBox<String> cboPhim;
-    @FXML private DatePicker dpTuNgay;
-    @FXML private DatePicker dpDenNgay;
+    @FXML private DatePicker dpTuNgay, dpDenNgay;
     @FXML private TableView<Thongke> tableThongKe;
-    @FXML private TableColumn<Thongke, String> colTenPhim;
-    @FXML private TableColumn<Thongke, String> colNgayChieu;
-    @FXML private TableColumn<Thongke, String> colGioChieu;
+    @FXML private TableColumn<Thongke, String> colTenPhim, colNgayChieu, colGioChieu;
     @FXML private TableColumn<Thongke, Integer> colSoVe;
     @FXML private TableColumn<Thongke, Double> colDoanhThu;
-    @FXML private Label lblTongDoanhThu;
+    @FXML private TableView<?> tableTopPhim; // ✅ thêm dòng này
 
-    // ---------------- KHỞI TẠO ----------------
     @FXML
     public void initialize() {
         try (Connection conn = DBConnection.getConnection()) {
@@ -48,14 +34,46 @@ public class ThongkeController {
             // Load danh sách phim vào combobox
             ResultSet rs = conn.createStatement().executeQuery("SELECT tenphim FROM phim");
             while (rs.next()) cboPhim.getItems().add(rs.getString("tenphim"));
-
         } catch (Exception e) {
             e.printStackTrace();
             lblDoanhThu.setText("Lỗi dữ liệu!");
         }
+
+        // 🔹 Cấu hình bảng Top 10 phim
+        tableTopPhim.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+        tableTopPhim.setPlaceholder(new Label("Chưa có dữ liệu thống kê"));
+
+        // 🔹 Cấu hình bảng Thống kê doanh thu
+        tableThongKe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+        tableThongKe.setPlaceholder(new Label("Chưa có dữ liệu thống kê"));
+
+         // Thiết lập kích thước tối thiểu để không bị che chữ
+
+        dpTuNgay.setPrefWidth(150);
+        dpDenNgay.setPrefWidth(150);
+        cboPhim.setPrefWidth(220);
+        
+        // 🔹 Căn giữa header
+        tableTopPhim.widthProperty().addListener((obs, oldVal, newVal) ->
+            tableTopPhim.lookupAll(".column-header .label")
+                    .forEach(node -> node.setStyle("-fx-alignment: CENTER;"))
+        );
+
+        tableThongKe.widthProperty().addListener((obs, oldVal, newVal) ->
+            tableThongKe.lookupAll(".column-header .label")
+                    .forEach(node -> node.setStyle("-fx-alignment: CENTER;"))
+        );
+
+        // 🔹 Căn giữa dữ liệu trong cell (tuỳ chọn)
+        colTenPhim.setStyle("-fx-alignment: CENTER;");
+        colNgayChieu.setStyle("-fx-alignment: CENTER;");
+        colGioChieu.setStyle("-fx-alignment: CENTER;");
+        colSoVe.setStyle("-fx-alignment: CENTER;");
+        colDoanhThu.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        
     }
 
-    // ---------------- HÀM HỖ TRỢ ----------------
     private String getCount(Connection conn, String query) throws SQLException {
         try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(query)) {
             if (rs.next()) return String.valueOf(rs.getInt(1));
@@ -70,12 +88,10 @@ public class ThongkeController {
         return "0";
     }
 
-    // ---------------- XỬ LÝ NÚT THỐNG KÊ ----------------
     @FXML
     private void onThongKe(ActionEvent event) {
         if (cboPhim.getValue() == null || dpTuNgay.getValue() == null || dpDenNgay.getValue() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Vui lòng chọn phim và khoảng thời gian!", ButtonType.OK);
-            alert.showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Vui lòng chọn phim và khoảng thời gian!", ButtonType.OK).showAndWait();
             return;
         }
 
@@ -116,7 +132,6 @@ public class ThongkeController {
                 tongDoanhThu += rs.getDouble("tong_tien");
             }
 
-            // Gắn dữ liệu vào bảng
             colTenPhim.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTenPhim()));
             colNgayChieu.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNgayChieu()));
             colGioChieu.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGioChieu()));
@@ -125,10 +140,15 @@ public class ThongkeController {
 
             tableThongKe.setItems(list);
             lblTongDoanhThu.setText(String.format("%,.0f VNĐ", tongDoanhThu));
-
         } catch (Exception e) {
             e.printStackTrace();
             lblTongDoanhThu.setText("Lỗi truy vấn!");
         }
+    }
+
+    @FXML
+    private void dangXuat(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

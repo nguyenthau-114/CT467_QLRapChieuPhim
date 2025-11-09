@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -13,126 +14,199 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="650" prefWidth="1100" stylesheets="@suatchieu.css"
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@suatchieu.css"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="SuatChieu.SuatChieuController">
 
-    <!-- ====== SIDEBAR BÊN TRÁI ====== -->
+    <!-- 🔹 SIDEBAR TRÁI -->
     <left>
-        <VBox prefWidth="192.0" spacing="8" styleClass="sidebar">
+        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
             <padding>
                 <Insets bottom="15" left="10" right="10" top="15" />
             </padding>
             <children>
-                <Label styleClass="sidebar-title" text="Quản trị" />
-                <Button styleClass="header-red" text="Doanh Thu" />
-                <Button styleClass="header-green" text="Dữ Liệu" />
-                <Button styleClass="header-blue" text="Khách Hàng" />
-                <Button styleClass="header-orange" text="Nhân Viên" />
-                <Button styleClass="header-yellow" text="Tài Khoản" />
+                <Label text="Quản trị"
+                       alignment="CENTER"
+                       maxWidth="Infinity"
+                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+
+                <Button prefHeight="25" prefWidth="108" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
+                    <VBox.margin>
+                        <Insets bottom="10" top="25" />
+                    </VBox.margin>
+                </Button>
+                <Button prefHeight="25" prefWidth="108" styleClass="header-green" text="Dữ Liệu">
+                    <VBox.margin>
+                        <Insets bottom="10" />
+                    </VBox.margin>
+                </Button>
+                <Button prefHeight="25" prefWidth="108" styleClass="header-orange" text="Nhân Viên">
+                    <VBox.margin>
+                        <Insets bottom="10" />
+                    </VBox.margin>
+                </Button>
+                <Button prefWidth="108" styleClass="header-blue" text="Khách Hàng">
+                    <VBox.margin>
+                        <Insets bottom="15" />
+                    </VBox.margin>
+                </Button>
                 <Separator />
-                <Button styleClass="sidebtn-ghost" text="Loại màn hình" />
-                <Button styleClass="sidebtn-ghost" text="Phòng Chiếu" />
-                <Button styleClass="sidebtn-ghost" text="Thể Loại" />
+
                 <Button styleClass="sidebtn-ghost" text="Phim" />
-                <Button styleClass="sidebtn-ghost selected" text="Suất Chiếu" />
-                <Button styleClass="sidebtn-ghost" text="Định Dạng" />
-                <Button styleClass="sidebtn-ghost" text="Lịch Chiếu" />
+                <Button text="Suất Chiếu">
+                    <VBox.margin>
+                        <Insets bottom="5" top="10" />
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="sidebtn-ghost" />
+                        <String fx:value="selected" />
+                    </styleClass>
+                </Button>
+                <Button styleClass="sidebtn-ghost" text="Phòng Chiếu" />
                 <Button styleClass="sidebtn-ghost" text="Vé" />
             </children>
         </VBox>
     </left>
 
-    <!-- ====== NỘI DUNG BÊN PHẢI ====== -->
+    <!-- 🔹 NỘI DUNG CHÍNH -->
     <center>
-        <AnchorPane style="-fx-background-color: #e6fff0; -fx-padding: 20; -fx-border-color: #94a3b8; -fx-border-width: 2;" BorderPane.alignment="CENTER">
-            <children>
+        <VBox fillWidth="true" spacing="0">
 
-                <!-- TIÊU ĐỀ -->
-                <Label layoutX="20" layoutY="20"
-                       style="-fx-font-size:22; -fx-font-weight:bold; -fx-text-fill:#333;"
-                       text="QUẢN LÝ SUẤT CHIẾU" />
+            <!-- 🔸 HEADER -->
+            <AnchorPane VBox.vgrow="NEVER">
+                <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46"
+                          styleClass="header-bar"
+                          AnchorPane.leftAnchor="0"
+                          AnchorPane.rightAnchor="0"
+                          AnchorPane.topAnchor="0">
+                        <padding>
+                            <Insets bottom="3" left="20" right="20" top="3" />
+                        </padding>
+                        <children>
+                            <Label prefHeight="23" prefWidth="220"
+                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;"
+                                   text="⏰ Quản Lý Suất Chiếu" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat"
+                                    prefHeight="28" prefWidth="104"
+                                    style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold; 
+                                           -fx-background-radius:6; -fx-padding:5 15 5 15;"
+                                    text="Đăng xuất" />
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
 
-                <!-- THANH TÌM KIẾM + NÚT ĐĂNG XUẤT -->
-                <Label layoutX="750" layoutY="25" text="Tìm kiếm"
-                       style="-fx-font-weight:bold; -fx-text-fill:#333;" />
-                <TextField fx:id="txtTimKiem" layoutX="820" layoutY="20" prefWidth="180"
-                           promptText="Nhập từ khóa..." onKeyReleased="#timKiem" />
-                <Button fx:id="btnDangXuat" layoutX="1010" layoutY="20" text="Đăng xuất"
-                        style="-fx-background-color:#3b82f6; -fx-text-fill:white; -fx-font-weight:bold; -fx-background-radius:5;"
-                        onAction="#dangXuat" />
+            <!-- 🔸 MAIN CONTENT -->
+            <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="15" left="0" right="0" top="0" />
+                </padding>
 
-                <!-- FORM NHẬP LIỆU -->
-                <GridPane hgap="50.0" layoutX="47.0" layoutY="89.0" prefHeight="140.0" prefWidth="900.0" vgap="20.0">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="18.0" />
-                        <ColumnConstraints percentWidth="25.0" />
-                        <ColumnConstraints percentWidth="18.0" />
-                        <ColumnConstraints percentWidth="25.0" />
-                    </columnConstraints>
-
+                <!-- 🔹 THANH TÌM KIẾM -->
+                <HBox alignment="CENTER_LEFT"
+                      prefHeight="40"
+                      spacing="15"
+                      AnchorPane.leftAnchor="20"
+                      AnchorPane.rightAnchor="20">
+                    <VBox.margin>
+                        <Insets top="41" />
+                    </VBox.margin>
                     <children>
-                        <!-- HÀNG 1 -->
-                        <Label text="Mã suất chiếu:" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtMaSuatChieu" promptText="Nhập mã (VD: SC001)"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-                        <Label text="Giờ chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtGioChieu" promptText="HH:MM:SS"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="2" />
-
-                        <!-- HÀNG 2 -->
-                        <Label text="Ngày chiếu:" GridPane.rowIndex="3" />
-                        <DatePicker fx:id="dpNgayChieu" prefWidth="180" promptText="Chọn ngày chiếu"
-                                    GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-                        <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <TextField fx:id="txtGiaVe" promptText="Nhập giá vé"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="3" />
-
-                        <!-- HÀNG 3 -->
-                        <Label text="Mã phim:" GridPane.rowIndex="4" />
-                        <TextField fx:id="txtMaPhim" promptText="Nhập mã phim"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="4" />
-
-                        <Label text="Mã phòng:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng chiếu"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
+                        <TextField fx:id="txtTimKiem" prefWidth="220" promptText="Nhập mã suất chiếu, phim..." />
+                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
+                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
+                                text="🔍" />
                     </children>
+                </HBox>
 
+                <!-- 🔹 FORM NHẬP LIỆU -->
+                <GridPane hgap="50" prefHeight="140" prefWidth="900" vgap="36">
+                    <VBox.margin>
+                        <Insets top="25" />
+                    </VBox.margin>
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="18" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="18" />
+                        <ColumnConstraints percentWidth="25" />
+                    </columnConstraints>
                     <rowConstraints>
                         <RowConstraints />
                         <RowConstraints />
-                        <RowConstraints maxHeight="42.6667" minHeight="25.8666" prefHeight="25.8666" />
-                        <RowConstraints maxHeight="26.1333" minHeight="8.5333" prefHeight="26.1333" />
-                        <RowConstraints maxHeight="26.1333" minHeight="8.5333" prefHeight="26.1333" />
+                        <RowConstraints />
+                        <RowConstraints />
                     </rowConstraints>
+                    <children>
+                        <Label text="Mã suất chiếu:" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtMaSuatChieu" promptText="Nhập mã (VD: SC001)"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Giờ chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtGioChieu" promptText="HH:MM:SS"
+                                   GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                        <Label text="Ngày chiếu:" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="dpNgayChieu" prefWidth="400" promptText="Chọn ngày chiếu"
+                                    GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtGiaVe" promptText="Nhập giá vé"
+                                   GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                        <Label text="Mã phim:" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaPhim" promptText="Nhập mã phim"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Mã phòng:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng chiếu"
+                                   GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                    </children>
                 </GridPane>
 
-                <!-- NÚT THAO TÁC -->
-                <HBox layoutX="94.0" layoutY="255.0" spacing="10">
-                    <Button fx:id="btnThem" onAction="#themSuatChieu" text="Thêm" styleClass="action-btn" />
-                    <Button fx:id="btnSua" onAction="#suaSuatChieu" text="Sửa" styleClass="action-btn" />
-                    <Button fx:id="btnXoa" onAction="#xoaSuatChieu" text="Xóa" styleClass="action-btn" />
-                    <Button fx:id="btnTai" onAction="#taiLaiDuLieu" text="Tải dữ liệu" styleClass="action-btn" />
+                <!-- 🔹 NÚT THAO TÁC -->
+                <HBox spacing="10">
+                    <VBox.margin>
+                        <Insets top="11" />
+                    </VBox.margin>
+                    <children>
+                        <Button fx:id="btnThem" onAction="#themSuatChieu" styleClass="action-btn" text="Thêm" />
+                        <Button fx:id="btnSua" onAction="#suaSuatChieu" styleClass="action-btn" text="Sửa" />
+                        <Button fx:id="btnXoa" onAction="#xoaSuatChieu" styleClass="action-btn" text="Xóa" />
+                        <Button fx:id="btnTai" onAction="#taiLaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
+                    </children>
                 </HBox>
 
-                <!-- BẢNG DỮ LIỆU -->
-                <TableView fx:id="tableSuatChieu" layoutX="40" layoutY="320" prefHeight="300" prefWidth="950">
+                <!-- 🔹 BẢNG DỮ LIỆU -->
+                <TableView fx:id="tableSuatChieu"
+                           prefHeight="290"
+                           prefWidth="1005"
+                           VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets top="25" />
+                    </VBox.margin>
                     <columns>
-                        <TableColumn fx:id="colMaSuatChieu" prefWidth="160.0" text="Mã suất chiếu" />
-                        <TableColumn fx:id="colNgayChieu" prefWidth="180.0" text="Ngày chiếu" />
-                        <TableColumn fx:id="colGioChieu" prefWidth="150.0" text="Giờ chiếu" />
-                        <TableColumn fx:id="colGiaVe" prefWidth="120.0" text="Giá vé" />
-                        <TableColumn fx:id="colMaPhim" prefWidth="160.0" text="Mã phim" />
-                        <TableColumn fx:id="colMaPhong" prefWidth="160.0" text="Mã phòng" />
+                        <TableColumn fx:id="colMaSuatChieu" text="Mã suất chiếu" />
+                        <TableColumn fx:id="colNgayChieu" text="Ngày chiếu" />
+                        <TableColumn fx:id="colGioChieu" text="Giờ chiếu" />
+                        <TableColumn fx:id="colGiaVe" text="Giá vé" />
+                        <TableColumn fx:id="colMaPhim" text="Mã phim" />
+                        <TableColumn fx:id="colMaPhong" text="Mã phòng" />
                     </columns>
                 </TableView>
-            </children>
-        </AnchorPane>
+            </VBox>
+        </VBox>
     </center>
 </BorderPane>
