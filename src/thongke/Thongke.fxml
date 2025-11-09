@@ -76,31 +76,35 @@
                 </HBox>
 
                 <!-- THỐNG KÊ TỔNG QUAN -->
-                <HBox spacing="15">
+                <HBox spacing="20" alignment="CENTER" prefWidth="Infinity">
                     <VBox.margin>
-                        <Insets bottom="40" top="35.0" /> 
-                        
+                        <Insets top="35.0" bottom="45" />
                     </VBox.margin>
-                    <VBox alignment="CENTER" style="-fx-background-color:#fde68a; -fx-padding:15;                                                     -fx-background-radius:10; -fx-pref-width:250;">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color:#fde68a; -fx-padding:15; -fx-background-radius:10;">
                         <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng Phim" />
                         <Label fx:id="lblTongPhim" style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;" text="0" />
                     </VBox>
 
-                    <VBox alignment="CENTER" style="-fx-background-color:#a7f3d0; -fx-padding:15;                                                     -fx-background-radius:10; -fx-pref-width:250;">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color:#a7f3d0; -fx-padding:15; -fx-background-radius:10;">
                         <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng Vé Đã Bán" />
                         <Label fx:id="lblTongVe" style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;" text="0" />
                     </VBox>
 
-                    <VBox alignment="CENTER" style="-fx-background-color:#93c5fd; -fx-padding:15;                                                     -fx-background-radius:10; -fx-pref-width:250;">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color:#93c5fd; -fx-padding:15; -fx-background-radius:10;">
                         <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Doanh Thu" />
                         <Label fx:id="lblDoanhThu" style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;" text="0 VNĐ" />
                     </VBox>
 
-                    <VBox alignment="CENTER" style="-fx-background-color:#fca5a5; -fx-padding:15;                                                     -fx-background-radius:10; -fx-pref-width:250;">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color:#fca5a5; -fx-padding:15; -fx-background-radius:10;">
                         <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Số Suất Chiếu" />
                         <Label fx:id="lblSuatChieu" style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;" text="0" />
                     </VBox>
                 </HBox>
+
 
                 <!-- KHU DƯỚI -->
                 <HBox prefHeight="419.0" prefWidth="953.0" spacing="25">
