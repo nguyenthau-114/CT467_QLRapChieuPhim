@@ -38,10 +38,10 @@
                 <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-green" text="Dữ Liệu">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange-active" text="Nhân Viên">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
-                <Button prefWidth="108.0" styleClass="header-blue selected" text="Khách Hàng">
+                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
                     <VBox.margin><Insets bottom="15.0" /></VBox.margin>
                 </Button>
                 <Separator />
@@ -98,36 +98,43 @@
                 </HBox>
 
                 <!-- FORM NHẬP -->
-                <AnchorPane prefHeight="184.0" prefWidth="953.0">
+                <AnchorPane prefHeight="184" prefWidth="953">
                     <children>
-                        <GridPane hgap="70.0" layoutX="22" layoutY="15.0" prefHeight="101.0" prefWidth="735.0" vgap="35.0">
+                        <GridPane hgap="70" layoutX="22" layoutY="15" prefHeight="120" prefWidth="800" vgap="35">
                             <columnConstraints>
-                                <ColumnConstraints percentWidth="21.0" />
-                                <ColumnConstraints percentWidth="29.0" />
-                                <ColumnConstraints percentWidth="21.0" />
-                                <ColumnConstraints percentWidth="29.0" />
+                                <ColumnConstraints percentWidth="21" />
+                                <ColumnConstraints percentWidth="29" />
+                                <ColumnConstraints percentWidth="21" />
+                                <ColumnConstraints percentWidth="29" />
                             </columnConstraints>
 
-                            <children>
-                                <Label prefWidth="115.0" text="Mã khách hàng:" GridPane.rowIndex="0" />
-                                <TextField fx:id="tfMaKH" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <rowConstraints>
+                                <RowConstraints />
+                                <RowConstraints />
+                            </rowConstraints>
 
-                                <Label text="Tên khách hàng:" GridPane.rowIndex="1" />
-                                <TextField fx:id="tfTenKH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <children>
+                                <!-- Hàng 1 -->
+                                <Label text="Mã khách hàng:" GridPane.rowIndex="0" />
+                                <TextField fx:id="tfMaKH" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                           promptText="Nhập mã khách hàng (VD: KH01)" />
 
                                 <Label text="Số điện thoại:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                                <TextField fx:id="tfSDT" prefHeight="28.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                                <TextField fx:id="tfSDT" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                                           promptText="Nhập số điện thoại (VD: 090xxxxxxx)" />
+
+                                <!-- Hàng 2 -->
+                                <Label text="Tên khách hàng:" GridPane.rowIndex="1" />
+                                <TextField fx:id="tfTenKH" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                           promptText="Nhập họ tên khách hàng" />
 
                                 <Label text="Email:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <TextField fx:id="tfEmail" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                <TextField fx:id="tfEmail" GridPane.columnIndex="3" GridPane.rowIndex="1"
+                                           promptText="Nhập email (VD: kh01@rapchieu.vn)" />
                             </children>
-                     <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                     </rowConstraints>
                         </GridPane>
                     </children>
-                    <VBox.margin><Insets top="20.0" /></VBox.margin>
+                    <VBox.margin><Insets top="20" /></VBox.margin>
                 </AnchorPane>
 
                 <!-- CÁC NÚT CHỨC NĂNG -->

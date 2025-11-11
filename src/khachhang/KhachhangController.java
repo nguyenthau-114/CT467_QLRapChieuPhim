@@ -5,12 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import ketnoi_truyxuat.DBConnection;
-
 import java.sql.*;
 
 public class KhachhangController {
 
-    @FXML private TextField txtMaKH, txtTenKH, txtSDT, txtEmail;
+    @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
     @FXML private TableView<khachhang> tableKH;
     @FXML private TableColumn<khachhang, String> colMaKH, colTenKH, colSDT, colEmail;
 
@@ -30,14 +29,13 @@ public class KhachhangController {
         colSDT.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getSdt()));
         colEmail.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getEmail()));
 
-        // Khi click chọn 1 dòng → hiển thị lên TextField + lưu bản gốc
         tableKH.setOnMouseClicked(event -> {
             khachhang selected = tableKH.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                txtMaKH.setText(selected.getMaKhachHang());
-                txtTenKH.setText(selected.getTenKhachHang());
-                txtSDT.setText(selected.getSdt());
-                txtEmail.setText(selected.getEmail());
+                tfMaKH.setText(selected.getMaKhachHang());
+                tfTenKH.setText(selected.getTenKhachHang());
+                tfSDT.setText(selected.getSdt());
+                tfEmail.setText(selected.getEmail());
 
                 originalMaKH = selected.getMaKhachHang();
                 originalTenKH = selected.getTenKhachHang();
@@ -68,7 +66,6 @@ public class KhachhangController {
             tableKH.setItems(dsKH);
 
         } catch (SQLException e) {
-            e.printStackTrace();
             showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
@@ -76,26 +73,20 @@ public class KhachhangController {
     // ---------------- THÊM ----------------
     @FXML
     public void onThem() {
-        String maKH = txtMaKH.getText().trim();
-        String tenKH = txtTenKH.getText().trim();
-        String sdt = txtSDT.getText().trim();
-        String email = txtEmail.getText().trim();
+        String maKH = tfMaKH.getText().trim();
+        String tenKH = tfTenKH.getText().trim();
+        String sdt = tfSDT.getText().trim();
+        String email = tfEmail.getText().trim();
 
         if (maKH.isEmpty() || tenKH.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", Alert.AlertType.WARNING);
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận thêm khách hàng");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Thêm khách hàng mới?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-        confirm.setContentText("Bạn có chắc muốn thêm khách hàng này không?");
-        ButtonType dongY = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
-        ButtonType huy = new ButtonType("Không", ButtonBar.ButtonData.CANCEL_CLOSE);
-        confirm.getButtonTypes().setAll(dongY, huy);
-
         confirm.showAndWait().ifPresent(response -> {
-            if (response == dongY) {
+            if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
                              "INSERT INTO khachhang (makhachhang, tenkhachhang, sdt, email) VALUES (?, ?, ?, ?)")) {
@@ -110,11 +101,8 @@ public class KhachhangController {
                     clearFields();
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
                     showAlert("Lỗi thêm khách hàng", e.getMessage(), Alert.AlertType.ERROR);
                 }
-            } else {
-                clearFields();
             }
         });
     }
@@ -122,51 +110,40 @@ public class KhachhangController {
     // ---------------- SỬA ----------------
     @FXML
     public void onSua() {
-        if (txtMaKH.getText().isEmpty()) {
+        if (tfMaKH.getText().isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng chọn khách hàng cần sửa!", Alert.AlertType.WARNING);
             return;
         }
 
-        String maKH = txtMaKH.getText().trim();
-        String tenKH = txtTenKH.getText().trim();
-        String sdt = txtSDT.getText().trim();
-        String email = txtEmail.getText().trim();
+        String maKH = tfMaKH.getText().trim();
+        String tenKH = tfTenKH.getText().trim();
+        String sdt = tfSDT.getText().trim();
+        String email = tfEmail.getText().trim();
 
         if (tenKH.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ dữ liệu!", Alert.AlertType.WARNING);
+            showAlert("Thiếu dữ liệu", "Vui lòng nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
             return;
         }
 
-        // Không cho sửa mã khách hàng
         if (!maKH.equals(originalMaKH)) {
-            showAlert("Không thể thay đổi mã khách hàng",
-                    "Mã khách hàng là định danh duy nhất, không thể chỉnh sửa.",
+            showAlert("Không thể sửa mã khách hàng",
+                    "Mã khách hàng là định danh duy nhất, không thể thay đổi.",
                     Alert.AlertType.WARNING);
-            txtMaKH.setText(originalMaKH);
+            tfMaKH.setText(originalMaKH);
             return;
         }
 
-        // Nếu không thay đổi gì
         boolean khongThayDoi =
                 tenKH.equals(originalTenKH) &&
                 sdt.equals(originalSDT) &&
                 email.equals(originalEmail);
 
-        if (khongThayDoi) {
-            showAlert("Không có thay đổi", "Bạn chưa thay đổi thông tin nào để cập nhật.", Alert.AlertType.INFORMATION);
-            return;
-        }
+        if (khongThayDoi) return;
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận sửa thông tin");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Cập nhật thông tin khách hàng?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-        confirm.setContentText("Bạn có chắc muốn cập nhật thông tin khách hàng này?");
-        ButtonType dongY = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
-        ButtonType huy = new ButtonType("Không", ButtonBar.ButtonData.CANCEL_CLOSE);
-        confirm.getButtonTypes().setAll(dongY, huy);
-
         confirm.showAndWait().ifPresent(response -> {
-            if (response == dongY) {
+            if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
                              "UPDATE khachhang SET tenkhachhang=?, sdt=?, email=? WHERE makhachhang=?")) {
@@ -181,14 +158,8 @@ public class KhachhangController {
                     clearFields();
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
                     showAlert("Lỗi cập nhật", e.getMessage(), Alert.AlertType.ERROR);
                 }
-            } else {
-                txtMaKH.setText(originalMaKH);
-                txtTenKH.setText(originalTenKH);
-                txtSDT.setText(originalSDT);
-                txtEmail.setText(originalEmail);
             }
         });
     }
@@ -196,52 +167,41 @@ public class KhachhangController {
     // ---------------- XÓA ----------------
     @FXML
     public void onXoa() {
-        String maKH = txtMaKH.getText().trim();
+        String maKH = tfMaKH.getText().trim();
 
         if (maKH.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng chọn khách hàng cần xóa!", Alert.AlertType.WARNING);
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận xóa khách hàng");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Bạn có chắc muốn xóa khách hàng có mã '" + maKH + "'?",
+                ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-        confirm.setContentText("Bạn có chắc muốn xóa khách hàng có mã '" + maKH + "' không?");
-        ButtonType dongY = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
-        ButtonType huy = new ButtonType("Không", ButtonBar.ButtonData.CANCEL_CLOSE);
-        confirm.getButtonTypes().setAll(dongY, huy);
-
         confirm.showAndWait().ifPresent(response -> {
-            if (response == dongY) {
+            if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement("DELETE FROM khachhang WHERE makhachhang=?")) {
 
                     ps.setString(1, maKH);
-                    int rows = ps.executeUpdate();
+                    ps.executeUpdate();
 
-                    if (rows > 0) {
-                        onTaiDuLieu();
-                        clearFields();
-                    } else {
-                        showAlert("Không tìm thấy", "Không có khách hàng có mã '" + maKH + "'.", Alert.AlertType.WARNING);
-                    }
+                    onTaiDuLieu();
+                    clearFields();
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
                     showAlert("Lỗi xóa khách hàng", e.getMessage(), Alert.AlertType.ERROR);
                 }
-            } else {
-                clearFields();
             }
         });
     }
 
     // ---------------- HÀM TIỆN ÍCH ----------------
     private void clearFields() {
-        txtMaKH.clear();
-        txtTenKH.clear();
-        txtSDT.clear();
-        txtEmail.clear();
+        tfMaKH.clear();
+        tfTenKH.clear();
+        tfSDT.clear();
+        tfEmail.clear();
     }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
@@ -255,12 +215,6 @@ public class KhachhangController {
     // ---------------- ĐĂNG XUẤT ----------------
     @FXML
     private void dangXuat(javafx.event.ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Đăng xuất");
-        alert.setHeaderText(null);
-        alert.setContentText("Bạn đã đăng xuất khỏi hệ thống!");
-        alert.showAndWait();
-
         ((javafx.stage.Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow()).close();
     }
 }

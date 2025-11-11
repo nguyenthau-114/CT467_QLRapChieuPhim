@@ -1,25 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package nhanvien;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 
 public class NhanVienController {
 
-    @FXML private TextField txtMaNV, txtTenNV, txtChucVu, txtSDT, txtEmail;
+    @FXML private TextField txtMaNV, txtTenNV, txtChucVu, txtSDT, txtEmail, txtTimKiem;
     @FXML private TableView<NhanVien> tableNV;
     @FXML private TableColumn<NhanVien, String> colMaNV, colTenNV, colChucVu, colSDT, colEmail;
+    @FXML private Button btnDangXuat;
 
-    private ObservableList<NhanVien> dsNV = FXCollections.observableArrayList();
+    private final ObservableList<NhanVien> dsNV = FXCollections.observableArrayList();
 
-    // Biến lưu dữ liệu gốc khi chọn dòng
+    // Lưu dữ liệu gốc để so sánh khi sửa
     private String originalMaNV = "", originalTenNV = "", originalChucVu = "", originalSDT = "", originalEmail = "";
 
     // ---------------- KHỞI TẠO ----------------
@@ -31,7 +32,9 @@ public class NhanVienController {
         colSDT.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getSdt()));
         colEmail.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getEmail()));
 
-        // Khi click chọn dòng → hiển thị + lưu gốc
+        tableNV.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        // Khi chọn dòng trong bảng
         tableNV.setOnMouseClicked(event -> {
             NhanVien nv = tableNV.getSelectionModel().getSelectedItem();
             if (nv != null) {
@@ -49,7 +52,7 @@ public class NhanVienController {
             }
         });
 
-        tableNV.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        onTaiDuLieu();
     }
 
     // ---------------- TẢI DỮ LIỆU ----------------
@@ -69,10 +72,12 @@ public class NhanVienController {
                         rs.getString("email")
                 ));
             }
-            tableNV.setItems(dsNV);
+
+            /*tableNV.setItems(dsNV);
+            System.out.println("✅ Đã tải " + dsNV.size() + " nhân viên từ CSDL.");*/
 
         } catch (SQLException e) {
-            showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -86,22 +91,33 @@ public class NhanVienController {
         String email = txtEmail.getText().trim();
 
         if (ma.isEmpty() || ten.isEmpty() || chucVu.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", Alert.AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
+            return;
+        }
+
+        if (!showConfirmDialog("Xác nhận thêm mới", "Bạn có chắc muốn thêm nhân viên này không?")) {
+            clearFields();
             return;
         }
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement("INSERT INTO nhanvien VALUES (?, ?, ?, ?, ?)")) {
+
             ps.setString(1, ma);
             ps.setString(2, ten);
             ps.setString(3, chucVu);
             ps.setString(4, sdt);
             ps.setString(5, email);
-            ps.executeUpdate();
-            onTaiDuLieu();
-            clearFields();
+
+            /*int rows = ps.executeUpdate();
+            if (rows > 0) {
+                showAlert("Thành công", "Đã thêm nhân viên mới!", AlertType.INFORMATION);
+                onTaiDuLieu();
+                clearFields();
+            }*/
+
         } catch (SQLException e) {
-            showAlert("Lỗi thêm nhân viên", e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Lỗi thêm nhân viên", e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -109,7 +125,7 @@ public class NhanVienController {
     @FXML
     public void onSua() {
         if (txtMaNV.getText().isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn nhân viên cần sửa!", Alert.AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Vui lòng chọn nhân viên cần sửa!", AlertType.WARNING);
             return;
         }
 
@@ -119,15 +135,29 @@ public class NhanVienController {
         String sdt = txtSDT.getText().trim();
         String email = txtEmail.getText().trim();
 
+        // Không cho phép đổi mã
         if (!ma.equals(originalMaNV)) {
-            showAlert("Không thể sửa mã nhân viên", "Mã nhân viên là định danh duy nhất!", Alert.AlertType.WARNING);
+            showAlert("Không thể sửa mã nhân viên",
+                    "Mã nhân viên là định danh duy nhất, hệ thống sẽ khôi phục lại mã cũ.",
+                    AlertType.WARNING);
             txtMaNV.setText(originalMaNV);
             return;
         }
 
-        if (ten.equals(originalTenNV) && chucVu.equals(originalChucVu) &&
-            sdt.equals(originalSDT) && email.equals(originalEmail)) {
-            showAlert("Không có thay đổi", "Bạn chưa thay đổi thông tin nào để cập nhật!", Alert.AlertType.INFORMATION);
+        boolean khongThayDoi =
+                ten.equals(originalTenNV) &&
+                chucVu.equals(originalChucVu) &&
+                sdt.equals(originalSDT) &&
+                email.equals(originalEmail);
+
+        if (khongThayDoi) {
+            showAlert("Không có thay đổi", "Bạn chưa thay đổi thông tin nào để cập nhật.", AlertType.INFORMATION);
+            return;
+        }
+
+        if (!showConfirmDialog("Xác nhận sửa thông tin",
+                "Bạn có chắc muốn cập nhật thông tin nhân viên này không?")) {
+            clearFields();
             return;
         }
 
@@ -140,12 +170,16 @@ public class NhanVienController {
             ps.setString(3, sdt);
             ps.setString(4, email);
             ps.setString(5, ma);
-            ps.executeUpdate();
 
-            onTaiDuLieu();
-            clearFields();
+            /*int rows = ps.executeUpdate();
+            if (rows > 0) {
+                showAlert("Thành công", "Cập nhật thông tin nhân viên thành công!", AlertType.INFORMATION);
+                onTaiDuLieu();
+                clearFields();
+            }*/
+
         } catch (SQLException e) {
-            showAlert("Lỗi cập nhật nhân viên", e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Lỗi cập nhật nhân viên", e.getMessage(), AlertType.ERROR);
         }
     }
 
@@ -155,27 +189,62 @@ public class NhanVienController {
         String ma = txtMaNV.getText().trim();
 
         if (ma.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn nhân viên cần xóa!", Alert.AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Vui lòng chọn nhân viên cần xóa!", AlertType.WARNING);
+            return;
+        }
+
+        if (!showConfirmDialog("Xác nhận xóa", "Bạn có chắc muốn xóa nhân viên có mã '" + ma + "' không?")) {
+            clearFields();
             return;
         }
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM nhanvien WHERE manhanvien=?")) {
+
             ps.setString(1, ma);
             int rows = ps.executeUpdate();
 
-            if (rows > 0) {
+            /*if (rows > 0) {
+                showAlert("Thành công", "Đã xóa nhân viên!", AlertType.INFORMATION);
                 onTaiDuLieu();
                 clearFields();
             } else {
-                showAlert("Không tìm thấy", "Không có nhân viên có mã '" + ma + "'.", Alert.AlertType.WARNING);
-            }
+                showAlert("Không tìm thấy", "Không có nhân viên có mã '" + ma + "'.", AlertType.WARNING);
+            }*/
+
         } catch (SQLException e) {
-            showAlert("Lỗi xóa nhân viên", e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Lỗi xóa nhân viên", e.getMessage(), AlertType.ERROR);
         }
     }
 
-    // ---------------- HÀM TIỆN ÍCH ----------------
+    // ---------------- TÌM KIẾM ----------------
+    @FXML
+    public void onTimKiem() {
+        String keyword = txtTimKiem.getText().trim().toLowerCase();
+        if (keyword.isEmpty()) {
+            tableNV.setItems(dsNV);
+            return;
+        }
+
+        ObservableList<NhanVien> ketQua = FXCollections.observableArrayList();
+        for (NhanVien nv : dsNV) {
+            if (nv.getMaNhanVien().toLowerCase().contains(keyword)
+                    || nv.getTenNhanVien().toLowerCase().contains(keyword)
+                    || nv.getChucVu().toLowerCase().contains(keyword)) {
+                ketQua.add(nv);
+            }
+        }
+        tableNV.setItems(ketQua);
+    }
+
+    // ---------------- ĐĂNG XUẤT ----------------
+    @FXML
+    private void dangXuat(ActionEvent event) {
+        showAlert("Đăng xuất", "Bạn đã đăng xuất khỏi hệ thống!", AlertType.INFORMATION);
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    }
+
+    // ---------------- HÀM HỖ TRỢ ----------------
     private void clearFields() {
         txtMaNV.clear();
         txtTenNV.clear();
@@ -184,7 +253,7 @@ public class NhanVienController {
         txtEmail.clear();
     }
 
-    private void showAlert(String title, String message, Alert.AlertType type) {
+    private void showAlert(String title, String message, AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -192,14 +261,17 @@ public class NhanVienController {
         alert.showAndWait();
     }
 
-    @FXML
-    private void dangXuat(javafx.event.ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Đăng xuất");
-        alert.setHeaderText(null);
-        alert.setContentText("Bạn đã đăng xuất khỏi hệ thống!");
-        alert.showAndWait();
-        ((javafx.stage.Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow()).close();
+    private boolean showConfirmDialog(String title, String message) {
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle(title);
+        confirm.setHeaderText(null);
+        confirm.setContentText(message);
+
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
+        confirm.showAndWait();
+        return confirm.getResult() == btnXacNhan;
     }
 }
-

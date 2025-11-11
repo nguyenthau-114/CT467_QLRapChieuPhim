@@ -103,7 +103,7 @@ public class Ve_truycapController {
             ps.setString(7, tfMaGhe.getText());
 
             ps.executeUpdate();
-            showAlert("Thành công", "Đã thêm vé mới!");
+            //showAlert("Thành công", "Đã thêm vé mới!");
             taiDuLieu();
             clearForm();
 
@@ -136,7 +136,7 @@ public class Ve_truycapController {
             ps.setString(7, tfMaVe.getText());
 
             ps.executeUpdate();
-            showAlert("Thành công", "Đã cập nhật thông tin vé!");
+            //showAlert("Thành công", "Đã cập nhật thông tin vé!");
             taiDuLieu();
             clearForm();
 
@@ -162,7 +162,7 @@ public class Ve_truycapController {
 
             ps.setString(1, selected.getMave());
             ps.executeUpdate();
-            showAlert("Thành công", "Đã xóa vé!");
+            //showAlert("Thành công", "Đã xóa vé!");
             taiDuLieu();
             clearForm();
 

@@ -160,12 +160,12 @@ public class SuatChieuController {
                     ps.setString(5, phim);
                     ps.setString(6, phong);
 
-                    int rows = ps.executeUpdate();
+                    /*int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Đã thêm suất chiếu mới!", AlertType.INFORMATION);
                         clearFields(); // ✅ chỉ xóa sau khi thêm thành công
-                    }
+                    }*/
 
                 } catch (SQLException e) {
                     showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
@@ -215,12 +215,12 @@ public class SuatChieuController {
                     ps.setString(5, phong);
                     ps.setString(6, ma);
 
-                    int rows = ps.executeUpdate();
+                    /*int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Cập nhật suất chiếu thành công!", AlertType.INFORMATION);
                         clearFields(); // ✅ xóa sau khi cập nhật thành công
-                    }
+                    }*/
 
                 } catch (SQLException e) {
                     showAlert("Lỗi cập nhật", e.getMessage(), AlertType.ERROR);
@@ -247,12 +247,12 @@ public class SuatChieuController {
                      PreparedStatement ps = conn.prepareStatement("DELETE FROM suatchieu WHERE masuatchieu=?")) {
 
                     ps.setString(1, ma);
-                    int rows = ps.executeUpdate();
+                    /*int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Đã xóa suất chiếu!", AlertType.INFORMATION);
                         clearFields();
-                    }
+                    }*/
 
                 } catch (SQLException e) {
                     showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
