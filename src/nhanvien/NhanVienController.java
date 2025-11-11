@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
+import javafx.scene.layout.VBox;
 
 public class NhanVienController {
 
@@ -274,4 +275,71 @@ public class NhanVienController {
         confirm.showAndWait();
         return confirm.getResult() == btnXacNhan;
     }
+// ===============================
+// 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
+// ===============================
+@FXML private VBox menuDuLieu;
+
+@FXML
+private void hienMenuDuLieu() {
+    menuDuLieu.setVisible(true);
+    menuDuLieu.setManaged(true);
+}
+
+@FXML
+private void anMenuDuLieu() {
+    new Thread(() -> {
+        try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+        javafx.application.Platform.runLater(() -> {
+            if (!menuDuLieu.isHover()) {
+                menuDuLieu.setVisible(false);
+                menuDuLieu.setManaged(false);
+            }
+        });
+    }).start();
+}
+
+@FXML
+private void giuMenuKhiHover() {
+    menuDuLieu.setVisible(true);
+    menuDuLieu.setManaged(true);
+}
+
+@FXML
+private void anMenuKhiRoi() {
+    menuDuLieu.setVisible(false);
+    menuDuLieu.setManaged(false);
+}
+
+// ===============================
+// 🔄 CHUYỂN TRANG TRONG MENU
+// ===============================
+@FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
+@FXML private void moTrangSuatChieu(ActionEvent e) { chuyenTrang(e, "/SuatChieu/SuatChieu.fxml"); }
+@FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }
+@FXML private void moTrangVe(ActionEvent e) { chuyenTrang(e, "/ve/ve_truycap.fxml"); }
+
+private void chuyenTrang(ActionEvent e, String path) {
+    try {
+        javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(path));
+        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(root));
+        stage.show();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
+                "Không thể mở trang: " + path).show();
+    }
+}
+//Hàm chuyển trang Thống Kê
+@FXML
+private void moTrangThongKe(ActionEvent e) {
+    chuyenTrang(e, "/thongke/Thongke.fxml");
+}
+@FXML
+private void moTrangKhachHang(ActionEvent e) {
+    chuyenTrang(e, "/khachhang/khachhang.fxml");
+}
+
+    
 }

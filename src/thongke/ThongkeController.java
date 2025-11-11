@@ -2,17 +2,21 @@ package thongke;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.stage.Stage;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.collections.*;
 import javafx.beans.property.*;
 import java.sql.*;
-
 import ketnoi_truyxuat.DBConnection;
 
 public class ThongkeController {
 
+    // --- Các thành phần thống kê ---
     @FXML private Label lblTongPhim, lblTongVe, lblDoanhThu, lblSuatChieu, lblTongDoanhThu;
     @FXML private ComboBox<String> cboPhim;
     @FXML private DatePicker dpTuNgay, dpDenNgay;
@@ -20,7 +24,10 @@ public class ThongkeController {
     @FXML private TableColumn<Thongke, String> colTenPhim, colNgayChieu, colGioChieu;
     @FXML private TableColumn<Thongke, Integer> colSoVe;
     @FXML private TableColumn<Thongke, Double> colDoanhThu;
-    @FXML private TableView<?> tableTopPhim; // ✅ thêm dòng này
+    @FXML private TableView<?> tableTopPhim;
+
+    // --- Menu xổ xuống “Dữ liệu” ---
+    @FXML private VBox menuDuLieu;
 
     @FXML
     public void initialize() {
@@ -31,7 +38,7 @@ public class ThongkeController {
             lblDoanhThu.setText(getSum(conn, "SELECT SUM(giave) FROM ve") + " VNĐ");
             lblSuatChieu.setText(getCount(conn, "SELECT COUNT(*) FROM suatchieu"));
 
-            // Load danh sách phim vào combobox
+            // Load danh sách phim
             ResultSet rs = conn.createStatement().executeQuery("SELECT tenphim FROM phim");
             while (rs.next()) cboPhim.getItems().add(rs.getString("tenphim"));
         } catch (Exception e) {
@@ -39,21 +46,19 @@ public class ThongkeController {
             lblDoanhThu.setText("Lỗi dữ liệu!");
         }
 
-        // 🔹 Cấu hình bảng Top 10 phim
+        // Cấu hình bảng Top 10 phim
         tableTopPhim.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         tableTopPhim.setPlaceholder(new Label("Chưa có dữ liệu thống kê"));
 
-        // 🔹 Cấu hình bảng Thống kê doanh thu
+        // Cấu hình bảng Thống kê doanh thu
         tableThongKe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         tableThongKe.setPlaceholder(new Label("Chưa có dữ liệu thống kê"));
-
-         // Thiết lập kích thước tối thiểu để không bị che chữ
 
         dpTuNgay.setPrefWidth(150);
         dpDenNgay.setPrefWidth(150);
         cboPhim.setPrefWidth(220);
-        
-        // 🔹 Căn giữa header
+
+        // Căn giữa header
         tableTopPhim.widthProperty().addListener((obs, oldVal, newVal) ->
             tableTopPhim.lookupAll(".column-header .label")
                     .forEach(node -> node.setStyle("-fx-alignment: CENTER;"))
@@ -64,16 +69,17 @@ public class ThongkeController {
                     .forEach(node -> node.setStyle("-fx-alignment: CENTER;"))
         );
 
-        // 🔹 Căn giữa dữ liệu trong cell (tuỳ chọn)
+        // Căn giữa cell
         colTenPhim.setStyle("-fx-alignment: CENTER;");
         colNgayChieu.setStyle("-fx-alignment: CENTER;");
         colGioChieu.setStyle("-fx-alignment: CENTER;");
         colSoVe.setStyle("-fx-alignment: CENTER;");
         colDoanhThu.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        
     }
 
+    // ===============================
+    // 📊 Xử lý thống kê dữ liệu
+    // ===============================
     private String getCount(Connection conn, String query) throws SQLException {
         try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(query)) {
             if (rs.next()) return String.valueOf(rs.getInt(1));
@@ -151,4 +157,87 @@ public class ThongkeController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
+    // ===============================
+    // 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
+    // ===============================
+
+@FXML
+private void hienMenuDuLieu() {
+    menuDuLieu.setVisible(true);
+    menuDuLieu.setManaged(true); // cho phép layout nhận diện khi hiển thị
+}
+
+@FXML
+private void anMenuDuLieu() {
+    // Trì hoãn 150ms để tránh mất menu khi rê chuột xuống quá nhanh
+    new Thread(() -> {
+        try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+        javafx.application.Platform.runLater(() -> {
+            if (!menuDuLieu.isHover()) {
+                menuDuLieu.setVisible(false);
+                menuDuLieu.setManaged(false);
+            }
+        });
+    }).start();
+}
+
+@FXML
+private void giuMenuKhiHover() {
+    menuDuLieu.setVisible(true);
+    menuDuLieu.setManaged(true);
+}
+
+@FXML
+private void anMenuKhiRoi() {
+    menuDuLieu.setVisible(false);
+    menuDuLieu.setManaged(false);
+}
+// ===============================
+// 📂 CHUYỂN TRANG (nút trong menu Dữ liệu)
+// ===============================
+
+@FXML
+private void moTrangPhim(ActionEvent event) {
+    chuyenTrang(event, "/phim/Phim_truycap.fxml");
+}
+
+@FXML
+private void moTrangSuatChieu(ActionEvent event) {
+    chuyenTrang(event, "/SuatChieu/SuatChieu.fxml");
+}
+
+@FXML
+private void moTrangPhongChieu(ActionEvent event) {
+    chuyenTrang(event, "/Phong/PhongChieu.fxml");
+}
+
+@FXML
+private void moTrangVe(ActionEvent event) {
+    chuyenTrang(event, "/ve/ve_truycap.fxml");
+}
+
+/** 🔹 Hàm dùng chung để chuyển trang */
+private void chuyenTrang(ActionEvent event, String fxmlPath) {
+    try {
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    } catch (Exception e) {
+        e.printStackTrace();
+        new Alert(Alert.AlertType.ERROR, "Không thể mở trang: " + fxmlPath).show();
+    }
+}
+//hàm chuyển trang Nhân Viên
+@FXML
+private void moTrangNhanVien(ActionEvent e) {
+    chuyenTrang(e, "/nhanvien/NhanVien.fxml");
+}
+@FXML
+private void moTrangKhachHang(ActionEvent e) {
+    chuyenTrang(e, "/khachhang/khachhang.fxml");
+}
+
 }

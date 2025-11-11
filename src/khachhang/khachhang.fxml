@@ -32,29 +32,48 @@
                     </font>
                 </Label>
 
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê"
+        onAction="#moTrangThongKe">
+
                     <VBox.margin><Insets bottom="10.0" top="25.0" /></VBox.margin>
                 </Button>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-green" text="Dữ Liệu">
-                    <VBox.margin><Insets bottom="10.0" /></VBox.margin>
-                </Button>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
+                 <!-- 🔹 Nút DỮ LIỆU + MENU CON -->
+                <VBox>
+                    <!-- Nút chính -->
+                    <Button fx:id="btnDuLieu"
+                            text="Dữ Liệu"
+                            onMouseEntered="#hienMenuDuLieu"
+                            onMouseExited="#anMenuDuLieu"
+                            prefHeight="25.0" prefWidth="108.0"
+                            styleClass="header-green">
+                        <VBox.margin><Insets bottom="10.0" /></VBox.margin>
+                    </Button>
+
+                    <!-- Menu con xổ xuống -->
+                    <VBox fx:id="menuDuLieu"
+                            visible="false"
+                            managed="false"
+                            pickOnBounds="false"
+                            onMouseEntered="#giuMenuKhiHover"
+                            onMouseExited="#anMenuKhiRoi"
+                            spacing="6"
+                            style="-fx-background-color: transparent; -fx-padding: 5 0 0 15;">
+                          <Button text="Phim" onAction="#moTrangPhim" styleClass="sidebtn-ghost" />
+                          <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" />
+                          <Button text="Phòng Chiếu" onAction="#moTrangPhongChieu" styleClass="sidebtn-ghost" />
+                          <Button text="Vé" onAction="#moTrangVe" styleClass="sidebtn-ghost" />
+                      </VBox>
+
+                </VBox>
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên"
+        onAction="#moTrangNhanVien">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
                 <Button prefWidth="108.0" styleClass="header-blue-active" text="Khách Hàng">
                     <VBox.margin><Insets bottom="15.0" /></VBox.margin>
                 </Button>
                 <Separator />
-                <Button styleClass="sidebtn-ghost" text="Phim">
-                    <VBox.margin><Insets bottom="5.0" top="10.0" /></VBox.margin>
-                </Button>
-                <Button styleClass="sidebtn-ghost" text="Suất Chiếu">
-                    <VBox.margin><Insets bottom="5.0" /></VBox.margin>
-                </Button>
-                <Button styleClass="sidebtn-ghost" text="Phòng Chiếu">
-                    <VBox.margin><Insets bottom="5.0" /></VBox.margin>
-                </Button>
-                <Button styleClass="sidebtn-ghost" text="Vé" />
+                
             </children>
         </VBox>
     </left>

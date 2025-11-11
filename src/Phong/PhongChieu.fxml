@@ -52,8 +52,8 @@
                </VBox.margin></Button>
                 <Separator />
 
-                <Button styleClass="sidebtn-ghost" text="Phim" />
-                <Button styleClass="sidebtn-ghost" text="Suất Chiếu">
+                <Button text="Phim" onAction="#moTrangPhim" styleClass="sidebtn-ghost" />
+                <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" >
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Button>
@@ -66,7 +66,7 @@
                         <String fx:value="selected" />
                     </styleClass>
                 </Button>
-                <Button prefHeight="0.0" prefWidth="114.0" styleClass="sidebtn-ghost" text="Vé">
+                <Button prefHeight="0.0" prefWidth="114.0" styleClass="sidebtn-ghost" text="Vé" >
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Button>

@@ -101,3 +101,46 @@
     -fx-background-color: #f97316;
     -fx-text-fill: white;
 }
+
+
+
+/* ===========================================
+   🎬 MENU DỮ LIỆU XỔ XUỐNG (GIỮ BỐ CỤC GỌN ĐẸP)
+   =========================================== */
+
+/* Hộp menu xổ xuống (ẩn bên dưới nút Dữ liệu, không phá bố cục) */
+#menuDuLieu {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 0 15;  /* đẩy nhẹ sang phải, không làm lệch hàng */
+    -fx-spacing: 4;
+}
+
+/* Các nút con trong menu xổ xuống */
+.sidebtn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-weight: normal;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 4 15 4 15;
+    -fx-background-radius: 6;
+    -fx-font-size: 13;
+}
+
+.sidebtn-ghost:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+    -fx-effect: none;
+}
+
+/* Khi bấm giữ */
+.sidebtn-ghost:pressed {
+    -fx-background-color: rgba(255,255,255,0.25);
+}
+
+/* Khi rê chuột vào nút Dữ liệu */
+.header-green:hover {
+    -fx-background-color: #9FDFB0;
+    -fx-text-fill: #1b4332;
+    -fx-effect: dropshadow(gaussian, rgba(159,223,176,0.6), 10, 0.3, 0, 0);
+}

@@ -61,15 +61,15 @@
                         <String fx:value="selected" />
                     </styleClass>
                 </Button>
-                <Button styleClass="sidebtn-ghost" text="Suất Chiếu">
+                <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" >
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Button>
-                <Button prefHeight="0.0" prefWidth="114.0" styleClass="sidebtn-ghost" text="Phòng Chiếu">
+                <Button text="Phòng Chiếu" onAction="#moTrangPhongChieu" styleClass="sidebtn-ghost">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Button>
-                <Button styleClass="sidebtn-ghost" text="Vé" />
+                <Button text="Vé" onAction="#moTrangVe" styleClass="sidebtn-ghost" />
             </children>
         </VBox>
     </left>

@@ -281,8 +281,30 @@ public class PhongChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    
+        //hàm chueyern trang chính
+private void chuyenTrang(ActionEvent e, String fxmlPath) {
+    try {
+        javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(fxmlPath));
+        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(root));
+        stage.show();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
+                "Không thể mở trang: " + fxmlPath).show();
+    }
+}
     @FXML
     private void dangXuat(ActionEvent event) {
         System.out.println("Đăng xuất thành công!");
     }
+    @FXML
+private void moTrangPhim(ActionEvent e) {
+    chuyenTrang(e, "/phim/Phim_truycap.fxml");
+}
+@FXML
+private void moTrangSuatChieu(ActionEvent e) {
+    chuyenTrang(e, "/SuatChieu/SuatChieu.fxml");
+}
 }
