@@ -45,7 +45,7 @@
                         <Insets bottom="10" top="25" />
                     </VBox.margin>
                 </Button>
-                <Button prefHeight="25" prefWidth="108" styleClass="header-green" text="Dữ Liệu">
+                <Button prefHeight="25" prefWidth="108" styleClass="header-green-active" text="Dữ Liệu">
                     <VBox.margin>
                         <Insets bottom="10" />
                     </VBox.margin>

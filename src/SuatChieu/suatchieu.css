@@ -75,17 +75,31 @@
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(255,235,120,0.6), 8, 0.4, 0, 1);
 }
+.header-yellow-active {
+    -fx-background-color: #FFD84D;   /* vàng tươi đậm hơn rõ ràng */
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,200,60,0.8), 10, 0.5, 0, 3);
+}
 .header-yellow:hover {
     -fx-background-color: #FFE066;
     -fx-effect: dropshadow(gaussian, rgba(255,224,102,0.8), 10, 0.3, 0, 0);
 }
 
 .header-green {
-    -fx-background-color: #B9EAC1;
+    -fx-background-color: #B9EAC1;   /* xanh mint pastel rõ hơn */
     -fx-text-fill: #1b4332;
     -fx-font-weight: bold;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(160,230,180,0.6), 8, 0.3, 0, 2);
+}
+.header-green-active {
+    -fx-background-color: #81d69c;   /* xanh đậm hơn, dễ thấy là active */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(100,200,130,0.8), 10, 0.5, 0, 3);
 }
 .header-green:hover {
     -fx-background-color: #9FDFB0;
@@ -93,11 +107,18 @@
 }
 
 .header-orange {
-    -fx-background-color: #FFD199;
+    -fx-background-color: #FFD199;   /* peach pastel tăng đậm */
     -fx-text-fill: #7b3f00;
     -fx-font-weight: bold;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(255,190,130,0.6), 8, 0.3, 0, 2);
+}
+.header-orange-active {
+    -fx-background-color: #ffb84d;  /* cam đậm hơn rõ */
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(255,150,60,0.7), 10, 0.5, 0, 2);
 }
 .header-orange:hover {
     -fx-background-color: #FFC266;
@@ -105,11 +126,18 @@
 }
 
 .header-blue {
-    -fx-background-color: #B6D5FF;
+    -fx-background-color: #B6D5FF;   /* sky pastel đậm hơn chút */
     -fx-text-fill: #003366;
     -fx-font-weight: bold;
     -fx-background-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(182,208,247,0.7), 8, 0.3, 0, 2);
+}
+.header-blue-active {
+    -fx-background-color: #5ca0ff;   /* xanh bầu trời đậm hơn */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(120,170,255,0.8), 10, 0.5, 0, 3);
 }
 .header-blue:hover {
     -fx-background-color: #9CC6FF;
