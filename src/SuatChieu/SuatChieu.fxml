@@ -40,7 +40,7 @@
                     </font>
                 </Label>
 
-                <Button prefHeight="25" prefWidth="108" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
+                <Button prefHeight="25" prefWidth="108" styleClass="header-yellow" onAction="#moTrangThongKe" text="Thống kê" textFill="WHITE">
                     <VBox.margin>
                         <Insets bottom="10" top="25" />
                     </VBox.margin>
@@ -50,12 +50,12 @@
                         <Insets bottom="10" />
                     </VBox.margin>
                 </Button>
-                <Button prefHeight="25" prefWidth="108" styleClass="header-orange" text="Nhân Viên">
+                <Button prefHeight="25" prefWidth="108" onAction="#moTrangNhanVien" styleClass="header-orange" text="Nhân Viên">
                     <VBox.margin>
                         <Insets bottom="10" />
                     </VBox.margin>
                 </Button>
-                <Button prefWidth="108" styleClass="header-blue" text="Khách Hàng">
+                <Button prefWidth="108" styleClass="header-blue" onAction="#moTrangKhachHang" text="Khách Hàng">
                     <VBox.margin>
                         <Insets bottom="15" />
                     </VBox.margin>

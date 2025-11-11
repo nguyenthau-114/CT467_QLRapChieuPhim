@@ -307,4 +307,23 @@ private void moTrangPhim(ActionEvent e) {
 private void moTrangSuatChieu(ActionEvent e) {
     chuyenTrang(e, "/SuatChieu/SuatChieu.fxml");
 }
+@FXML
+private void moTrangVe(ActionEvent e) {
+    chuyenTrang(e, "/ve/ve_truycap.fxml");
+}
+@FXML
+private void moTrangThongKe(ActionEvent e) {
+    chuyenTrang(e, "/thongke/Thongke.fxml");
+}
+
+@FXML
+private void moTrangNhanVien(ActionEvent e) {
+    chuyenTrang(e, "/nhanvien/NhanVien.fxml");
+}
+
+@FXML
+private void moTrangKhachHang(ActionEvent e) {
+    chuyenTrang(e, "/khachhang/khachhang.fxml");
+}
+
 }
