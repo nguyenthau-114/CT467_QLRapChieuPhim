@@ -104,24 +104,28 @@
                 <Insets bottom="15" left="0" right="0" top="0" />
             </padding>
             <!-- THANH TÌM KIẾM -->
-                <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="821.0" spacing="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+                <!-- 🔹 THANH TÌM KIẾM -->
+                <HBox alignment="CENTER_LEFT"
+                      prefHeight="40"
+                      spacing="15"
+                      AnchorPane.leftAnchor="20"
+                      AnchorPane.rightAnchor="20">
                     <VBox.margin>
-                        <Insets top="35.0" />
+                        <Insets top="41" />
                     </VBox.margin>
                     <children>
-                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding></Label>
-                        <TextField fx:id="tfTimKiem" prefWidth="220" promptText="Nhập mã phim" />
-                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white;                                         -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;" text="🔍" />
+                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
+                        <TextField fx:id="txtTimKiem" prefWidth="220" promptText="Nhập mã suất chiếu, phim..." />
+                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
+                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
+                                text="🔍" />
                     </children>
                 </HBox>
 
             <!-- 🔸 FORM NHẬP -->
             <AnchorPane prefHeight="184.0" prefWidth="953.0">
                 <children>
-                    <GridPane hgap="50.0" layoutX="22" layoutY="15.0" prefHeight="165.0" prefWidth="736.0" vgap="20">
+                    <GridPane hgap="50.0" layoutX="2" layoutY="15.0" prefHeight="165.0" prefWidth="736.0" vgap="20">
                         <columnConstraints>
                             <ColumnConstraints percentWidth="14.0" />
                             <ColumnConstraints percentWidth="36.0" />
