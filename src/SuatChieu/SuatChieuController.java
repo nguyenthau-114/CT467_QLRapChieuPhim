@@ -12,12 +12,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import ketnoi_truyxuat.DBConnection;
-
 import java.sql.*;
 
 public class SuatChieuController {
 
-    // ====== KHAI BÁO CÁC THÀNH PHẦN GIAO DIỆN ======
     @FXML private TextField txtMaSuatChieu, txtGioChieu, txtGiaVe, txtMaPhim, txtMaPhong, txtTimKiem;
     @FXML private DatePicker dpNgayChieu;
     @FXML private TableView<SuatChieu> tableSuatChieu;
@@ -29,7 +27,6 @@ public class SuatChieuController {
 
     private ObservableList<SuatChieu> dsSuatChieu = FXCollections.observableArrayList();
 
-    // Biến lưu dữ liệu gốc (phục vụ kiểm tra sửa)
     private String originalMaSuatChieu = "";
     private Date originalNgayChieu;
     private Time originalGioChieu;
@@ -37,7 +34,6 @@ public class SuatChieuController {
     private String originalMaPhim = "";
     private String originalMaPhong = "";
 
-    // ====== KHỞI TẠO BAN ĐẦU ======
     @FXML
     public void initialize() {
         colMaSuatChieu.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMasuatchieu()));
@@ -47,7 +43,6 @@ public class SuatChieuController {
         colMaPhim.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaphim()));
         colMaPhong.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaphong()));
 
-        // Khi chọn dòng trong bảng
         tableSuatChieu.setOnMouseClicked(event -> {
             SuatChieu sc = tableSuatChieu.getSelectionModel().getSelectedItem();
             if (sc != null) {
@@ -58,7 +53,6 @@ public class SuatChieuController {
                 txtMaPhim.setText(sc.getMaphim());
                 txtMaPhong.setText(sc.getMaphong());
 
-                // Lưu dữ liệu gốc
                 originalMaSuatChieu = sc.getMasuatchieu();
                 originalNgayChieu = sc.getNgaychieu();
                 originalGioChieu = sc.getGiochieu();
@@ -69,31 +63,9 @@ public class SuatChieuController {
         });
 
         taiLaiDuLieu();
-        // ✅ Giúp bảng tự co giãn đầy vùng hiển thị khi phóng to/thu nhỏ cửa sổ
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
-        // Lắng nghe thay đổi kích thước cửa sổ cha (stage)
-        tableSuatChieu.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.windowProperty().addListener((obsWin, oldWin, newWin) -> {
-                    if (newWin != null) {
-                        Stage stage = (Stage) newWin;
-
-                        // Lắng nghe thay đổi chiều cao và chiều rộng của cửa sổ
-                        stage.widthProperty().addListener((o, oldW, newW) -> {
-                            tableSuatChieu.setPrefWidth(newW.doubleValue() - 250); // chừa khoảng sidebar
-                        });
-                        stage.heightProperty().addListener((o, oldH, newH) -> {
-                            tableSuatChieu.setPrefHeight(newH.doubleValue() - 250); // chừa khoảng header + form
-                        });
-                    }
-                });
-            }
-        });
-
     }
 
-    // ====== TẢI DỮ LIỆU ======
     @FXML
     public void taiLaiDuLieu() {
         dsSuatChieu.clear();
@@ -103,12 +75,10 @@ public class SuatChieuController {
                 return;
             }
 
-            String sql = "SELECT masuatchieu, ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong " +
-                         "FROM suatchieu ORDER BY CAST(SUBSTRING(masuatchieu, 3) AS UNSIGNED)";
+            String sql = "SELECT masuatchieu, ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong FROM suatchieu ORDER BY CAST(SUBSTRING(masuatchieu,3) AS UNSIGNED)";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
-            int count = 0;
             while (rs.next()) {
                 dsSuatChieu.add(new SuatChieu(
                         rs.getString("masuatchieu"),
@@ -118,54 +88,46 @@ public class SuatChieuController {
                         rs.getString("phim_maphim"),
                         rs.getString("phongchieu_maphong")
                 ));
-                count++;
             }
-
             tableSuatChieu.setItems(dsSuatChieu);
-            System.out.println("✅ Đã tải " + count + " suất chiếu từ CSDL.");
-
         } catch (SQLException e) {
-            e.printStackTrace();
             showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
         }
     }
 
-    // ====== THÊM SUẤT CHIẾU ======
+    // ===================== THÊM SUẤT CHIẾU =====================
     @FXML
     public void themSuatChieu() {
-        String ma = txtMaSuatChieu.getText().trim();
         String gio = txtGioChieu.getText().trim();
         String gia = txtGiaVe.getText().trim();
         String phim = txtMaPhim.getText().trim();
         String phong = txtMaPhong.getText().trim();
 
-        if (ma.isEmpty() || dpNgayChieu.getValue() == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
+        if (dpNgayChieu.getValue() == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
             return;
         }
 
         Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận thêm suất chiếu mới?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
-                             "INSERT INTO suatchieu (masuatchieu, ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?, ?)")) {
+                             "INSERT INTO suatchieu (ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?)")) {
 
-                    ps.setString(1, ma);
-                    ps.setDate(2, Date.valueOf(dpNgayChieu.getValue()));
-                    ps.setTime(3, Time.valueOf(gio));
-                    ps.setFloat(4, Float.parseFloat(gia));
-                    ps.setString(5, phim);
-                    ps.setString(6, phong);
+                    ps.setDate(1, Date.valueOf(dpNgayChieu.getValue()));
+                    ps.setTime(2, Time.valueOf(gio));
+                    ps.setFloat(3, Float.parseFloat(gia));
+                    ps.setString(4, phim);
+                    ps.setString(5, phong);
 
-                    /*int rows = ps.executeUpdate();
+                    int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Đã thêm suất chiếu mới!", AlertType.INFORMATION);
-                        clearFields(); // ✅ chỉ xóa sau khi thêm thành công
-                    }*/
+                        clearFields();
+                    }
 
                 } catch (SQLException e) {
                     showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
@@ -174,34 +136,22 @@ public class SuatChieuController {
         });
     }
 
-    // ====== SỬA SUẤT CHIẾU ======
+    // ===================== SỬA SUẤT CHIẾU =====================
     @FXML
     public void suaSuatChieu() {
-        if (txtMaSuatChieu.getText().isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn suất chiếu cần sửa!", AlertType.WARNING);
-            return;
-        }
-
         String ma = txtMaSuatChieu.getText().trim();
         String gio = txtGioChieu.getText().trim();
         String gia = txtGiaVe.getText().trim();
         String phim = txtMaPhim.getText().trim();
         String phong = txtMaPhong.getText().trim();
 
-        if (dpNgayChieu.getValue() == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
+        if (ma.isEmpty() || dpNgayChieu.getValue() == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ thông tin!", AlertType.WARNING);
-            return;
-        }
-
-        if (!ma.equals(originalMaSuatChieu)) {
-            showAlert("Không thể đổi mã suất chiếu", "Mã suất chiếu là định danh duy nhất, hệ thống sẽ khôi phục lại mã cũ.", AlertType.WARNING);
-            txtMaSuatChieu.setText(originalMaSuatChieu);
             return;
         }
 
         Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận cập nhật suất chiếu?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
@@ -215,12 +165,12 @@ public class SuatChieuController {
                     ps.setString(5, phong);
                     ps.setString(6, ma);
 
-                    /*int rows = ps.executeUpdate();
+                    int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Cập nhật suất chiếu thành công!", AlertType.INFORMATION);
-                        clearFields(); // ✅ xóa sau khi cập nhật thành công
-                    }*/
+                        clearFields();
+                    }
 
                 } catch (SQLException e) {
                     showAlert("Lỗi cập nhật", e.getMessage(), AlertType.ERROR);
@@ -229,7 +179,7 @@ public class SuatChieuController {
         });
     }
 
-    // ====== XÓA SUẤT CHIẾU ======
+    // ===================== XÓA SUẤT CHIẾU =====================
     @FXML
     public void xoaSuatChieu() {
         String ma = txtMaSuatChieu.getText().trim();
@@ -240,20 +190,17 @@ public class SuatChieuController {
 
         Alert confirm = new Alert(AlertType.CONFIRMATION, "Bạn có chắc muốn xóa suất chiếu " + ma + "?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
-
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.YES) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement("DELETE FROM suatchieu WHERE masuatchieu=?")) {
-
                     ps.setString(1, ma);
-                    /*int rows = ps.executeUpdate();
+                    int rows = ps.executeUpdate();
                     if (rows > 0) {
                         taiLaiDuLieu();
                         showAlert("Thành công", "Đã xóa suất chiếu!", AlertType.INFORMATION);
                         clearFields();
-                    }*/
-
+                    }
                 } catch (SQLException e) {
                     showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
                 }
@@ -261,12 +208,11 @@ public class SuatChieuController {
         });
     }
 
-    // ====== TÌM KIẾM ======
+    // ===================== TÌM KIẾM =====================
     @FXML
     private void timKiem(KeyEvent event) {
         String keyword = txtTimKiem.getText().trim().toLowerCase();
         ObservableList<SuatChieu> ketQua = FXCollections.observableArrayList();
-
         for (SuatChieu sc : dsSuatChieu) {
             if (sc.getMasuatchieu().toLowerCase().contains(keyword)
                     || sc.getMaphim().toLowerCase().contains(keyword)
@@ -274,11 +220,9 @@ public class SuatChieuController {
                 ketQua.add(sc);
             }
         }
-
         tableSuatChieu.setItems(ketQua);
     }
 
-    // ====== ĐĂNG XUẤT ======
     @FXML
     private void dangXuat(ActionEvent event) {
         try {
@@ -292,7 +236,6 @@ public class SuatChieuController {
         }
     }
 
-    // ====== TIỆN ÍCH ======
     private void clearFields() {
         txtMaSuatChieu.clear();
         dpNgayChieu.setValue(null);
@@ -309,46 +252,24 @@ public class SuatChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    //hàm chueyern trang chính
-private void chuyenTrang(ActionEvent e, String fxmlPath) {
-    try {
-        javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(fxmlPath));
-        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new javafx.scene.Scene(root));
-        stage.show();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
-                "Không thể mở trang: " + fxmlPath).show();
+
+    private void chuyenTrang(ActionEvent e, String fxmlPath) {
+        try {
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(fxmlPath));
+            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
+                    "Không thể mở trang: " + fxmlPath).show();
+        }
     }
-}
 
-//Hàm chuyển trang qua lại
-    
-@FXML
-private void moTrangPhim(ActionEvent e) {
-    chuyenTrang(e, "/phim/Phim_truycap.fxml");
-}
-@FXML
-private void moTrangPhongChieu(ActionEvent e) {
-    chuyenTrang(e, "/Phong/PhongChieu.fxml");
-}
-@FXML
-private void moTrangVe(ActionEvent e) {
-    chuyenTrang(e, "/ve/ve_truycap.fxml");
-}
-@FXML
-private void moTrangThongKe(ActionEvent e) {
-    chuyenTrang(e, "/thongke/Thongke.fxml");
-}
-
-@FXML
-private void moTrangNhanVien(ActionEvent e) {
-    chuyenTrang(e, "/nhanvien/NhanVien.fxml");
-}
-
-@FXML
-private void moTrangKhachHang(ActionEvent e) {
-    chuyenTrang(e, "/khachhang/khachhang.fxml");
-}
+    @FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
+    @FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }
+    @FXML private void moTrangVe(ActionEvent e) { chuyenTrang(e, "/ve/ve_truycap.fxml"); }
+    @FXML private void moTrangThongKe(ActionEvent e) { chuyenTrang(e, "/thongke/Thongke.fxml"); }
+    @FXML private void moTrangNhanVien(ActionEvent e) { chuyenTrang(e, "/nhanvien/NhanVien.fxml"); }
+    @FXML private void moTrangKhachHang(ActionEvent e) { chuyenTrang(e, "/khachhang/khachhang.fxml"); }
 }
