@@ -62,7 +62,6 @@ public class SuatChieuController {
             }
         });
 
-        // ❌ Không tải dữ liệu tự động khi mở form
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
 
@@ -110,10 +109,16 @@ public class SuatChieuController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận thêm suất chiếu mới?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
+        confirm.setContentText("Xác nhận thêm suất chiếu mới?");
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnXacNhan) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
                              "INSERT INTO suatchieu (ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?)")) {
@@ -152,10 +157,16 @@ public class SuatChieuController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận cập nhật suất chiếu?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
+        confirm.setContentText("Xác nhận cập nhật suất chiếu?");
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnXacNhan) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
                              "UPDATE suatchieu SET ngaychieu=?, giochieu=?, giave=?, phim_maphim=?, phongchieu_maphong=? WHERE masuatchieu=?")) {
@@ -190,10 +201,16 @@ public class SuatChieuController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Bạn có chắc muốn xóa suất chiếu " + ma + "?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
+        confirm.setContentText("Bạn có chắc muốn xóa suất chiếu " + ma + "?");
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnXacNhan) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement("DELETE FROM suatchieu WHERE masuatchieu=?")) {
                     ps.setString(1, ma);
