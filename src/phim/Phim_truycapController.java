@@ -92,29 +92,91 @@ public class Phim_truycapController {
     public void onThem() {
         phim p = buildPhimFromForm();
         if (p == null) return;
-        dao.insertPhim(p);
-        onTaiDuLieu();
-        clearForm();
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận thêm");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Bạn có chắc muốn thêm phim này không?");
+        ButtonType ok = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(ok, cancel);
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ok) {
+                dao.insertPhim(p);
+                onTaiDuLieu();
+                tablePhim.getSelectionModel().selectLast(); // ✅ chọn dòng phim vừa thêm
+                showAlert("Đã thêm phim thành công!");
+            }
+        });
+
     }
+
 
     @FXML
     public void onSua() {
         phim p = buildPhimFromForm();
         if (p == null) return;
-        dao.updatePhim(p);
-        onTaiDuLieu();
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận sửa");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Bạn có chắc muốn cập nhật thông tin phim này không?");
+        ButtonType ok = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(ok, cancel);
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ok) {
+                dao.updatePhim(p);
+                onTaiDuLieu();
+                showAlert("Đã cập nhật phim thành công!");
+            }
+        });
     }
+
 
     @FXML
     public void onXoa() {
         phim selected = tablePhim.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Hãy chọn 1 dòng cần xóa"); return;
+            showAlert("Hãy chọn 1 dòng cần xóa");
+            return;
         }
-        dao.deletePhim(selected.getMaPhim());
-        onTaiDuLieu();
-        clearForm();
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận xóa");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Bạn có chắc muốn xóa phim này không?");
+        ButtonType ok = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(ok, cancel);
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ok) {
+                try {
+                    dao.deletePhim(selected.getMaPhim());
+                    onTaiDuLieu();
+                    clearForm();
+                    showAlert("Đã xóa phim thành công!");
+                } catch (Exception e) {
+                    // Nếu trigger báo lỗi, dòng này sẽ bắt được và hiển thị thông báo SQL
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Lỗi xóa phim");
+                    alert.setHeaderText(null);
+                    // MySQL trigger SIGNAL sẽ truyền message qua e.getMessage()
+                    alert.setContentText(
+                        e.getMessage().contains("suatchieu") 
+                            ? "Không thể xóa phim vì đang có suất chiếu!" 
+                            : e.getMessage()
+                    );
+                    alert.showAndWait();
+                }
+            }
+        });
     }
+
+
 
     @FXML
     public void onChonAnh() {
@@ -128,7 +190,7 @@ public class Phim_truycapController {
     // Helpers
     private phim buildPhimFromForm() {
         try {
-            String ma = tfMaPhim.getText().trim();
+            String ma = tfMaPhim.getText().trim(); // vẫn lấy, nhưng không bắt buộc
             String ten = tfTenPhim.getText().trim();
             String theloai = dsTheLoai.stream().filter(TheLoaiItem::isSelected)
                     .map(TheLoaiItem::getName).collect(Collectors.joining(", "));
@@ -136,12 +198,19 @@ public class Phim_truycapController {
             int thoiLuong = Integer.parseInt(tfThoiLuong.getText().trim());
             String ngayKC = dpNgayKC.getValue() == null ? null : dpNgayKC.getValue().toString();
             int doTuoi = Integer.parseInt(tfDoTuoi.getText().trim());
-            if (ma.isEmpty() || ten.isEmpty()) { showAlert("Mã phim và Tên phim bắt buộc."); return null; }
+
+            if (ten.isEmpty()) {
+                showAlert("Tên phim bắt buộc nhập!");
+                return null;
+            }
+
             return new phim(ma, ten, theloai, daoDien, thoiLuong, ngayKC, doTuoi);
         } catch (NumberFormatException e) {
-            showAlert("Thời lượng/Độ tuổi phải là số nguyên."); return null;
+            showAlert("Thời lượng/Độ tuổi phải là số nguyên.");
+            return null;
         }
     }
+
     private void clearForm() {
         tfMaPhim.clear(); tfTenPhim.clear(); tfDaoDien.clear(); tfThoiLuong.clear(); tfDoTuoi.clear();
         dpNgayKC.setValue(null); dsTheLoai.forEach(t -> t.setSelected(false)); imgPoster.setImage(null);

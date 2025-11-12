@@ -179,7 +179,7 @@
                                text="0" />
                     </VBox>
                 </HBox>
-
+ 
                 <!-- KHU DƯỚI -->
                 <HBox prefHeight="419.0" prefWidth="953.0" spacing="25">
 
