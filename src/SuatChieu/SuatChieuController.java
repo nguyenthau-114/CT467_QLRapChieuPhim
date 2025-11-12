@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
+import java.time.LocalDate;
 
 public class SuatChieuController {
 
@@ -62,7 +63,6 @@ public class SuatChieuController {
             }
         });
 
-        // ❌ Không tải dữ liệu tự động khi mở form
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
 
@@ -97,68 +97,81 @@ public class SuatChieuController {
         }
     }
 
-    // ===================== THÊM SUẤT CHIẾU =====================
+    
+    // ===================== THÊM SUẤT CHIẾU (KIỂM TRA LỊCH TRÙNG) =====================
     @FXML
     public void themSuatChieu() {
         String gio = txtGioChieu.getText().trim();
         String gia = txtGiaVe.getText().trim();
         String phim = txtMaPhim.getText().trim();
         String phong = txtMaPhong.getText().trim();
+        LocalDate ngay = dpNgayChieu.getValue();
 
-        if (dpNgayChieu.getValue() == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
+        if (ngay == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
             return;
         }
 
-        // ✅ BƯỚC 1: Kiểm tra phòng có đang được sử dụng không
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement psCheck = conn.prepareStatement("SELECT fn_kiemtra_phongtrong(?) AS dang_dung")) {
+        try (Connection conn = DBConnection.getConnection()) {
 
-            psCheck.setString(1, phong);
-            try (ResultSet rs = psCheck.executeQuery()) {
-                if (rs.next()) {
-                    int dangDung = rs.getInt("dang_dung");
+            // 🔹 1. GỌI FUNCTION KIỂM TRA LỊCH TRÙNG
+            String sqlCheck = "SELECT fn_kiemtra_lichtrung(?, ?, ?, ?) AS trung";
+            try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
+                psCheck.setString(1, phong);
+                psCheck.setDate(2, Date.valueOf(ngay));
+                psCheck.setTime(3, Time.valueOf(gio.length() == 5 ? gio + ":00" : gio));
+                psCheck.setString(4, phim);
 
-                    if (dangDung == 1) {
-                        showAlert("Phòng đang được sử dụng",
-                                "Phòng '" + phong + "' hiện đã được dùng trong suất chiếu khác.\nVui lòng chọn phòng khác.",
-                                AlertType.WARNING);
-                        return; // ❌ Dừng, không cho thêm
+                try (ResultSet rs = psCheck.executeQuery()) {
+                    if (rs.next()) {
+                        int trung = rs.getInt("trung");
+
+                        if (trung == 1) {
+                            showAlert("⛔ Lịch chiếu bị trùng",
+                                    "Phòng '" + phong + "' Không thể thêm suất chiếu mới!",
+                                    AlertType.WARNING);
+                            return;
+                        } else {
+                            // 🔹 2. Nếu KHÔNG trùng → hỏi xác nhận thêm
+                            Alert confirm = new Alert(AlertType.CONFIRMATION);
+                            confirm.setTitle("✅ Lịch hợp lệ! Xác nhận thêm suất chiếu");
+                            confirm.setHeaderText(null);
+                            confirm.setContentText("Phòng '" + phong + "' hiện trống.\nBạn có muốn thêm suất chiếu này không?");
+                            ButtonType btnThem = new ButtonType("Thêm", ButtonBar.ButtonData.OK_DONE);
+                            ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+                            confirm.getButtonTypes().setAll(btnThem, btnHuy);
+
+                            confirm.showAndWait().ifPresent(response -> {
+                                if (response == btnThem) {
+                                    try (PreparedStatement ps = conn.prepareStatement(
+                                            "INSERT INTO suatchieu (ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?)")) {
+
+                                        ps.setDate(1, Date.valueOf(ngay));
+                                        ps.setTime(2, Time.valueOf(gio.length() == 5 ? gio + ":00" : gio));
+                                        ps.setFloat(3, Float.parseFloat(gia));
+                                        ps.setString(4, phim);
+                                        ps.setString(5, phong);
+
+                                        int rows = ps.executeUpdate();
+                                        if (rows > 0) {
+                                            taiLaiDuLieu();
+                                            showAlert("Thành công", "Đã thêm suất chiếu mới!", AlertType.INFORMATION);
+                                            clearFields();
+                                        }
+
+                                    } catch (SQLException e) {
+                                        showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             }
+
         } catch (SQLException e) {
-            showAlert("Lỗi kiểm tra phòng", e.getMessage(), AlertType.ERROR);
-            return;
+            showAlert("Lỗi kiểm tra lịch chiếu", e.getMessage(), AlertType.ERROR);
         }
-
-        // ✅ BƯỚC 2: Xác nhận thêm nếu phòng trống
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận thêm suất chiếu mới?", ButtonType.YES, ButtonType.NO);
-        confirm.setHeaderText(null);
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                try (Connection conn = DBConnection.getConnection();
-                     PreparedStatement ps = conn.prepareStatement(
-                             "INSERT INTO suatchieu (ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?)")) {
-
-                    ps.setDate(1, Date.valueOf(dpNgayChieu.getValue()));
-                    ps.setTime(2, Time.valueOf(gio));
-                    ps.setFloat(3, Float.parseFloat(gia));
-                    ps.setString(4, phim);
-                    ps.setString(5, phong);
-
-                    int rows = ps.executeUpdate();
-                    if (rows > 0) {
-                        taiLaiDuLieu();
-                        showAlert("Thành công", "Đã thêm suất chiếu mới!", AlertType.INFORMATION);
-                        clearFields();
-                    }
-
-                } catch (SQLException e) {
-                    showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
-                }
-            }
-        });
     }
 
 
@@ -176,10 +189,16 @@ public class SuatChieuController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận cập nhật suất chiếu?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
+        confirm.setContentText("Xác nhận cập nhật suất chiếu?");
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnXacNhan) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement(
                              "UPDATE suatchieu SET ngaychieu=?, giochieu=?, giave=?, phim_maphim=?, phongchieu_maphong=? WHERE masuatchieu=?")) {
@@ -214,10 +233,16 @@ public class SuatChieuController {
             return;
         }
 
-        Alert confirm = new Alert(AlertType.CONFIRMATION, "Bạn có chắc muốn xóa suất chiếu " + ma + "?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(AlertType.CONFIRMATION);
+        confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
+        confirm.setContentText("Bạn có chắc muốn xóa suất chiếu " + ma + "?");
+        ButtonType btnXacNhan = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnHuy = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(btnXacNhan, btnHuy);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
+            if (response == btnXacNhan) {
                 try (Connection conn = DBConnection.getConnection();
                      PreparedStatement ps = conn.prepareStatement("DELETE FROM suatchieu WHERE masuatchieu=?")) {
                     ps.setString(1, ma);
@@ -291,43 +316,6 @@ public class SuatChieuController {
                     "Không thể mở trang: " + fxmlPath).show();
         }
     }
-    // ===================== kiemtraphong trong =====================
-    @FXML
-    public void kiemTraPhongTrong() {
-        String maPhong = txtMaPhong.getText().trim();
-        if (maPhong.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn mã phòng!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        String sql = "SELECT fn_kiemtra_phongtrong(?) AS dang_dung";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, maPhong);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int dangDung = rs.getInt("dang_dung");
-
-                    if (dangDung == 1) {
-                        showAlert("Phòng đang được sử dụng",
-                                  "Phòng '" + maPhong + "' hiện có suất chiếu đang sử dụng.",
-                                  Alert.AlertType.INFORMATION);
-                    } else {
-                        showAlert("Phòng trống",
-                                  "Phòng '" + maPhong + "' hiện chưa được dùng trong suất chiếu nào.",
-                                  Alert.AlertType.INFORMATION);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Lỗi kiểm tra phòng", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
 
     @FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
     @FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }

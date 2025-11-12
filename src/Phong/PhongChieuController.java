@@ -346,8 +346,6 @@ public class PhongChieuController {
     }
     
 
-
-
     @FXML private void dangXuat(ActionEvent event) { System.out.println("Đăng xuất thành công!"); }
     @FXML private void moTrangPhim(ActionEvent e)       { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
     @FXML private void moTrangSuatChieu(ActionEvent e)  { chuyenTrang(e, "/SuatChieu/SuatChieu.fxml"); }

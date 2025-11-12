@@ -204,6 +204,8 @@
                         <TableColumn fx:id="colGiaVe" text="Giá vé" />
                         <TableColumn fx:id="colMaPhim" text="Mã phim" />
                         <TableColumn fx:id="colMaPhong" text="Mã phòng" />
+                        <!-- ✅ Thêm cột trạng thái -->
+                        <TableColumn fx:id="colTrangThai" text="Trạng thái" prefWidth="120" />
                     </columns>
                 </TableView>
             </VBox>

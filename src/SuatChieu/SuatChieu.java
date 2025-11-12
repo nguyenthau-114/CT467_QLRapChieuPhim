@@ -4,15 +4,15 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class SuatChieu {
-
     private String masuatchieu;
     private Date ngaychieu;
     private Time giochieu;
     private float giave;
     private String maphim;
     private String maphong;
+    private String trangthai; // ✅ thêm mới
 
-    // ----------- CONSTRUCTOR -----------
+    // ===== Constructor đầy đủ (giữ nguyên + thêm trạng thái) =====
     public SuatChieu(String masuatchieu, Date ngaychieu, Time giochieu, float giave, String maphim, String maphong) {
         this.masuatchieu = masuatchieu;
         this.ngaychieu = ngaychieu;
@@ -20,9 +20,21 @@ public class SuatChieu {
         this.giave = giave;
         this.maphim = maphim;
         this.maphong = maphong;
+        this.trangthai = "Sắp chiếu"; // ✅ mặc định nếu không truyền
     }
 
-    // ----------- GETTER & SETTER -----------
+    // ✅ Constructor mở rộng: có cả trạng thái
+    public SuatChieu(String masuatchieu, Date ngaychieu, Time giochieu, float giave, String maphim, String maphong, String trangthai) {
+        this.masuatchieu = masuatchieu;
+        this.ngaychieu = ngaychieu;
+        this.giochieu = giochieu;
+        this.giave = giave;
+        this.maphim = maphim;
+        this.maphong = maphong;
+        this.trangthai = trangthai;
+    }
+
+    // ===== Getter & Setter =====
     public String getMasuatchieu() {
         return masuatchieu;
     }
@@ -71,16 +83,12 @@ public class SuatChieu {
         this.maphong = maphong;
     }
 
-    // ----------- TO STRING (TÙY CHỌN) -----------
-    @Override
-    public String toString() {
-        return "SuatChieu{" +
-                "masuatchieu='" + masuatchieu + '\'' +
-                ", ngaychieu=" + ngaychieu +
-                ", giochieu=" + giochieu +
-                ", giave=" + giave +
-                ", maphim='" + maphim + '\'' +
-                ", maphong='" + maphong + '\'' +
-                '}';
+    // ✅ Getter/Setter mới cho trạng thái
+    public String getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
     }
 }
