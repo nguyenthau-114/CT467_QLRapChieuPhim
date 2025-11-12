@@ -238,26 +238,58 @@ public class PhongChieuController {
         confirm.setHeaderText(null);
         confirm.setContentText("Bạn có chắc muốn xóa phòng chiếu có mã '" + maPhong + "' không?");
         ButtonType dongY = new ButtonType("Có", ButtonBar.ButtonData.OK_DONE);
-        ButtonType huy = new ButtonType("Không", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType huy   = new ButtonType("Không", ButtonBar.ButtonData.CANCEL_CLOSE);
         confirm.getButtonTypes().setAll(dongY, huy);
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == dongY) {
-                try (Connection conn = DBConnection.getConnection();
-                     PreparedStatement ps = conn.prepareStatement("DELETE FROM phongchieu WHERE maphong=?")) {
+                try (Connection conn = DBConnection.getConnection()) {
 
-                    ps.setString(1, maPhong);
-                    int rows = ps.executeUpdate();
+                    // ✅ Tùy chọn: set chế độ chặn của trigger theo phiên JDBC
+                    // FUTURE = chặn nếu còn suất chưa diễn ra (mặc định của trigger)
+                    try (Statement st = conn.createStatement()) {
+                        st.execute("SET @PHONG_DELETE_MODE = 'FUTURE'"); // hoặc 'ANY' nếu muốn chặn mọi suất
+                    }
 
-                    if (rows > 0) {
-                        taiDuLieu();
-                        clearFields();
-                    } else {
-                        showAlert("Không tìm thấy", "Không có phòng chiếu có mã '" + maPhong + "'.", Alert.AlertType.WARNING);
+                    // Thực hiện xóa
+                    try (PreparedStatement ps = conn.prepareStatement(
+                            "DELETE FROM phongchieu WHERE maphong = ?")) {
+                        ps.setString(1, maPhong);
+                        int rows = ps.executeUpdate();
+
+                        if (rows > 0) {
+                            taiDuLieu();
+                            clearFields();
+                        } else {
+                            showAlert("Không tìm thấy",
+                                    "Không có phòng chiếu có mã '" + maPhong + "'.",
+                                    Alert.AlertType.WARNING);
+                        }
                     }
 
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    String sqlState = e.getSQLState();
+                    int err = e.getErrorCode();
+
+                    // 🔒 Trigger SIGNAL (45000)
+                    if ("45000".equals(sqlState)) {
+                        showAlert("Không thể xóa phòng", 
+                                  "Phòng đang có suất chiếu liên quan nên không thể xóa.\n"
+                                  + "Chi tiết: " + e.getMessage(),
+                                  Alert.AlertType.WARNING);
+                        return;
+                    }
+
+                    // 🔒 Ràng buộc FK RESTRICT (nếu bạn bật FK)
+                    if (err == 1451) { // Cannot delete or update a parent row: a foreign key constraint fails
+                        showAlert("Không thể xóa phòng", 
+                                  "Phòng đang bị ràng buộc bởi bảng suất chiếu nên không thể xóa.",
+                                  Alert.AlertType.WARNING);
+                        return;
+                    }
+
+                    // Các lỗi khác
                     showAlert("Lỗi xóa phòng", e.getMessage(), Alert.AlertType.ERROR);
                 }
             } else {
@@ -265,6 +297,7 @@ public class PhongChieuController {
             }
         });
     }
+
 
     // ---------------- HÀM TIỆN ÍCH ----------------
     private void clearFields() {

@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 public class Mainapp extends Application {
     @Override
 public void start(Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/SuatChieu/SuatChieu.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/thongke/Thongke.fxml"));
     Parent root = loader.load();
     Scene scene = new Scene(root);
     stage.setScene(scene);
