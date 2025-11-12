@@ -110,6 +110,29 @@ public class SuatChieuController {
             return;
         }
 
+        // ✅ BƯỚC 1: Kiểm tra phòng có đang được sử dụng không
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement psCheck = conn.prepareStatement("SELECT fn_kiemtra_phongtrong(?) AS dang_dung")) {
+
+            psCheck.setString(1, phong);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next()) {
+                    int dangDung = rs.getInt("dang_dung");
+
+                    if (dangDung == 1) {
+                        showAlert("Phòng đang được sử dụng",
+                                "Phòng '" + phong + "' hiện đã được dùng trong suất chiếu khác.\nVui lòng chọn phòng khác.",
+                                AlertType.WARNING);
+                        return; // ❌ Dừng, không cho thêm
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            showAlert("Lỗi kiểm tra phòng", e.getMessage(), AlertType.ERROR);
+            return;
+        }
+
+        // ✅ BƯỚC 2: Xác nhận thêm nếu phòng trống
         Alert confirm = new Alert(AlertType.CONFIRMATION, "Xác nhận thêm suất chiếu mới?", ButtonType.YES, ButtonType.NO);
         confirm.setHeaderText(null);
         confirm.showAndWait().ifPresent(response -> {
@@ -137,6 +160,7 @@ public class SuatChieuController {
             }
         });
     }
+
 
     // ===================== SỬA SUẤT CHIẾU =====================
     @FXML
@@ -267,6 +291,43 @@ public class SuatChieuController {
                     "Không thể mở trang: " + fxmlPath).show();
         }
     }
+    // ===================== kiemtraphong trong =====================
+    @FXML
+    public void kiemTraPhongTrong() {
+        String maPhong = txtMaPhong.getText().trim();
+        if (maPhong.isEmpty()) {
+            showAlert("Thiếu thông tin", "Vui lòng nhập hoặc chọn mã phòng!", Alert.AlertType.WARNING);
+            return;
+        }
+
+        String sql = "SELECT fn_kiemtra_phongtrong(?) AS dang_dung";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maPhong);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int dangDung = rs.getInt("dang_dung");
+
+                    if (dangDung == 1) {
+                        showAlert("Phòng đang được sử dụng",
+                                  "Phòng '" + maPhong + "' hiện có suất chiếu đang sử dụng.",
+                                  Alert.AlertType.INFORMATION);
+                    } else {
+                        showAlert("Phòng trống",
+                                  "Phòng '" + maPhong + "' hiện chưa được dùng trong suất chiếu nào.",
+                                  Alert.AlertType.INFORMATION);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Lỗi kiểm tra phòng", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
 
     @FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
     @FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }
