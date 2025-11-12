@@ -62,10 +62,11 @@ public class SuatChieuController {
             }
         });
 
-        taiLaiDuLieu();
+        // ❌ Không tải dữ liệu tự động khi mở form
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
 
+    // ===================== TẢI DỮ LIỆU =====================
     @FXML
     public void taiLaiDuLieu() {
         dsSuatChieu.clear();
@@ -75,7 +76,8 @@ public class SuatChieuController {
                 return;
             }
 
-            String sql = "SELECT masuatchieu, ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong FROM suatchieu ORDER BY CAST(SUBSTRING(masuatchieu,3) AS UNSIGNED)";
+            String sql = "SELECT masuatchieu, ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong " +
+                         "FROM suatchieu ORDER BY CAST(SUBSTRING(masuatchieu,3) AS UNSIGNED)";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
