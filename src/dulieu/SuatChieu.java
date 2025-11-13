@@ -1,4 +1,4 @@
-package java;
+package dulieu;
 
 import java.sql.Date;
 import java.sql.Time;

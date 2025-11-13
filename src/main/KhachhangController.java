@@ -8,7 +8,7 @@ import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
-import java.khachhang;
+import dulieu.khachhang;
 
 public class KhachhangController {
 

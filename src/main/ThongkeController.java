@@ -13,7 +13,7 @@ import javafx.collections.*;
 import javafx.beans.property.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
-import java.Thongke;
+import dulieu.Thongke;
 
 public class ThongkeController {
 

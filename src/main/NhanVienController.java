@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 import javafx.scene.layout.VBox;
-import java.NhanVien;
+import dulieu.NhanVien;
 
 public class NhanVienController {
 

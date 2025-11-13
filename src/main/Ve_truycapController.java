@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
-import java.ve;
+import dulieu.ve;
 
 public class Ve_truycapController {
 

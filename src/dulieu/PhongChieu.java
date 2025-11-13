@@ -1,4 +1,4 @@
-package java;
+package dulieu;
 
 public class PhongChieu {
 

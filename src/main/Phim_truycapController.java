@@ -13,8 +13,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
-import java.TheLoaiItem;
-import java.phim;
+import dulieu.TheLoaiItem;
+import dulieu.phim;
 
 
 public class Phim_truycapController {
