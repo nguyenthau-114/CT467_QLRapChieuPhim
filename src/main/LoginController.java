@@ -7,8 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+
 
 import java.sql.*;
+import javafx.scene.layout.VBox;
 import ketnoi_truyxuat.DBConnection;
 import main.ThongkeController;
 
@@ -89,19 +93,23 @@ public class LoginController {
     // ==================================================
     private void chuyenTrangThongKe(ActionEvent event, String tenNguoiDung) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/Thongke.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/FXML.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("📊 Thống kê - Rạp Chiếu Phim");
-            stage.show();
+            FXMLController controller = loader.getController();
+            controller.moTrangThongKe(); // Load Thống kê vào contentArea
 
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("📊 Hệ thống quản lý rạp chiếu phim");
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Lỗi", "Không thể mở trang thống kê!");
         }
-    }
+
+
+}
+
 
     // ==================================================
     //  HÀM HIỆN ALERT
@@ -113,4 +121,42 @@ public class LoginController {
         alert.setContentText(message);
         alert.showAndWait(); // Đợi bấm OK xong mới chạy tiếp chương trình
     }
+    /*@FXML private Label statusLabel;
+
+    @FXML private VBox menuDuLieu;
+
+    @FXML
+    private void hienMenuDuLieu() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
+
+    @FXML
+    private void anMenuDuLieu() {
+        new Thread(() -> {
+            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+            javafx.application.Platform.runLater(() -> {
+                if (!menuDuLieu.isHover()) {
+                    menuDuLieu.setVisible(false);
+                    menuDuLieu.setManaged(false);
+                }
+            });
+        }).start();
+    }
+
+    @FXML
+    private void giuMenuKhiHover() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
+
+    @FXML
+    private void anMenuKhiRoi() {
+        menuDuLieu.setVisible(false);
+        menuDuLieu.setManaged(false);
+    }
+    @FXML
+    private void dangXuat() {
+        statusLabel.setText("📌 Bạn đã đăng xuất.");
+    }*/
 }

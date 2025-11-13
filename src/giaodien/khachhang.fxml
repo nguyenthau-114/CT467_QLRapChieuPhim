@@ -25,7 +25,18 @@
     <center>
         <VBox fillWidth="true" spacing="0">
 
-            
+            <!-- 🔹 HEADER (banner trên cùng) -->
+            <AnchorPane VBox.vgrow="NEVER">
+                <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" style="-fx-background-color:white;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" >
+                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
+                        <children>
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="Quản Lý Khách Hàng" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
 
             <!-- 🔸 MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">

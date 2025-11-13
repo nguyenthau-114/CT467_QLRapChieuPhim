@@ -3,20 +3,27 @@ package main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
 public class FXMLController {
 
     @FXML private StackPane contentArea;
     @FXML private Label statusLabel;
+    @FXML private VBox menuDuLieu;
+
     @FXML
     public void initialize() {
-        // 🔥 Khi mở ứng dụng -> vào ngay trang Thống Kê
+        // Khi mở FXML chính, load luôn Thống kê
         moTrangThongKe();
     }
 
+    // Load nội dung các trang con vào contentArea
     private void loadView(String path, String title) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(path));
@@ -24,38 +31,37 @@ public class FXMLController {
             statusLabel.setText(title);
         } catch (Exception e) {
             e.printStackTrace();
-            statusLabel.setText("Lỗi tải trang " + path);
+            statusLabel.setText("Lỗi tải trang: " + path);
         }
     }
 
-    @FXML private void moTrangPhim() {
-        loadView("/giaodien/Phim_truycap.fxml", "Đang mở: Quản lý phim");
-    }
+    @FXML public void moTrangThongKe() { loadView("/giaodien/Thongke.fxml", "Đang mở: Thống kê"); }
+    @FXML private void moTrangPhim()      { loadView("/giaodien/Phim_truycap.fxml", "Đang mở: Quản lý Phim"); }
+    @FXML private void moTrangSuatChieu(){ loadView("/giaodien/SuatChieu.fxml", "Đang mở: Suất Chiếu"); }
+    @FXML private void moTrangPhong()     { loadView("/giaodien/PhongChieu.fxml", "Đang mở: Phòng Chiếu"); }
+    @FXML private void moTrangVe()        { loadView("/giaodien/ve_truycap.fxml", "Đang mở: Vé"); }
+    @FXML private void moTrangNhanVien()  { loadView("/giaodien/nhanvien.fxml", "Đang mở: Nhân Viên"); }
+    @FXML private void moTrangKhachHang() { loadView("/giaodien/khachhang.fxml", "Đang mở: Khách Hàng"); }
 
-    @FXML private void moTrangSuatChieu() {
-        loadView("/giaodien/SuatChieu.fxml", "Đang mở: Suất chiếu");
-    }
 
-    @FXML private void moTrangPhong() {
-        loadView("/giaodien/PhongChieu.fxml", "Đang mở: Phòng chiếu");
-    }
+    // ================= Đăng xuất =================
+    @FXML
+    private void dangXuat(ActionEvent event) {
+        try {
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.close();
 
-    @FXML private void moTrangVe() {
-        loadView("/giaodien/ve_truycap.fxml", "Đang mở: Vé");
-    }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/DangNhap.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.setTitle("Đăng nhập");
+            loginStage.show();
 
-    @FXML private void moTrangNhanVien() {
-        loadView("/giaodien/nhanvien.fxml", "Đang mở: Nhân viên");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-    @FXML private void moTrangKhachHang() {
-        loadView("/giaodien/khachhang.fxml", "Đang mở: Khách hàng");
-    }
-
-    @FXML private void moTrangThongKe() {
-        loadView("/giaodien/Thongke.fxml", "Đang mở: Thống kê");
-    }
-    @FXML private VBox menuDuLieu;
 
     @FXML
     private void hienMenuDuLieu() {
@@ -91,8 +97,11 @@ public class FXMLController {
     private void dangXuat() {
         statusLabel.setText("📌 Bạn đã đăng xuất.");
     }
-
 }
+
+    
+
+
 
 
 
