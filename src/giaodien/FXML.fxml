@@ -1,11 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@fxml.css" xmlns:fx="http://javafx.com/fxml/1">
-    
-</AnchorPane>
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.FXMLController">
+
+    <!-- HEADER -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-background-color:#1e293b; -fx-padding:12;">
+            <children>
+                <Label text="🕋 QUẢN LÝ RẠP CHIẾU PHIM"
+                       style="-fx-text-fill:white; -fx-font-size:18; -fx-font-weight:bold;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="Đăng xuất" onAction="#dangXuat"
+                        style="-fx-background-color:#ef4444; -fx-text-fill:white;"/>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
+            <padding>
+                <Insets bottom="15" left="10" right="10" top="15"/>
+            </padding>
+
+            <children>
+
+                <Label alignment="CENTER" maxWidth="Infinity"
+                       style="-fx-text-fill:#fff; -fx-font-weight:bold; -fx-font-size:22;"
+                       text="Quản trị">
+                    <font><Font size="18"/></font>
+                </Label>
+
+                <!-- Thống kê -->
+                <Button text="Thống kê"
+                        onAction="#moTrangThongKe"
+                        prefHeight="25" prefWidth="108"
+                        styleClass="header-yellow"/>
+
+                <!-- Dữ liệu + menu con -->
+                <VBox>
+                    <Button text="Dữ Liệu"
+                            fx:id="btnDuLieu"
+                            onMouseEntered="#hienMenuDuLieu"
+                            onMouseExited="#anMenuDuLieu"
+                            prefHeight="25" prefWidth="108"
+                            styleClass="header-green"/>
+
+                    <VBox fx:id="menuDuLieu"
+                          visible="false" managed="false"
+                          onMouseEntered="#giuMenuKhiHover"
+                          onMouseExited="#anMenuKhiRoi"
+                          spacing="6"
+                          style="-fx-padding: 5 0 0 15;">
+                        <Button text="Phim" onAction="#moTrangPhim" styleClass="sidebtn-ghost"/>
+                        <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost"/>
+                        <Button text="Phòng Chiếu" onAction="#moTrangPhong" styleClass="sidebtn-ghost"/>
+                        <Button text="Vé" onAction="#moTrangVe" styleClass="sidebtn-ghost"/>
+                    </VBox>
+                </VBox>
+
+                <!-- nhân viên / khách hàng -->
+                <Button text="Nhân Viên" onAction="#moTrangNhanVien"
+                        prefHeight="25" prefWidth="108"
+                        styleClass="header-orange"/>
+
+                <Button text="Khách Hàng" onAction="#moTrangKhachHang"
+                        prefHeight="25" prefWidth="108"
+                        styleClass="header-blue"/>
+
+                <Separator/>
+
+            </children>
+        </VBox>
+    </left>
+
+    <!-- VÙNG HIỂN THỊ VIEW CON -->
+    <center>
+        <StackPane fx:id="contentArea">
+            <children>
+                <Label text="Chọn chức năng để bắt đầu."
+                       style="-fx-text-fill:#666; -fx-font-size:16;"/>
+            </children>
+        </StackPane>
+    </center>
+
+    <!-- STATUS BAR -->
+    <bottom>
+        <HBox style="-fx-background-color:#e2e8f0; -fx-padding:10;">
+            <children>
+                <Label fx:id="statusLabel" text="Sẵn sàng."/>
+            </children>
+        </HBox>
+    </bottom>
+
+</BorderPane>

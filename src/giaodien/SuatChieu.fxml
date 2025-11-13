@@ -11,89 +11,14 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="main.SuatChieuController">
 
-    <!-- 🔹 SIDEBAR TRÁI -->
-    <left>
-        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
-            <padding>
-                <Insets bottom="15" left="10" right="10" top="15" />
-            </padding>
-            <children>
-                <Label text="Quản trị"
-                       alignment="CENTER"
-                       maxWidth="Infinity"
-                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-
-                <Button prefHeight="25" prefWidth="108" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
-                    <VBox.margin>
-                        <Insets bottom="10" top="25" />
-                    </VBox.margin>
-                </Button>
-                <Button prefHeight="25" prefWidth="108" styleClass="header-green-active" text="Dữ Liệu">
-                    <VBox.margin>
-                        <Insets bottom="10" />
-                    </VBox.margin>
-                </Button>
-                <Button prefHeight="25" prefWidth="108" styleClass="header-orange" text="Nhân Viên">
-                    <VBox.margin>
-                        <Insets bottom="10" />
-                    </VBox.margin>
-                </Button>
-                <Button prefWidth="108" styleClass="header-blue" text="Khách Hàng">
-                    <VBox.margin>
-                        <Insets bottom="15" />
-                    </VBox.margin>
-                </Button>
-                <Separator />
-
-                <Button text="Phim" styleClass="sidebtn-ghost" />
-                <Button text="Suất Chiếu">
-                    <VBox.margin>
-                        <Insets bottom="5" top="10" />
-                    </VBox.margin>
-                    <styleClass>
-                        <String fx:value="sidebtn-ghost" />
-                        <String fx:value="selected" />
-                    </styleClass>
-                </Button>
-                <Button text="Phòng Chiếu" styleClass="sidebtn-ghost" />
-                <Button text="Vé" styleClass="sidebtn-ghost" />
-            </children>
-        </VBox>
-    </left>
+    
 
     <!-- 🔹 NỘI DUNG CHÍNH -->
     <center>
         <VBox fillWidth="true" spacing="0">
 
             <!-- 🔸 HEADER -->
-            <AnchorPane VBox.vgrow="NEVER">
-                <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46"
-                          styleClass="header-bar"
-                          AnchorPane.leftAnchor="0"
-                          AnchorPane.rightAnchor="0"
-                          AnchorPane.topAnchor="0">
-                        <padding>
-                            <Insets bottom="3" left="20" right="20" top="3" />
-                        </padding>
-                        <children>
-                            <Label prefHeight="23" prefWidth="220"
-                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;"
-                                   text="⏰ Quản Lý Suất Chiếu" />
-                            <Pane HBox.hgrow="ALWAYS" />
-                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat"
-                                    prefHeight="28" prefWidth="104"
-                                    style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold;
-                                           -fx-background-radius:6; -fx-padding:5 15 5 15;"
-                                    text="Đăng xuất" />
-                        </children>
-                    </HBox>
-                </children>
-            </AnchorPane>
+            
 
             <!-- 🔸 MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
