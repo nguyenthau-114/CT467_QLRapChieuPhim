@@ -1,4 +1,4 @@
-package phim;
+package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +13,8 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
+import java.TheLoaiItem;
+import java.phim;
 
 
 public class Phim_truycapController {

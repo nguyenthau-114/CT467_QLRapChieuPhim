@@ -1,4 +1,4 @@
-package Phong;
+package java;
 
 public class PhongChieu {
 

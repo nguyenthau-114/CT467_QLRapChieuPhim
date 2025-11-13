@@ -1,4 +1,4 @@
-package phim;
+package main;
 
 import ketnoi_truyxuat.DBConnection;
 import java.sql.Connection;
@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.phim;
 
 public class Phim_truycap {
 

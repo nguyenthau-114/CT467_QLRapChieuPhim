@@ -1,4 +1,4 @@
-package thongke;
+package java;
 
 public class Thongke {
     private final String tenPhim;

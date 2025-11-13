@@ -1,4 +1,4 @@
-package nhanvien;
+package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 import javafx.scene.layout.VBox;
+import java.NhanVien;
 
 public class NhanVienController {
 

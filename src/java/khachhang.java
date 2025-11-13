@@ -1,4 +1,4 @@
-package khachhang;
+package java;
 
 public class khachhang {
     private String maKhachHang;

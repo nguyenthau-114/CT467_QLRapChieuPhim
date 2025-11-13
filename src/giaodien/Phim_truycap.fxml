@@ -21,7 +21,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@Phim.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phim.Phim_truycapController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="main.Phim_truycapController">
 
     <!-- 🔹 SIDEBAR TRÁI -->
     <left>

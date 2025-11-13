@@ -1,4 +1,4 @@
-package phim;
+package java;
 
 public class phim {
     private String maPhim;

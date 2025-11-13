@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@nhanvien.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nhanvien.NhanVienController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.KhachhangController">
 
     <!-- 🔹 SIDEBAR TRÁI -->
     <left>
@@ -27,13 +27,17 @@
             </padding>
             <children>
                 <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;" text="Quản trị">
-                    <font><Font size="18.0" /></font>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
                 </Label>
 
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE"
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê"
         onAction="#moTrangThongKe">
+
                     <VBox.margin><Insets bottom="10.0" top="25.0" /></VBox.margin>
                 </Button>
+                 <!-- 🔹 Nút DỮ LIỆU + MENU CON -->
                 <VBox>
                     <!-- Nút chính -->
                     <Button fx:id="btnDuLieu"
@@ -61,13 +65,11 @@
                       </VBox>
 
                 </VBox>
-                
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange-active" text="Nhân Viên">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên"
+        onAction="#moTrangNhanVien">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
-                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng"
-        onAction="#moTrangKhachHang">
-
+                <Button prefWidth="108.0" styleClass="header-blue-active" text="Khách Hàng">
                     <VBox.margin><Insets bottom="15.0" /></VBox.margin>
                 </Button>
                 <Separator />
@@ -84,9 +86,11 @@
             <AnchorPane VBox.vgrow="NEVER">
                 <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
+                        <padding>
+                            <Insets bottom="3" left="20" right="20" top="3" />
+                        </padding>
                         <children>
-                            <Label prefHeight="23.0" prefWidth="220.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="👔 Quản Lý Nhân Viên" />
+                            <Label prefHeight="23.0" prefWidth="220.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="👥 Quản Lý Khách Hàng" />
                             <Pane HBox.hgrow="ALWAYS" />
                             <Button fx:id="btnDangXuat" onAction="#dangXuat" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold;                                            -fx-background-radius:6; -fx-padding:5 15 5 15;" text="Đăng xuất" />
                         </children>
@@ -96,7 +100,9 @@
 
             <!-- 🔸 MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
-                <padding><Insets bottom="15" left="0" right="0" top="0" /></padding>
+                <padding>
+                    <Insets bottom="15" left="0" right="0" top="0" />
+                </padding>
 
                 <!-- THANH TÌM KIẾM -->
                 <HBox alignment="CENTER_LEFT" prefHeight="28.0" prefWidth="821.0" spacing="15">
@@ -105,15 +111,15 @@
                         <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:">
                             <padding><Insets left="20.0" /></padding>
                         </Label>
-                        <TextField fx:id="tfTimKiem" prefWidth="220" promptText="Nhập tên nhân viên" />
-                        <Button onAction="#onTaiDuLieu" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold;                                        -fx-padding: 5 12 5 12; -fx-background-radius: 6;" text="🔍" />
+                        <TextField fx:id="tfTimKiem" prefWidth="220" promptText="Nhập tên khách hàng" />
+                        <Button onAction="#onTaiDuLieu" style="-fx-background-color: #4caf50; -fx-text-fill: white;                                         -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;" text="🔍" />
                     </children>
                 </HBox>
 
                 <!-- FORM NHẬP -->
                 <AnchorPane prefHeight="184" prefWidth="953">
                     <children>
-                        <GridPane hgap="70" layoutX="22" layoutY="15" prefHeight="152" prefWidth="810" vgap="35">
+                        <GridPane hgap="70" layoutX="22" layoutY="15" prefHeight="120" prefWidth="800" vgap="35">
                             <columnConstraints>
                                 <ColumnConstraints percentWidth="21" />
                                 <ColumnConstraints percentWidth="29" />
@@ -124,32 +130,26 @@
                             <rowConstraints>
                                 <RowConstraints />
                                 <RowConstraints />
-                                <RowConstraints />
                             </rowConstraints>
 
                             <children>
                                 <!-- Hàng 1 -->
-                                <Label text="Mã nhân viên:" GridPane.rowIndex="0" />
-                                <TextField fx:id="txtMaNV" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                                           promptText="Nhập mã nhân viên (VD: NV01)" />
+                                <Label text="Mã khách hàng:" GridPane.rowIndex="0" />
+                                <TextField fx:id="tfMaKH" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                           promptText="Nhập mã khách hàng (VD: KH01)" />
 
-                                <Label text="Chức vụ:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                                <TextField fx:id="txtChucVu" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                                           promptText="Nhập chức vụ (VD: Quản lý / Thu ngân)" />
+                                <Label text="Số điện thoại:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <TextField fx:id="tfSDT" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                                           promptText="Nhập số điện thoại (VD: 090xxxxxxx)" />
 
                                 <!-- Hàng 2 -->
-                                <Label text="Tên nhân viên:" GridPane.rowIndex="1" />
-                                <TextField fx:id="txtTenNV" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                                           promptText="Nhập họ tên nhân viên" />
+                                <Label text="Tên khách hàng:" GridPane.rowIndex="1" />
+                                <TextField fx:id="tfTenKH" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                           promptText="Nhập họ tên khách hàng" />
 
-                                <Label text="Số điện thoại:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <TextField fx:id="txtSDT" GridPane.columnIndex="3" GridPane.rowIndex="1"
-                                           promptText="Nhập số điện thoại (VD: 0901xxxxxx)" />
-
-                                <!-- Hàng 3 -->
-                                <Label text="Email:" GridPane.rowIndex="2" />
-                                <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                                           promptText="Nhập email nhân viên (VD: nv01@rapchieu.vn)" />
+                                <Label text="Email:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <TextField fx:id="tfEmail" GridPane.columnIndex="3" GridPane.rowIndex="1"
+                                           promptText="Nhập email (VD: kh01@rapchieu.vn)" />
                             </children>
                         </GridPane>
                     </children>
@@ -168,11 +168,10 @@
                 </HBox>
 
                 <!-- BẢNG DỮ LIỆU -->
-                <TableView fx:id="tableNV" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tableKH" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colMaNV" text="Mã NV" />
-                        <TableColumn fx:id="colTenNV" text="Tên nhân viên" />
-                        <TableColumn fx:id="colChucVu" text="Chức vụ" />
+                        <TableColumn fx:id="colMaKH" text="Mã KH" />
+                        <TableColumn fx:id="colTenKH" text="Tên khách hàng" />
                         <TableColumn fx:id="colSDT" text="Số điện thoại" />
                         <TableColumn fx:id="colEmail" text="Email" />
                     </columns>

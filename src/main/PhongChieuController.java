@@ -1,5 +1,6 @@
-package Phong;
+package main;
 
+import java.PhongChieu;
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

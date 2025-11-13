@@ -1,4 +1,4 @@
-package SuatChieu;
+package java;
 
 import java.sql.Date;
 import java.sql.Time;

@@ -1,4 +1,4 @@
-package thongke;
+package main;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +13,7 @@ import javafx.collections.*;
 import javafx.beans.property.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
+import java.Thongke;
 
 public class ThongkeController {
 

@@ -1,4 +1,4 @@
-package khachhang;
+package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +8,7 @@ import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
+import java.khachhang;
 
 public class KhachhangController {
 

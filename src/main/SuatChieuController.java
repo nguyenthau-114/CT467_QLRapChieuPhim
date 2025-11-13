@@ -1,5 +1,6 @@
-package SuatChieu;
+package main;
 
+import java.SuatChieu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

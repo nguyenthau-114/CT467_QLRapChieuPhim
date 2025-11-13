@@ -16,10 +16,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@../phim/Phim.css"
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="thongke.ThongkeController">
+            fx:controller="main.ThongkeController">
 
     <!-- ========== SIDEBAR ========== -->
     <left>

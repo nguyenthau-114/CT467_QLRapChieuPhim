@@ -1,3 +1,5 @@
+package main;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +9,7 @@ import javafx.stage.Stage;
 public class Mainapp extends Application {
     @Override
 public void start(Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/thongke/Thongke.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/Thongke.fxml"));
     Parent root = loader.load();
     Scene scene = new Scene(root);
     stage.setScene(scene);

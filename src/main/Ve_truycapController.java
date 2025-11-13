@@ -1,4 +1,4 @@
-package ve;
+package main;
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
+import java.ve;
 
 public class Ve_truycapController {
 
