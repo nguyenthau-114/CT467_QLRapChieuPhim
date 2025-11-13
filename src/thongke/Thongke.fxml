@@ -135,7 +135,7 @@
                             style="-fx-background-color:#f97316; -fx-text-fill:white;
                                    -fx-background-radius:8; -fx-font-weight:bold;"
                             text="Báo Cáo" />
-                    <Button fx:id="btnThongKe" onAction="#onThongKe"
+                    <Button fx:id="btnThongKe" onAction="#onThongKePhim"
                             style="-fx-background-color:#2563eb; -fx-text-fill:white;
                                    -fx-background-radius:8; -fx-font-weight:bold;"
                             text="Thống kê" />
@@ -196,29 +196,26 @@
                         </TableView>
                     </VBox>
 
-                    <!-- CỘT PHẢI: THỐNG KÊ DOANH THU THEO PHIM -->
+                    <!-- Thay phần thống kê doanh thu theo phim -->
                     <VBox prefHeight="363.0" prefWidth="797.0" spacing="10"
                           style="-fx-background-color:linear-gradient(to bottom right, #e0f2fe, #f0fdf4);
                                  -fx-padding:15; -fx-background-radius:10;">
                         <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;"
                                text="📈 Thống kê doanh thu theo phim" />
 
+                        <!-- ❌ Bỏ chọn phim + từ ngày đến ngày -->
                         <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label style="-fx-font-weight:bold;" minWidth="75" text="Chọn phim:" />
-                            <ComboBox fx:id="cboPhim" prefWidth="130" prefHeight="26" maxWidth="130" />
-                            <Label style="-fx-font-weight:bold;" minWidth="60" text="Từ ngày:" />
-                            <DatePicker fx:id="dpTuNgay" prefWidth="115" prefHeight="26" />
-                            <Label style="-fx-font-weight:bold;" minWidth="60" text="Đến ngày:" />
-                            <DatePicker fx:id="dpDenNgay" prefWidth="115" prefHeight="26" />
+                            <Button fx:id="btnThongKePhim" text="Thống kê"
+                                    onAction="#onThongKePhim"
+                                    style="-fx-background-color:#2563eb; -fx-text-fill:white;
+                                           -fx-font-weight:bold; -fx-background-radius:6;"/>
                         </HBox>
 
                         <TableView fx:id="tableThongKe" prefHeight="300">
                             <columns>
                                 <TableColumn fx:id="colTenPhim" prefWidth="160" text="Tên phim" />
-                                <TableColumn fx:id="colNgayChieu" prefWidth="100" text="Ngày chiếu" />
-                                <TableColumn fx:id="colGioChieu" prefWidth="220" text="Giờ chiếu" />
-                                <TableColumn fx:id="colSoVe" prefWidth="120" text="Số vé đã bán" />
-                                <TableColumn fx:id="colDoanhThu" prefWidth="150" text="Tiền vé" />
+                                <TableColumn fx:id="colSoVe" prefWidth="120" text="Số vé bán" />
+                                <TableColumn fx:id="colDoanhThu" prefWidth="150" text="Doanh thu" />
                             </columns>
                         </TableView>
 

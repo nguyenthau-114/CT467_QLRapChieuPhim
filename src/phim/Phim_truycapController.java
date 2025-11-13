@@ -106,7 +106,7 @@ public class Phim_truycapController {
                 dao.insertPhim(p);
                 onTaiDuLieu();
                 tablePhim.getSelectionModel().selectLast(); // ✅ chọn dòng phim vừa thêm
-                showAlert("Đã thêm phim thành công!");
+                //showAlert("Đã thêm phim thành công!");
             }
         });
 
@@ -130,7 +130,7 @@ public class Phim_truycapController {
             if (response == ok) {
                 dao.updatePhim(p);
                 onTaiDuLieu();
-                showAlert("Đã cập nhật phim thành công!");
+                //showAlert("Đã cập nhật phim thành công!");
             }
         });
     }
@@ -158,7 +158,7 @@ public class Phim_truycapController {
                     dao.deletePhim(selected.getMaPhim());
                     onTaiDuLieu();
                     clearForm();
-                    showAlert("Đã xóa phim thành công!");
+                    //showAlert("Đã xóa phim thành công!");
                 } catch (Exception e) {
                     // Nếu trigger báo lỗi, dòng này sẽ bắt được và hiển thị thông báo SQL
                     Alert alert = new Alert(Alert.AlertType.ERROR);
