@@ -32,8 +32,7 @@
                     </font>
                 </Label>
 
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê"
-        onAction="#moTrangThongKe">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê">
 
                     <VBox.margin><Insets bottom="10.0" top="25.0" /></VBox.margin>
                 </Button>
@@ -58,15 +57,14 @@
                             onMouseExited="#anMenuKhiRoi"
                             spacing="6"
                             style="-fx-background-color: transparent; -fx-padding: 5 0 0 15;">
-                          <Button text="Phim" onAction="#moTrangPhim" styleClass="sidebtn-ghost" />
-                          <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" />
-                          <Button text="Phòng Chiếu" onAction="#moTrangPhongChieu" styleClass="sidebtn-ghost" />
-                          <Button text="Vé" onAction="#moTrangVe" styleClass="sidebtn-ghost" />
+                          <Button text="Phim" styleClass="sidebtn-ghost" />
+                          <Button text="Suất Chiếu" styleClass="sidebtn-ghost" />
+                          <Button text="Phòng Chiếu" styleClass="sidebtn-ghost" />
+                          <Button text="Vé" styleClass="sidebtn-ghost" />
                       </VBox>
 
                 </VBox>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên"
-        onAction="#moTrangNhanVien">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
                 <Button prefWidth="108.0" styleClass="header-blue-active" text="Khách Hàng">
