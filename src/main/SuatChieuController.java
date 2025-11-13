@@ -44,10 +44,7 @@ public class SuatChieuController {
 
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        // ❌ KHÔNG load dữ liệu khi mở giao diện
-        // taiLaiDuLieu();
-
-        // ✔ Listener chọn dòng
+        // Listener
         tableSuatChieu.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, sc) -> {
             if (sc != null) {
                 txtMaSuatChieu.setText(sc.getMasuatchieu());
@@ -109,10 +106,10 @@ public class SuatChieuController {
         return "Sắp ra mắt";
     }
 
-
     // ===================== THÊM SUẤT CHIẾU =====================
     @FXML
     public void themSuatChieu() {
+
         String gio = txtGioChieu.getText().trim();
         String gia = txtGiaVe.getText().trim();
         String phim = txtMaPhim.getText().trim();
@@ -124,6 +121,25 @@ public class SuatChieuController {
             return;
         }
 
+        // === Kiểm tra giờ hợp lệ (08:00–23:30) ===
+        try {
+            Time gioNhap = Time.valueOf(gio.length() == 5 ? gio + ":00" : gio);
+
+            Time gioMin = Time.valueOf("08:00:00");
+            Time gioMax = Time.valueOf("23:30:00");
+
+            if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
+                showAlert("⛔ Giờ chiếu không hợp lệ",
+                        "Giờ chiếu phải từ 08:00 đến 23:30!",
+                        AlertType.ERROR);
+                return;
+            }
+        } catch (Exception ex) {
+            showAlert("Lỗi định dạng giờ", "Giờ phải nhập dạng HH:MM hoặc HH:MM:SS", AlertType.ERROR);
+            return;
+        }
+
+        // === Kiểm tra lịch trùng ===
         try (Connection conn = DBConnection.getConnection()) {
 
             String sqlCheck = "SELECT fn_kiemtra_lichtrung(?, ?, ?, ?) AS trung";
@@ -179,6 +195,27 @@ public class SuatChieuController {
             return;
         }
 
+        // === Kiểm tra giờ hợp lệ (06:00–23:30) ===
+        Time gioNhap;
+        try {
+            gioNhap = Time.valueOf(gio.length() == 5 ? gio + ":00" : gio);
+
+            Time gioMin = Time.valueOf("08:00:00");
+            Time gioMax = Time.valueOf("23:30:00");
+
+            if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
+                showAlert("⛔ Giờ chiếu không hợp lệ",
+                        "Giờ chiếu phải nằm trong khoảng 08:00 → 23:30!",
+                        AlertType.ERROR);
+                return;
+            }
+
+        } catch (Exception e) {
+            showAlert("Lỗi giờ chiếu", "Giờ phải đúng định dạng HH:MM hoặc HH:MM:SS", AlertType.ERROR);
+            return;
+        }
+
+        // === Thực hiện UPDATE ===
         try (Connection conn = DBConnection.getConnection()) {
 
             PreparedStatement ps = conn.prepareStatement(
@@ -186,7 +223,7 @@ public class SuatChieuController {
             );
 
             ps.setDate(1, Date.valueOf(ngay));
-            ps.setTime(2, Time.valueOf(gio.length() == 5 ? gio + ":00" : gio));
+            ps.setTime(2, gioNhap);
             ps.setFloat(3, Float.parseFloat(gia));
             ps.setString(4, phim);
             ps.setString(5, phong);
@@ -228,7 +265,6 @@ public class SuatChieuController {
             showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
-
 
     // ===================== HỖ TRỢ =====================
     private void clearFields() {
