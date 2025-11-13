@@ -157,17 +157,19 @@ public class ThongkeController {
         stage.close();
     }
 
-    // =================================================
-    // 📁 MENU DỮ LIỆU
-    // =================================================
+    // ===============================
+    // 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
+    // ===============================
+
     @FXML
     private void hienMenuDuLieu() {
         menuDuLieu.setVisible(true);
-        menuDuLieu.setManaged(true);
+        menuDuLieu.setManaged(true); // cho phép layout nhận diện khi hiển thị
     }
 
     @FXML
     private void anMenuDuLieu() {
+        // Trì hoãn 150ms để tránh mất menu khi rê chuột xuống quá nhanh
         new Thread(() -> {
             try { Thread.sleep(150); } catch (InterruptedException ignored) {}
             javafx.application.Platform.runLater(() -> {
@@ -190,27 +192,51 @@ public class ThongkeController {
         menuDuLieu.setVisible(false);
         menuDuLieu.setManaged(false);
     }
+    // ===============================
+    // 📂 CHUYỂN TRANG (nút trong menu Dữ liệu)
+    // ===============================
 
-    // =================================================
-    // 🔄 CHUYỂN TRANG
-    // =================================================
+    @FXML
+    private void moTrangPhim(ActionEvent event) {
+        chuyenTrang(event, "/phim/Phim_truycap.fxml");
+    }
+
+    @FXML
+    private void moTrangSuatChieu(ActionEvent event) {
+        chuyenTrang(event, "/SuatChieu/SuatChieu.fxml");
+    }
+
+    @FXML
+    private void moTrangPhongChieu(ActionEvent event) {
+        chuyenTrang(event, "/Phong/PhongChieu.fxml");
+    }
+
+    @FXML
+    private void moTrangVe(ActionEvent event) {
+        chuyenTrang(event, "/ve/ve_truycap.fxml");
+    }
+
+    /** 🔹 Hàm dùng chung để chuyển trang */
     private void chuyenTrang(ActionEvent event, String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Không thể mở trang: " + fxmlPath).show();
         }
     }
+    //hàm chuyển trang Nhân Viên
+    @FXML
+    private void moTrangNhanVien(ActionEvent e) {
+        chuyenTrang(e, "/nhanvien/NhanVien.fxml");
+    }
+    @FXML
+    private void moTrangKhachHang(ActionEvent e) {
+        chuyenTrang(e, "/khachhang/khachhang.fxml");
+    }
 
-    @FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
-    @FXML private void moTrangSuatChieu(ActionEvent e) { chuyenTrang(e, "/SuatChieu/SuatChieu.fxml"); }
-    @FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }
-    @FXML private void moTrangVe(ActionEvent e) { chuyenTrang(e, "/ve/ve_truycap.fxml"); }
-    @FXML private void moTrangNhanVien(ActionEvent e) { chuyenTrang(e, "/nhanvien/NhanVien.fxml"); }
-    @FXML private void moTrangKhachHang(ActionEvent e) { chuyenTrang(e, "/khachhang/khachhang.fxml"); }
-
-}
+    }

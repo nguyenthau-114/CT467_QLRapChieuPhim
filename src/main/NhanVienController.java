@@ -54,7 +54,6 @@ public class NhanVienController {
             }
         });
 
-        onTaiDuLieu();
     }
 
     // ---------------- TẢI DỮ LIỆU ----------------
@@ -75,8 +74,8 @@ public class NhanVienController {
                 ));
             }
 
-            /*tableNV.setItems(dsNV);
-            System.out.println("✅ Đã tải " + dsNV.size() + " nhân viên từ CSDL.");*/
+            tableNV.setItems(dsNV);
+            System.out.println("✅ Đã tải " + dsNV.size() + " nhân viên từ CSDL.");
 
         } catch (SQLException e) {
             showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
@@ -111,12 +110,12 @@ public class NhanVienController {
             ps.setString(4, sdt);
             ps.setString(5, email);
 
-            /*int rows = ps.executeUpdate();
+            int rows = ps.executeUpdate();
             if (rows > 0) {
                 showAlert("Thành công", "Đã thêm nhân viên mới!", AlertType.INFORMATION);
                 onTaiDuLieu();
                 clearFields();
-            }*/
+            }
 
         } catch (SQLException e) {
             showAlert("Lỗi thêm nhân viên", e.getMessage(), AlertType.ERROR);
@@ -173,12 +172,12 @@ public class NhanVienController {
             ps.setString(4, email);
             ps.setString(5, ma);
 
-            /*int rows = ps.executeUpdate();
+            int rows = ps.executeUpdate();
             if (rows > 0) {
                 showAlert("Thành công", "Cập nhật thông tin nhân viên thành công!", AlertType.INFORMATION);
                 onTaiDuLieu();
                 clearFields();
-            }*/
+            }
 
         } catch (SQLException e) {
             showAlert("Lỗi cập nhật nhân viên", e.getMessage(), AlertType.ERROR);
@@ -206,13 +205,13 @@ public class NhanVienController {
             ps.setString(1, ma);
             int rows = ps.executeUpdate();
 
-            /*if (rows > 0) {
+            if (rows > 0) {
                 showAlert("Thành công", "Đã xóa nhân viên!", AlertType.INFORMATION);
                 onTaiDuLieu();
                 clearFields();
             } else {
                 showAlert("Không tìm thấy", "Không có nhân viên có mã '" + ma + "'.", AlertType.WARNING);
-            }*/
+            }
 
         } catch (SQLException e) {
             showAlert("Lỗi xóa nhân viên", e.getMessage(), AlertType.ERROR);
@@ -276,41 +275,43 @@ public class NhanVienController {
         confirm.showAndWait();
         return confirm.getResult() == btnXacNhan;
     }
-// ===============================
-// 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
-// ===============================
-@FXML private VBox menuDuLieu;
+    // ===============================
+    // 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
+    // ===============================
+    @FXML private VBox menuDuLieu;
 
-@FXML
-private void hienMenuDuLieu() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true);
-}
+    @FXML
+    private void hienMenuDuLieu() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
 
-@FXML
-private void anMenuDuLieu() {
-    new Thread(() -> {
-        try { Thread.sleep(150); } catch (InterruptedException ignored) {}
-        javafx.application.Platform.runLater(() -> {
-            if (!menuDuLieu.isHover()) {
-                menuDuLieu.setVisible(false);
-                menuDuLieu.setManaged(false);
-            }
-        });
-    }).start();
-}
+    @FXML
+    private void anMenuDuLieu() {
+        new Thread(() -> {
+            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+            javafx.application.Platform.runLater(() -> {
+                if (!menuDuLieu.isHover()) {
+                    menuDuLieu.setVisible(false);
+                    menuDuLieu.setManaged(false);
+                }
+            });
+        }).start();
+    }
 
-@FXML
-private void giuMenuKhiHover() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true);
-}
+    @FXML
+    private void giuMenuKhiHover() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
 
-@FXML
-private void anMenuKhiRoi() {
-    menuDuLieu.setVisible(false);
-    menuDuLieu.setManaged(false);
-}
+    @FXML
+    private void anMenuKhiRoi() {
+        menuDuLieu.setVisible(false);
+        menuDuLieu.setManaged(false);
+    }
+
+    
 
 
 }

@@ -220,40 +220,42 @@ public class KhachhangController {
     private void dangXuat(javafx.event.ActionEvent event) {
         ((javafx.stage.Stage)((javafx.scene.Node)event.getSource()).getScene().getWindow()).close();
     }
-// ===============================
-// 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
-// ===============================
-@FXML private VBox menuDuLieu;
+    // ===============================
+    // 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
+    // ===============================
+    @FXML private VBox menuDuLieu;
 
-@FXML
-private void hienMenuDuLieu() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true);
-}
+    @FXML
+    private void hienMenuDuLieu() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
 
-@FXML
-private void anMenuDuLieu() {
-    new Thread(() -> {
-        try { Thread.sleep(150); } catch (InterruptedException ignored) {}
-        javafx.application.Platform.runLater(() -> {
-            if (!menuDuLieu.isHover()) {
-                menuDuLieu.setVisible(false);
-                menuDuLieu.setManaged(false);
-            }
-        });
-    }).start();
-}
+    @FXML
+    private void anMenuDuLieu() {
+        new Thread(() -> {
+            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+            javafx.application.Platform.runLater(() -> {
+                if (!menuDuLieu.isHover()) {
+                    menuDuLieu.setVisible(false);
+                    menuDuLieu.setManaged(false);
+                }
+            });
+        }).start();
+    }
 
-@FXML
-private void giuMenuKhiHover() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true);
-}
+    @FXML
+    private void giuMenuKhiHover() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
 
-@FXML
-private void anMenuKhiRoi() {
-    menuDuLieu.setVisible(false);
-    menuDuLieu.setManaged(false);
-}
+    @FXML
+    private void anMenuKhiRoi() {
+        menuDuLieu.setVisible(false);
+        menuDuLieu.setManaged(false);
+    }
+
+
 }
 

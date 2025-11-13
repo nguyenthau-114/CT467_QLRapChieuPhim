@@ -296,4 +296,6 @@ public class SuatChieuController {
             showAlert("Lỗi đăng xuất", e.getMessage(), AlertType.ERROR);
         }
     }
+    
+ 
 }

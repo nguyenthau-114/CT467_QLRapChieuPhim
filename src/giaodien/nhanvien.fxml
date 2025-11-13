@@ -17,80 +17,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.NhanVienController">
+<BorderPane prefHeight="700" prefWidth="1200" 
+            stylesheets="@fxml.css" 
+            xmlns="http://javafx.com/javafx/25" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="main.NhanVienController">
 
-    <!-- 🔹 SIDEBAR TRÁI -->
-    <left>
-        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
-            <padding>
-                <Insets bottom="15" left="10" right="10" top="15" />
-            </padding>
-            <children>
-                <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;" text="Quản trị">
-                    <font><Font size="18.0" /></font>
-                </Label>
-
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
-                    <VBox.margin><Insets bottom="10.0" top="25.0" /></VBox.margin>
-                </Button>
-                <VBox>
-                    <!-- Nút chính -->
-                    <Button fx:id="btnDuLieu"
-                            text="Dữ Liệu"
-                            onMouseEntered="#hienMenuDuLieu"
-                            onMouseExited="#anMenuDuLieu"
-                            prefHeight="25.0" prefWidth="108.0"
-                            styleClass="header-green">
-                        <VBox.margin><Insets bottom="10.0" /></VBox.margin>
-                    </Button>
-
-                    <!-- Menu con xổ xuống -->
-                    <VBox fx:id="menuDuLieu"
-                            visible="false"
-                            managed="false"
-                            pickOnBounds="false"
-                            onMouseEntered="#giuMenuKhiHover"
-                            onMouseExited="#anMenuKhiRoi"
-                            spacing="6"
-                            style="-fx-background-color: transparent; -fx-padding: 5 0 0 15;">
-                          <Button text="Phim" styleClass="sidebtn-ghost" />
-                          <Button text="Suất Chiếu" styleClass="sidebtn-ghost" />
-                          <Button text="Phòng Chiếu" styleClass="sidebtn-ghost" />
-                          <Button text="Vé" styleClass="sidebtn-ghost" />
-                      </VBox>
-
-                </VBox>
-                
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange-active" text="Nhân Viên">
-                    <VBox.margin><Insets bottom="10.0" /></VBox.margin>
-                </Button>
-                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
-
-                    <VBox.margin><Insets bottom="15.0" /></VBox.margin>
-                </Button>
-                <Separator />
-                
-            </children>
-        </VBox>
-    </left>
+    
 
     <!-- 🔹 NỘI DUNG CHÍNH -->
     <center>
         <VBox fillWidth="true" spacing="0">
 
-            <!-- 🔸 HEADER -->
-            <AnchorPane VBox.vgrow="NEVER">
-                <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
-                        <children>
-                            <Label prefHeight="23.0" prefWidth="220.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="👔 Quản Lý Nhân Viên" />
-                            <Pane HBox.hgrow="ALWAYS" />
-                            <Button fx:id="btnDangXuat" onAction="#dangXuat" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold;                                            -fx-background-radius:6; -fx-padding:5 15 5 15;" text="Đăng xuất" />
-                        </children>
-                    </HBox>
-                </children>
-            </AnchorPane>
 
             <!-- 🔸 MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">

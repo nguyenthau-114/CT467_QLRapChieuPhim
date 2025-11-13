@@ -21,60 +21,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" 
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="main.Phim_truycapController">
 
     <!-- 🔹 SIDEBAR TRÁI -->
-    <left>
-        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
-            <padding>
-                <Insets bottom="15" left="10" right="10" top="15" />
-            </padding>
-            <children>
-                <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;" text="Quản trị">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-              <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow" text="Thống kê" textFill="WHITE">
-
-               <VBox.margin>
-                  <Insets bottom="10.0" top="25.0" />
-               </VBox.margin></Button>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-green-active" text="Dữ Liệu">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin></Button>
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin></Button>
-                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
-               <VBox.margin>
-                  <Insets bottom="15.0" />
-               </VBox.margin></Button>
-                <Separator />
-                <Button text="Phim">
-                    <VBox.margin>
-                        <Insets bottom="5.0" top="10.0" />
-                    </VBox.margin>
-                    <styleClass>
-                        <String fx:value="sidebtn-ghost" />
-                        <String fx:value="selected" />
-                    </styleClass>
-                </Button>
-                <Button text="Suất Chiếu" styleClass="sidebtn-ghost" >
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin></Button>
-                <Button text="Phòng Chiếu" styleClass="sidebtn-ghost">
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin></Button>
-                <Button text="Vé" styleClass="sidebtn-ghost" />
-            </children>
-        </VBox>
-    </left>
+    
 
     <!-- 🔹 NỘI DUNG CHÍNH -->
 <!-- 🔹 NỘI DUNG CHÍNH (Header nằm ngoài main-content) -->
@@ -83,20 +34,6 @@
 
         <!-- 🔸 HEADER (nằm ngoài nội dung chính nhưng không tràn sidebar) -->
 <!-- 🔸 HEADER (bọc trong AnchorPane để giãn full chiều ngang vùng center) -->
-        <AnchorPane VBox.vgrow="NEVER">
-            <children>
-                <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                    <padding>
-                        <Insets bottom="3" left="20" right="20" top="3" />
-                    </padding>
-                    <children>
-                        <Label prefHeight="23.0" prefWidth="220.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="🎬 Quản Lý Phim" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color:#ff5252; -fx-text-fill:white; -fx-font-weight:bold;                                        -fx-background-radius:6; -fx-padding:5 15 5 15;" text="Đăng xuất" />
-                    </children>
-                </HBox>
-            </children>
-        </AnchorPane>
          
 
 
@@ -118,7 +55,7 @@
                     <children>
                         <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
                         <TextField fx:id="txtTimKiem" prefWidth="220" promptText="Nhập mã suất chiếu, phim..." />
-                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
+                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white;
                                        -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
                                 text="🔍" />
                     </children>
@@ -161,7 +98,7 @@
                             <HBox spacing="10" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
                                 <children>
                                     <VBox alignment="CENTER" spacing="5" />
-      
+     
                                   <Label maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="102.0" text="Ngày khởi chiếu:">
                                  <HBox.margin>
                                     <Insets top="14.0" />

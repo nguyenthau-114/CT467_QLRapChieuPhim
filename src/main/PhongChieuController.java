@@ -64,8 +64,7 @@ public class PhongChieuController {
             }
         });
 
-        // Tải dữ liệu ban đầu
-        taiDuLieu();
+        // Tải dữ liệu ban đầ
     }
 
     // ================== TẢI DỮ LIỆU ==================
@@ -332,5 +331,6 @@ public class PhongChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    @FXML private void dangXuat(ActionEvent event) { System.out.println("Đăng xuất thành công!"); }
+    
+
 }
