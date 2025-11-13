@@ -40,8 +40,10 @@
                 <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
 
                 <!-- Nút hành động -->
-                <HBox spacing="10">
-                    <Button fx:id="btnBaoCao" style="-fx-background-color:#f97316; -fx-text-fill:white;                                    -fx-background-radius:8; -fx-font-weight:bold;" text="Báo Cáo" />
+                <HBox spacing="8">
+                    <Button fx:id="btnBaoCao" style="-fx-background-color:#f97316; -fx-text-fill:white;                                    
+                        -fx-background-radius:8; -fx-font-weight:bold;" text="Báo Cáo"
+                    />
                 </HBox>
 
 <!-- ======== THỐNG KÊ TỔNG QUAN ======== -->
@@ -81,13 +83,13 @@
     </VBox>
 
     <!-- ========== CỘT PHẢI: DOANH THU THEO PHIM ========== -->
-    <VBox prefWidth="600" spacing="10" style="-fx-background-color:linear-gradient(to bottom right, #e0f2fe, #f0fdf4);                  -fx-padding:15; -fx-background-radius:12;">
+    <VBox prefWidth="700" spacing="10" style="-fx-background-color:linear-gradient(to bottom right, #e0f2fe, #f0fdf4);                  -fx-padding:15; -fx-background-radius:12;">
 
         <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;" text="📈 Doanh thu theo phim" />
 
         <Button fx:id="btnThongKePhim" onAction="#onThongKePhim" style="-fx-background-color:#2563eb; -fx-text-fill:white;                        -fx-background-radius:6; -fx-font-weight:bold;" text="Tải dữ liệu" />
 
-        <TableView fx:id="tableThongKe" prefHeight="300">
+        <TableView fx:id="tableThongKe" prefHeight="200">
             <columns>
                 <TableColumn fx:id="colTenPhim" prefWidth="200" text="Tên phim" />
                 <TableColumn fx:id="colSoVe" prefWidth="120" text="Số vé bán" />

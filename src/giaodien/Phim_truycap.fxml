@@ -40,7 +40,7 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" style="-fx-background-color:white;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" >
                         <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
                         <children>
-                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="Quan Ly Phim" />
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="🎬 Quản Lý Phim" />
                             <Pane HBox.hgrow="ALWAYS" />
                         </children>
                     </HBox>
@@ -53,27 +53,11 @@
             <padding>
                 <Insets bottom="15" left="0" right="0" top="0" />
             </padding>
-            <!-- THANH TÌM KIẾM -->
-                <!-- 🔹 THANH TÌM KIẾM -->
-                <HBox alignment="CENTER_LEFT"
-                      prefHeight="40"
-                      spacing="15"
-                      AnchorPane.leftAnchor="20"
-                      AnchorPane.rightAnchor="20">
-                    <VBox.margin>
-                        <Insets top="41" />
-                    </VBox.margin>
-                    <children>
-                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
-                        <TextField fx:id="txtTimKiem" prefWidth="220" promptText="Nhập mã suất chiếu, phim..." />
-                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white;
-                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
-                                text="🔍" />
-                    </children>
-                </HBox>
+                            <!-- THANH TÌM KIẾM -->
+                <Button text="🔍 Tìm kiếm" styleClass="search-btn" onAction="#moTimKiemPopup" />
 
             <!-- 🔸 FORM NHẬP -->
-            <AnchorPane prefHeight="184.0" prefWidth="953.0">
+            <AnchorPane prefHeight="140.0" prefWidth="953.0">
                 <children>
                     <GridPane hgap="50.0" layoutX="2" layoutY="15.0" prefHeight="165.0" prefWidth="736.0" vgap="20">
                         <columnConstraints>
@@ -131,7 +115,7 @@
                           <Button layoutX="816.0" layoutY="154.0" onAction="#onChonAnh" prefHeight="30" prefWidth="116" text="Chọn hình ảnh" textFill="WHITE" />
                 </children>
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets top="7.0" />
                </VBox.margin>
             </AnchorPane>
 

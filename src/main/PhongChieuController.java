@@ -10,7 +10,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 
@@ -331,6 +335,59 @@ public class PhongChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    //tim kiem nang cao
     
+    @FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemPhong.fxml"));
+        Parent root = loader.load();
+
+        TimKiemPhongController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm phòng chiếu");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
+
+    ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
+
+    for (PhongChieu p : dsPhong) {
+        boolean ok = true;
+
+        if (!ma.isEmpty() && !p.getMaphong().toLowerCase().contains(ma.toLowerCase()))
+            ok = false;
+
+        if (!ten.isEmpty() && !p.getTenphong().toLowerCase().contains(ten.toLowerCase()))
+            ok = false;
+
+        if (!loai.isEmpty() && !p.getLoaiphong().toLowerCase().contains(loai.toLowerCase()))
+            ok = false;
+
+        // số ghế >= nhập
+        if (!soGheStr.isEmpty()) {
+            try {
+                int minGhe = Integer.parseInt(soGheStr);
+                if (p.getSoghe() < minGhe) ok = false;
+            } catch (NumberFormatException e) {
+                // Nếu người dùng nhập chữ → bỏ qua điều kiện này
+            }
+        }
+
+        if (ok) ketQua.add(p);
+    }
+
+    tablePhong.setItems(ketQua);
+}
+
 
 }

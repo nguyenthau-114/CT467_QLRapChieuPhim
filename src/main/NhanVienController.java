@@ -12,6 +12,10 @@ import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
 import javafx.scene.layout.VBox;
 import dulieu.NhanVien;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
 
 public class NhanVienController {
 
@@ -310,8 +314,54 @@ public class NhanVienController {
         menuDuLieu.setVisible(false);
         menuDuLieu.setManaged(false);
     }
-
     
+    //tìm kiếm nâng cao
+    @FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNhanVien.fxml"));
+        Parent root = loader.load();
 
+        TimKiemNhanVienController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm nhân viên");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void timKiemNangCao(String ma, String ten, String chucvu, String sdt, String email) {
+
+    ObservableList<NhanVien> ketQua = FXCollections.observableArrayList();
+
+    for (NhanVien nv : dsNV) {
+        boolean ok = true;
+
+        if (!ma.isEmpty() && !nv.getMaNhanVien().toLowerCase().contains(ma.toLowerCase()))
+            ok = false;
+
+        if (!ten.isEmpty() && !nv.getTenNhanVien().toLowerCase().contains(ten.toLowerCase()))
+            ok = false;
+
+        if (!chucvu.isEmpty() && !nv.getChucVu().toLowerCase().contains(chucvu.toLowerCase()))
+            ok = false;
+
+        if (!sdt.isEmpty() && !nv.getSdt().toLowerCase().contains(sdt.toLowerCase()))
+            ok = false;
+
+        if (!email.isEmpty() && !nv.getEmail().toLowerCase().contains(email.toLowerCase()))
+            ok = false;
+
+        if (ok) ketQua.add(nv);
+    }
+
+    tableNV.setItems(ketQua);
+}
 
 }

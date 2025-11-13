@@ -9,6 +9,11 @@ import java.sql.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 import dulieu.khachhang;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class KhachhangController {
 
@@ -255,6 +260,51 @@ public class KhachhangController {
         menuDuLieu.setVisible(false);
         menuDuLieu.setManaged(false);
     }
+//tìm kiếm nâng cao
+@FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemKhachHang.fxml"));
+        Parent root = loader.load();
+
+        TimKiemKhachHangController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm khách hàng");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void timKiemNangCao(String ma, String ten, String sdt, String email) {
+
+    ObservableList<khachhang> ketQua = FXCollections.observableArrayList();
+
+    for (khachhang kh : dsKH) {
+        boolean ok = true;
+
+        if (!ma.isEmpty() && !kh.getMaKhachHang().toLowerCase().contains(ma.toLowerCase()))
+            ok = false;
+
+        if (!ten.isEmpty() && !kh.getTenKhachHang().toLowerCase().contains(ten.toLowerCase()))
+            ok = false;
+
+        if (!sdt.isEmpty() && !kh.getSdt().toLowerCase().contains(sdt.toLowerCase()))
+            ok = false;
+
+        if (!email.isEmpty() && !kh.getEmail().toLowerCase().contains(email.toLowerCase()))
+            ok = false;
+
+        if (ok) ketQua.add(kh);
+    }
+
+    tableKH.setItems(ketQua);
+}
 
 
 }

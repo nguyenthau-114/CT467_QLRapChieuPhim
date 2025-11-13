@@ -15,7 +15,7 @@
         <HBox spacing="10" alignment="CENTER_LEFT"
               style="-fx-background-color:#1e293b; -fx-padding:12;">
             <children>
-                <Label text="🕋 QUẢN LÝ RẠP CHIẾU PHIM"
+                <Label text="🏪 QUẢN LÝ RẠP CHIẾU PHIM"
                        style="-fx-text-fill:white; -fx-font-size:18; -fx-font-weight:bold;"/>
                 <Pane HBox.hgrow="ALWAYS"/>
                 <Button fx:id="btnDangXuat" 
@@ -30,9 +30,9 @@
 
     <!-- SIDEBAR -->
     <left>
-        <VBox prefWidth="200" spacing="8" styleClass="sidebar">
+        <VBox prefWidth="200" spacing="15" styleClass="sidebar">
             <padding>
-                <Insets bottom="15" left="10" right="10" top="15"/>
+                <Insets bottom="15" left="10" right="10" top="25"/>
             </padding>
 
             <children>
@@ -40,7 +40,7 @@
                 <Label alignment="CENTER" maxWidth="Infinity"
                        style="-fx-text-fill:#fff; -fx-font-weight:bold; -fx-font-size:22;"
                        text="Quản trị">
-                    <font><Font size="18"/></font>
+                    <font><Font size="20"/></font>
                 </Label>
 
                 <!-- Thống kê -->

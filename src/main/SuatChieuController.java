@@ -312,7 +312,7 @@ private void moTimKiemPopup() {
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm nâng cao");
+        stage.setTitle("Tìm kiếm suất chiếu");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
