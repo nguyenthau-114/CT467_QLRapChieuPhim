@@ -235,3 +235,127 @@
     -fx-border-radius: 6;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);
 }
+
+
+/* ==================== TRANG ĐĂNG NHẬP ==================== */
+/* =========================================================
+   TRANG ĐĂNG NHẬP – ĐỒNG BỘ VỚI GIAO DIỆN QUẢN TRỊ (PASTEL)
+   ========================================================= */
+
+/* Nền tổng thể của trang đăng nhập */
+.login-root {
+    -fx-background-color: linear-gradient(to bottom, #d6f0db, #bcead5);
+    -fx-font-family: "Segoe UI", "Arial";
+}
+
+/* Khung đăng nhập */
+.login-box {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f0fdf4);
+    -fx-border-color: #5ca86b;
+    -fx-border-width: 2;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+
+    -fx-padding: 30;
+    -fx-spacing: 20;
+    -fx-alignment: center;
+
+    /* Bóng giống main-content */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0.3, 0, 3);
+}
+
+/* Tiêu đề “Đăng nhập” */
+.login-box .label-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+/* Icon avatar */
+.login-avatar {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 8, 0, 0, 2);
+}
+
+/* =========================================================
+   INPUT FIELD – ĐỒNG BỘ STYLE VỚI .text-field TRONG APP
+   ========================================================= */
+.login-field {
+    -fx-background-color: white;
+    -fx-border-color: #93c5fd;
+    -fx-border-width: 1.5;
+
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+
+    -fx-padding: 8 12;
+    -fx-font-size: 14px;
+}
+.login-field:focused {
+    -fx-border-color: #2563eb;
+    -fx-effect: dropshadow(three-pass-box, rgba(37,99,235,0.25), 6, 0, 0, 0);
+}
+
+/* Label Email + Mật khẩu */
+.login-label {
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Icon trước Email / Password */
+.login-icon {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+/* =========================================================
+   NÚT ĐĂNG NHẬP – ĐỒNG BỘ VỚI header-blue-active
+   ========================================================= */
+/* =========================================================
+   NÚT ĐĂNG NHẬP – TONE XANH MINT PASTEL
+   ========================================================= */
+.login-button {
+    -fx-background-color: linear-gradient(to right, #bcead5, #a3e3c4); /* mint pastel */
+    -fx-text-fill: #0a3d2d;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 25;
+
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #5ca86b;
+    -fx-border-width: 1.5;
+
+    -fx-cursor: hand;
+
+    -fx-effect: dropshadow(gaussian, rgba(70,150,100,0.25), 10, 0.55, 0, 3);
+}
+
+.login-button:hover {
+    -fx-background-color: linear-gradient(to right, #aee8cc, #94dfb9); /* sáng hơn chút */
+    -fx-effect: dropshadow(gaussian, rgba(70,150,100,0.35), 12, 0.6, 0, 3);
+}
+
+.login-button:pressed {
+    -fx-background-color: #8fd6ad; /* đậm hơn khi bấm */
+    -fx-text-fill: white;
+    -fx-effect: none;
+}
+
+
+/* Hyperlink đăng ký */
+.login-link {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.login-link:hover {
+    -fx-text-fill: #1e40af;
+    -fx-underline: true;
+}
+
+/* Label thông báo */
+#lblThongBao {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: #dc2626;
+}

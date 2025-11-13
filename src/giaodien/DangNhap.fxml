@@ -12,7 +12,13 @@
 <?import javafx.scene.image.Image?>
 
 
-<AnchorPane prefHeight="600" prefWidth="800" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600" prefWidth="800"
+            styleClass="login-root"
+            stylesheets="@fxml.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.LoginController">
+
     <children>
         <VBox alignment="CENTER" spacing="15" styleClass="login-box" AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="100">
 
@@ -67,7 +73,11 @@
 
 
                 <!-- Nút đăng nhập -->
-                <Button fx:id="loginButton" styleClass="login-button" text="Đăng nhập" />
+               <Button fx:id="loginButton"
+                    styleClass="login-button"
+                    text="Đăng nhập"
+                    onAction="#handleLogin" />
+
 
                 <!-- Đăng ký -->
                 <Hyperlink text="Đăng ký tài khoản" />
