@@ -58,6 +58,8 @@ public class ThongkeController {
 
         // ⭐⭐⭐ LOAD BẢNG TỶ LỆ LẤP ĐẦY (bị thiếu)
         loadTLapDay();
+        tableTLapDay.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
     }
 
     private String getCount(Connection conn, String query) throws SQLException {

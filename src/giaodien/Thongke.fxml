@@ -161,24 +161,38 @@
 
 
 
-<!-- ======== TỶ LỆ LẤP ĐẦY (FULL WIDTH) ======== -->
-<VBox spacing="10" style="-fx-background-color:linear-gradient(to bottom right, #eef2ff, #fdf2f8);              -fx-padding:15; -fx-background-radius:12;">
+<!-- ======== TỶ LỆ LẤP ĐẦY (FULL WIDTH – ĐÃ FIX LỆCH) ======== -->
+<VBox spacing="10"
+      style="-fx-background-color:linear-gradient(to bottom right, #eef2ff, #fdf2f8);
+             -fx-padding:15; -fx-background-radius:12;">
 
-    <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;" text="📊 Thống kê tỷ lệ lấp đầy theo suất chiếu" />
+    <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;"
+           text="📊 Thống kê tỷ lệ lấp đầy theo suất chiếu" />
 
-    <TableView fx:id="tableTLapDay" prefHeight="260">
-        <columns>
-            <TableColumn fx:id="colMaSuat" prefWidth="70" text="Mã suất" />
-            <TableColumn fx:id="colPhim" prefWidth="150" text="Phim" />
-            <TableColumn fx:id="colPhong" prefWidth="100" text="Phòng" />
-            <TableColumn fx:id="colNgay" prefWidth="120" text="Ngày chiếu" />
-            <TableColumn fx:id="colGio" prefWidth="100" text="Giờ chiếu" />
-            <TableColumn fx:id="colTongGhe" prefWidth="90" text="Tổng ghế" />
-            <TableColumn fx:id="colDaBan" prefWidth="90" text="Đã bán" />
-            <TableColumn fx:id="colTyLe" prefWidth="90" text="Tỷ lệ (%)" />
-        </columns>
-    </TableView>
+    <!-- ⭐ BỌC TABLEVIEW TRONG HBOX để căn giữa -->
+    <HBox alignment="CENTER" prefWidth="Infinity">
+
+        <TableView fx:id="tableTLapDay"
+                   prefHeight="260"
+                   prefWidth="1050"
+                   style="-fx-background-radius:10; -fx-border-radius:10;">
+
+            <columns>
+                <TableColumn fx:id="colMaSuat" prefWidth="120" text="Mã suất" />
+                <TableColumn fx:id="colPhim" prefWidth="180" text="Phim" />
+                <TableColumn fx:id="colPhong" prefWidth="120" text="Phòng" />
+                <TableColumn fx:id="colNgay" prefWidth="150" text="Ngày chiếu" />
+                <TableColumn fx:id="colGio" prefWidth="120" text="Giờ chiếu" />
+                <TableColumn fx:id="colTongGhe" prefWidth="120" text="Tổng ghế" />
+                <TableColumn fx:id="colDaBan" prefWidth="120" text="Đã bán" />
+                <TableColumn fx:id="colTyLe" prefWidth="120" text="Tỷ lệ (%)" />
+            </columns>
+        </TableView>
+
+    </HBox>
+
 </VBox>
+
 
 
 
