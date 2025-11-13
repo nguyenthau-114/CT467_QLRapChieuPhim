@@ -12,14 +12,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import ketnoi_truyxuat.DBConnection;
-
+import javafx.stage.Modality;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javafx.scene.Parent; 
+
 
 public class SuatChieuController {
-
-    @FXML private TextField txtMaSuatChieu, txtGioChieu, txtGiaVe, txtMaPhim, txtMaPhong, txtTimKiem;
+    @FXML private TextField txtMaSuatChieu, txtGioChieu, txtGiaVe, txtMaPhim, txtMaPhong;
     @FXML private DatePicker dpNgayChieu;
     @FXML private TableView<SuatChieu> tableSuatChieu;
     @FXML private TableColumn<SuatChieu, String> colMaSuatChieu, colMaPhim, colMaPhong, colTrangThai;
@@ -28,6 +29,7 @@ public class SuatChieuController {
     @FXML private TableColumn<SuatChieu, Float> colGiaVe;
     @FXML private Button btnDangXuat;
 
+    
     private ObservableList<SuatChieu> dsSuatChieu = FXCollections.observableArrayList();
 
     // ======================== KHỞI TẠO ========================
@@ -177,6 +179,7 @@ public class SuatChieuController {
         } catch (SQLException e) {
             showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
         }
+        
     }
 
     // ===================== SỬA SUẤT CHIẾU =====================
@@ -265,6 +268,7 @@ public class SuatChieuController {
             showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
+    
 
     // ===================== HỖ TRỢ =====================
     private void clearFields() {
@@ -296,6 +300,64 @@ public class SuatChieuController {
             showAlert("Lỗi đăng xuất", e.getMessage(), AlertType.ERROR);
         }
     }
-    
- 
+@FXML
+private void moTimKiemPopup() {
+
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
+        Parent root = loader.load();
+
+        TimKiemNangCaoController popupController = loader.getController();
+        popupController.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm nâng cao");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
+    dsSuatChieu.clear();
+
+    try (Connection conn = DBConnection.getConnection()) {
+
+        String sql = "SELECT * FROM suatchieu sc "
+                + "JOIN phim p ON sc.phim_maphim = p.maphim "
+                + "JOIN phongchieu pc ON sc.phongchieu_maphong = pc.maphong "
+                + "WHERE 1=1 ";
+
+        if (ma != null && !ma.isEmpty()) sql += " AND masuatchieu LIKE '%" + ma + "%'";
+        if (ngay != null) sql += " AND ngaychieu = '" + ngay + "'";
+        if (phim != null) sql += " AND p.tenphim = '" + phim + "'";
+        if (phong != null) sql += " AND pc.maphong = '" + phong + "'";
+
+        ResultSet rs = conn.createStatement().executeQuery(sql);
+
+        while (rs.next()) {
+            Date d = rs.getDate("ngaychieu");
+            Time t = rs.getTime("giochieu");
+
+            dsSuatChieu.add(new SuatChieu(
+                    rs.getString("masuatchieu"),
+                    d,
+                    t,
+                    rs.getFloat("giave"),
+                    rs.getString("phim_maphim"),
+                    rs.getString("phongchieu_maphong"),
+                    xacDinhTrangThai(d)
+            ));
+        }
+
+        tableSuatChieu.setItems(dsSuatChieu);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
 }
