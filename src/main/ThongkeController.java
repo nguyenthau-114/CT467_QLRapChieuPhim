@@ -14,22 +14,29 @@ import javafx.beans.property.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
 import dulieu.Thongke;
+import dulieu.TLapDay;   // ⭐ THÊM IMPORT QUAN TRỌNG
 
 public class ThongkeController {
 
     @FXML private Label lblTongPhim, lblTongVe, lblDoanhThu, lblSuatChieu, lblTongDoanhThu;
 
+    // 🔹 BẢNG DOANH THU THEO PHIM
     @FXML private TableView<Thongke> tableThongKe;
     @FXML private TableColumn<Thongke, String> colTenPhim;
     @FXML private TableColumn<Thongke, Integer> colSoVe;
     @FXML private TableColumn<Thongke, Double> colDoanhThu;
 
-    @FXML private TableView<?> tableTopPhim;
-    @FXML private VBox menuDuLieu;
+    // 🔹 BẢNG TỶ LỆ LẤP ĐẦY
+    @FXML private TableView<TLapDay> tableTLapDay;
+    @FXML private TableColumn<TLapDay, String> colMaSuat, colPhim, colPhong, colNgay, colGio;
+    @FXML private TableColumn<TLapDay, Integer> colTongGhe, colDaBan;
+    @FXML private TableColumn<TLapDay, Double> colTyLe;
 
+    @FXML private VBox menuDuLieu;
 
     @FXML
     public void initialize() {
+        // 🧮 Load thống kê tổng quan
         try (Connection conn = DBConnection.getConnection()) {
 
             lblTongPhim.setText(getCount(conn, "SELECT COUNT(*) FROM phim"));
@@ -42,15 +49,15 @@ public class ThongkeController {
             lblDoanhThu.setText("Lỗi dữ liệu!");
         }
 
+        // 🟦 Setup bảng doanh thu
         tableThongKe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-        tableTopPhim.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
         tableThongKe.setPlaceholder(new Label("Chưa có dữ liệu"));
-        tableTopPhim.setPlaceholder(new Label("Chưa có dữ liệu"));
-
         colTenPhim.setStyle("-fx-alignment: CENTER;");
         colSoVe.setStyle("-fx-alignment: CENTER;");
         colDoanhThu.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        // ⭐⭐⭐ LOAD BẢNG TỶ LỆ LẤP ĐẦY (bị thiếu)
+        loadTLapDay();
     }
 
     private String getCount(Connection conn, String query) throws SQLException {
@@ -63,6 +70,9 @@ public class ThongkeController {
         return rs.next() ? String.format("%,d", rs.getInt(1)) : "0";
     }
 
+    // =================================================
+    // 📊 NÚT THỐNG KÊ DOANH THU THEO PHIM
+    // =================================================
     @FXML
     private void onThongKePhim(ActionEvent e) {
 
@@ -92,96 +102,113 @@ public class ThongkeController {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Lỗi khi truy vấn view_doanhthu_phim!").show();
+            new Alert(Alert.AlertType.ERROR, "Lỗi truy vấn: view_doanhthu_phim").show();
         }
     }
 
+    // =================================================
+    // 📊 LOAD TỶ LỆ LẤP ĐẦY (bảng dưới)
+    // =================================================
+    private void loadTLapDay() {
+        try (Connection conn = DBConnection.getConnection()) {
+
+            String sql = "SELECT * FROM view_tyle_suatchieu";
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+
+            ObservableList<TLapDay> list = FXCollections.observableArrayList();
+
+            while (rs.next()) {
+                list.add(new TLapDay(
+                        rs.getString("masuatchieu"),
+                        rs.getString("tenphim"),
+                        rs.getString("tenphong"),
+                        rs.getString("ngaychieu"),
+                        rs.getString("giochieu"),
+                        rs.getInt("tong_ghe"),
+                        rs.getInt("da_ban"),
+                        rs.getDouble("tyle")
+                ));
+            }
+
+            colMaSuat.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getMaSuat()));
+            colPhim.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTenPhim()));
+            colPhong.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getPhong()));
+            colNgay.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNgay()));
+            colGio.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getGio()));
+            colTongGhe.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getTongGhe()).asObject());
+            colDaBan.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getDaBan()).asObject());
+            colTyLe.setCellValueFactory(c -> new SimpleDoubleProperty(c.getValue().getTyLe()).asObject());
+
+            tableTLapDay.setItems(list);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // =================================================
+    // 🔐 ĐĂNG XUẤT
+    // =================================================
     @FXML
     private void dangXuat(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
-    // ===============================
-    // 📂 MENU DỮ LIỆU (hiện/ẩn + điều hướng)
-    // ===============================
-
-@FXML
-private void hienMenuDuLieu() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true); // cho phép layout nhận diện khi hiển thị
-}
-
-@FXML
-private void anMenuDuLieu() {
-    // Trì hoãn 150ms để tránh mất menu khi rê chuột xuống quá nhanh
-    new Thread(() -> {
-        try { Thread.sleep(150); } catch (InterruptedException ignored) {}
-        javafx.application.Platform.runLater(() -> {
-            if (!menuDuLieu.isHover()) {
-                menuDuLieu.setVisible(false);
-                menuDuLieu.setManaged(false);
-            }
-        });
-    }).start();
-}
-
-@FXML
-private void giuMenuKhiHover() {
-    menuDuLieu.setVisible(true);
-    menuDuLieu.setManaged(true);
-}
-
-@FXML
-private void anMenuKhiRoi() {
-    menuDuLieu.setVisible(false);
-    menuDuLieu.setManaged(false);
-}
-// ===============================
-// 📂 CHUYỂN TRANG (nút trong menu Dữ liệu)
-// ===============================
-
-@FXML
-private void moTrangPhim(ActionEvent event) {
-    chuyenTrang(event, "/phim/Phim_truycap.fxml");
-}
-
-@FXML
-private void moTrangSuatChieu(ActionEvent event) {
-    chuyenTrang(event, "/SuatChieu/SuatChieu.fxml");
-}
-
-@FXML
-private void moTrangPhongChieu(ActionEvent event) {
-    chuyenTrang(event, "/Phong/PhongChieu.fxml");
-}
-
-@FXML
-private void moTrangVe(ActionEvent event) {
-    chuyenTrang(event, "/ve/ve_truycap.fxml");
-}
-
-/** 🔹 Hàm dùng chung để chuyển trang */
-private void chuyenTrang(ActionEvent event, String fxmlPath) {
-    try {
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    } catch (Exception e) {
-        e.printStackTrace();
-        new Alert(Alert.AlertType.ERROR, "Không thể mở trang: " + fxmlPath).show();
+    // =================================================
+    // 📁 MENU DỮ LIỆU
+    // =================================================
+    @FXML
+    private void hienMenuDuLieu() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
     }
-}
-//hàm chuyển trang Nhân Viên
-@FXML
-private void moTrangNhanVien(ActionEvent e) {
-    chuyenTrang(e, "/nhanvien/NhanVien.fxml");
-}
-@FXML
-private void moTrangKhachHang(ActionEvent e) {
-    chuyenTrang(e, "/khachhang/khachhang.fxml");
-}
+
+    @FXML
+    private void anMenuDuLieu() {
+        new Thread(() -> {
+            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+            javafx.application.Platform.runLater(() -> {
+                if (!menuDuLieu.isHover()) {
+                    menuDuLieu.setVisible(false);
+                    menuDuLieu.setManaged(false);
+                }
+            });
+        }).start();
+    }
+
+    @FXML
+    private void giuMenuKhiHover() {
+        menuDuLieu.setVisible(true);
+        menuDuLieu.setManaged(true);
+    }
+
+    @FXML
+    private void anMenuKhiRoi() {
+        menuDuLieu.setVisible(false);
+        menuDuLieu.setManaged(false);
+    }
+
+    // =================================================
+    // 🔄 CHUYỂN TRANG
+    // =================================================
+    private void chuyenTrang(ActionEvent event, String fxmlPath) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Không thể mở trang: " + fxmlPath).show();
+        }
+    }
+
+    @FXML private void moTrangPhim(ActionEvent e) { chuyenTrang(e, "/phim/Phim_truycap.fxml"); }
+    @FXML private void moTrangSuatChieu(ActionEvent e) { chuyenTrang(e, "/SuatChieu/SuatChieu.fxml"); }
+    @FXML private void moTrangPhongChieu(ActionEvent e) { chuyenTrang(e, "/Phong/PhongChieu.fxml"); }
+    @FXML private void moTrangVe(ActionEvent e) { chuyenTrang(e, "/ve/ve_truycap.fxml"); }
+    @FXML private void moTrangNhanVien(ActionEvent e) { chuyenTrang(e, "/nhanvien/NhanVien.fxml"); }
+    @FXML private void moTrangKhachHang(ActionEvent e) { chuyenTrang(e, "/khachhang/khachhang.fxml"); }
 
 }

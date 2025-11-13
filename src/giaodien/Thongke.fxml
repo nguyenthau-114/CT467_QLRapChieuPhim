@@ -2,8 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
@@ -12,14 +10,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.ThongkeController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ThongkeController">
 
     <!-- ========== SIDEBAR ========== -->
     <left>
@@ -28,16 +22,12 @@
             <children>
 
                 <!-- Tiêu đề -->
-                <Label alignment="CENTER" maxWidth="Infinity"
-                       style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;"
-                       text="Quản trị">
+                <Label alignment="CENTER" maxWidth="Infinity" style="-fx-text-fill: #f5f5f5; -fx-font-weight: bold; -fx-font-size: 22;" text="Quản trị">
                     <font><Font size="18.0" /></font>
                 </Label>
 
                 <!-- Nút Thống kê -->
-                <Button prefHeight="25.0" prefWidth="108.0"
-                        styleClass="header-yellow-active"
-                        text="Thống kê" textFill="WHITE">
+                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-yellow-active" text="Thống kê" textFill="WHITE">
                     <VBox.margin><Insets bottom="10.0" top="25.0" /></VBox.margin>
                 </Button>
 
@@ -46,28 +36,16 @@
                 <!-- 🔹 Nút DỮ LIỆU + MENU CON -->
                 <VBox>
                     <!-- Nút chính -->
-                    <Button fx:id="btnDuLieu"
-                            text="Dữ Liệu"
-                            onMouseEntered="#hienMenuDuLieu"
-                            onMouseExited="#anMenuDuLieu"
-                            prefHeight="25.0" prefWidth="108.0"
-                            styleClass="header-green">
+                    <Button fx:id="btnDuLieu" onMouseEntered="#hienMenuDuLieu" onMouseExited="#anMenuDuLieu" prefHeight="25.0" prefWidth="108.0" styleClass="header-green" text="Dữ Liệu">
                         <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                     </Button>
 
                     <!-- Menu con xổ xuống -->
-                    <VBox fx:id="menuDuLieu"
-                            visible="false"
-                            managed="false"
-                            pickOnBounds="false"
-                            onMouseEntered="#giuMenuKhiHover"
-                            onMouseExited="#anMenuKhiRoi"
-                            spacing="6"
-                            style="-fx-background-color: transparent; -fx-padding: 5 0 0 15;">
-                          <Button text="Phim" onAction="#moTrangPhim" styleClass="sidebtn-ghost" />
-                          <Button text="Suất Chiếu" onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" />
-                          <Button text="Phòng Chiếu" onAction="#moTrangPhongChieu" styleClass="sidebtn-ghost" />
-                          <Button text="Vé" onAction="#moTrangVe" styleClass="sidebtn-ghost" />
+                    <VBox fx:id="menuDuLieu" managed="false" onMouseEntered="#giuMenuKhiHover" onMouseExited="#anMenuKhiRoi" pickOnBounds="false" spacing="6" style="-fx-background-color: transparent; -fx-padding: 5 0 0 15;" visible="false">
+                          <Button onAction="#moTrangPhim" styleClass="sidebtn-ghost" text="Phim" />
+                          <Button onAction="#moTrangSuatChieu" styleClass="sidebtn-ghost" text="Suất Chiếu" />
+                          <Button onAction="#moTrangPhongChieu" styleClass="sidebtn-ghost" text="Phòng Chiếu" />
+                          <Button onAction="#moTrangVe" styleClass="sidebtn-ghost" text="Vé" />
                       </VBox>
 
                 </VBox>
@@ -75,13 +53,11 @@
 
 
                 <!-- Các nút khác -->
-                <Button prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên"
-        onAction="#moTrangNhanVien">
+                <Button onAction="#moTrangNhanVien" prefHeight="25.0" prefWidth="108.0" styleClass="header-orange" text="Nhân Viên">
                     <VBox.margin><Insets bottom="10.0" /></VBox.margin>
                 </Button>
 
-                <Button prefWidth="108.0" styleClass="header-blue" text="Khách Hàng"
-        onAction="#moTrangKhachHang">
+                <Button onAction="#moTrangKhachHang" prefWidth="108.0" styleClass="header-blue" text="Khách Hàng">
                     <VBox.margin><Insets bottom="15.0" /></VBox.margin>
                 </Button>
 
@@ -103,23 +79,12 @@
             <!-- 🔹 HEADER (banner trên cùng) -->
             <AnchorPane VBox.vgrow="NEVER">
                 <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46.0"
-                          styleClass="header-bar"
-                          AnchorPane.leftAnchor="0"
-                          AnchorPane.rightAnchor="0"
-                          AnchorPane.topAnchor="0">
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
                         <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
                         <children>
-                            <Label prefHeight="23.0" prefWidth="300.0"
-                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;"
-                                   text="📊 Thống kê và Báo Cáo" />
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:white;" text="📊 Thống kê và Báo Cáo" />
                             <Pane HBox.hgrow="ALWAYS" />
-                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat"
-                                    prefHeight="28.0" prefWidth="104.0"
-                                    style="-fx-background-color:#ff5252; -fx-text-fill:white;
-                                           -fx-font-weight:bold; -fx-background-radius:6;
-                                           -fx-padding:5 15 5 15;"
-                                    text="Đăng xuất" />
+                            <Button fx:id="btnDangXuat" alignment="CENTER_RIGHT" onAction="#dangXuat" prefHeight="28.0" prefWidth="104.0" style="-fx-background-color:#ff5252; -fx-text-fill:white;                                            -fx-font-weight:bold; -fx-background-radius:6;                                            -fx-padding:5 15 5 15;" text="Đăng xuất" />
                         </children>
                     </HBox>
                 </children>
@@ -131,103 +96,92 @@
 
                 <!-- Nút hành động -->
                 <HBox spacing="10">
-                    <Button fx:id="btnBaoCao"
-                            style="-fx-background-color:#f97316; -fx-text-fill:white;
-                                   -fx-background-radius:8; -fx-font-weight:bold;"
-                            text="Báo Cáo" />
-                    <Button fx:id="btnThongKe" onAction="#onThongKePhim"
-                            style="-fx-background-color:#2563eb; -fx-text-fill:white;
-                                   -fx-background-radius:8; -fx-font-weight:bold;"
-                            text="Thống kê" />
+                    <Button fx:id="btnBaoCao" style="-fx-background-color:#f97316; -fx-text-fill:white;                                    -fx-background-radius:8; -fx-font-weight:bold;" text="Báo Cáo" />
                 </HBox>
 
-                <!-- THỐNG KÊ TỔNG QUAN -->
-                <HBox spacing="20" alignment="CENTER" prefWidth="Infinity">
-                    <VBox.margin>
-                        <Insets top="35.0" bottom="45" />
-                    </VBox.margin>
+<!-- ======== THỐNG KÊ TỔNG QUAN ======== -->
+<!-- ======== KHỐI 2 CỘT: TRÁI = 4 BOX, PHẢI = DOANH THU ======== -->
+<HBox prefWidth="Infinity" spacing="25">
 
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color:#fde68a; -fx-padding:15; -fx-background-radius:10;">
-                        <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng Phim" />
-                        <Label fx:id="lblTongPhim"
-                               style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;"
-                               text="0" />
-                    </VBox>
+    <!-- ========== CỘT TRÁI: 4 BOX TỔNG QUAN ========== -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
 
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color:#a7f3d0; -fx-padding:15; -fx-background-radius:10;">
-                        <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng Vé Đã Bán" />
-                        <Label fx:id="lblTongVe"
-                               style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;"
-                               text="0" />
-                    </VBox>
+        <HBox spacing="20">
 
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color:#93c5fd; -fx-padding:15; -fx-background-radius:10;">
-                        <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Doanh Thu" />
-                        <Label fx:id="lblDoanhThu"
-                               style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;"
-                               text="0 VNĐ" />
-                    </VBox>
+            <VBox alignment="CENTER" style="-fx-background-color:#fde68a; -fx-padding:15; -fx-background-radius:12;" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng phim" />
+                <Label fx:id="lblTongPhim" style="-fx-font-size:28; -fx-font-weight:bold;" text="0" />
+            </VBox>
 
-                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
-                          style="-fx-background-color:#fca5a5; -fx-padding:15; -fx-background-radius:10;">
-                        <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Số Suất Chiếu" />
-                        <Label fx:id="lblSuatChieu"
-                               style="-fx-font-size:28; -fx-font-weight:bold; -fx-text-fill:#1f2937;"
-                               text="0" />
-                    </VBox>
-                </HBox>
- 
-                <!-- KHU DƯỚI -->
-                <HBox prefHeight="419.0" prefWidth="953.0" spacing="25">
+            <VBox alignment="CENTER" style="-fx-background-color:#a7f3d0; -fx-padding:15; -fx-background-radius:12;" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Tổng vé đã bán" />
+                <Label fx:id="lblTongVe" style="-fx-font-size:28; -fx-font-weight:bold;" text="0" />
+            </VBox>
 
-                    <!-- CỘT TRÁI: TOP 10 PHIM -->
-                    <VBox prefHeight="363.0" prefWidth="600.0">
-                        <Label style="-fx-font-size:16; -fx-font-weight:bold;"
-                               text="Top 10 Phim Có Doanh Thu Cao Nhất" />
-                        <TableView fx:id="tableTopPhim" prefHeight="400">
-                            <columns>
-                                <TableColumn prefWidth="60" text="Top" />
-                                <TableColumn prefWidth="150" text="Tên Phim" />
-                                <TableColumn prefWidth="200" text="Doanh Thu" />
-                            </columns>
-                        </TableView>
-                    </VBox>
+        </HBox>
 
-                    <!-- Thay phần thống kê doanh thu theo phim -->
-                    <VBox prefHeight="363.0" prefWidth="797.0" spacing="10"
-                          style="-fx-background-color:linear-gradient(to bottom right, #e0f2fe, #f0fdf4);
-                                 -fx-padding:15; -fx-background-radius:10;">
-                        <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;"
-                               text="📈 Thống kê doanh thu theo phim" />
+        <HBox spacing="20">
 
-                        <!-- ❌ Bỏ chọn phim + từ ngày đến ngày -->
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Button fx:id="btnThongKePhim" text="Thống kê"
-                                    onAction="#onThongKePhim"
-                                    style="-fx-background-color:#2563eb; -fx-text-fill:white;
-                                           -fx-font-weight:bold; -fx-background-radius:6;"/>
-                        </HBox>
+            <VBox alignment="CENTER" style="-fx-background-color:#93c5fd; -fx-padding:15; -fx-background-radius:12;" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Doanh thu" />
+                <Label fx:id="lblDoanhThu" style="-fx-font-size:28; -fx-font-weight:bold;" text="0 VNĐ" />
+            </VBox>
 
-                        <TableView fx:id="tableThongKe" prefHeight="300">
-                            <columns>
-                                <TableColumn fx:id="colTenPhim" prefWidth="160" text="Tên phim" />
-                                <TableColumn fx:id="colSoVe" prefWidth="120" text="Số vé bán" />
-                                <TableColumn fx:id="colDoanhThu" prefWidth="150" text="Doanh thu" />
-                            </columns>
-                        </TableView>
+            <VBox alignment="CENTER" style="-fx-background-color:#fca5a5; -fx-padding:15; -fx-background-radius:12;" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size:16; -fx-font-weight:bold;" text="Số suất chiếu" />
+                <Label fx:id="lblSuatChieu" style="-fx-font-size:28; -fx-font-weight:bold;" text="0" />
+            </VBox>
 
-                        <HBox alignment="BOTTOM_RIGHT" spacing="5">
-                            <Label style="-fx-font-size:16; -fx-font-weight:bold; -fx-text-fill:#334155;"
-                                   text="Tổng doanh thu:" />
-                            <Label fx:id="lblTongDoanhThu"
-                                   style="-fx-font-size:16; -fx-text-fill:#16a34a; -fx-font-weight:bold;"
-                                   text="0 VNĐ" />
-                        </HBox>
-                    </VBox>
-                </HBox>
+        </HBox>
+    </VBox>
+
+    <!-- ========== CỘT PHẢI: DOANH THU THEO PHIM ========== -->
+    <VBox prefWidth="600" spacing="10" style="-fx-background-color:linear-gradient(to bottom right, #e0f2fe, #f0fdf4);                  -fx-padding:15; -fx-background-radius:12;">
+
+        <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;" text="📈 Doanh thu theo phim" />
+
+        <Button fx:id="btnThongKePhim" onAction="#onThongKePhim" style="-fx-background-color:#2563eb; -fx-text-fill:white;                        -fx-background-radius:6; -fx-font-weight:bold;" text="Tải dữ liệu" />
+
+        <TableView fx:id="tableThongKe" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="colTenPhim" prefWidth="200" text="Tên phim" />
+                <TableColumn fx:id="colSoVe" prefWidth="120" text="Số vé bán" />
+                <TableColumn fx:id="colDoanhThu" prefWidth="120" text="Doanh thu" />
+            </columns>
+        </TableView>
+
+        <HBox alignment="BOTTOM_RIGHT">
+            <Label style="-fx-font-weight:bold;" text="Tổng doanh thu:" />
+            <Label fx:id="lblTongDoanhThu" style="-fx-font-size:14; -fx-text-fill:#16a34a; -fx-font-weight:bold;" text="0 VNĐ" />
+        </HBox>
+    </VBox>
+
+</HBox>
+
+
+
+
+<!-- ======== TỶ LỆ LẤP ĐẦY (FULL WIDTH) ======== -->
+<VBox spacing="10" style="-fx-background-color:linear-gradient(to bottom right, #eef2ff, #fdf2f8);              -fx-padding:15; -fx-background-radius:12;">
+
+    <Label style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#1e3a8a;" text="📊 Thống kê tỷ lệ lấp đầy theo suất chiếu" />
+
+    <TableView fx:id="tableTLapDay" prefHeight="260">
+        <columns>
+            <TableColumn fx:id="colMaSuat" prefWidth="70" text="Mã suất" />
+            <TableColumn fx:id="colPhim" prefWidth="150" text="Phim" />
+            <TableColumn fx:id="colPhong" prefWidth="100" text="Phòng" />
+            <TableColumn fx:id="colNgay" prefWidth="120" text="Ngày chiếu" />
+            <TableColumn fx:id="colGio" prefWidth="100" text="Giờ chiếu" />
+            <TableColumn fx:id="colTongGhe" prefWidth="90" text="Tổng ghế" />
+            <TableColumn fx:id="colDaBan" prefWidth="90" text="Đã bán" />
+            <TableColumn fx:id="colTyLe" prefWidth="90" text="Tỷ lệ (%)" />
+        </columns>
+    </TableView>
+</VBox>
+
+
+
             </VBox>
         </VBox>
     </center>
