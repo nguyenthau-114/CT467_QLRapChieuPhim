@@ -245,44 +245,4 @@ public class Phim_truycapController {
         }
         */
     }
-    //hàm chuyển trang chính
- private void chuyenTrang(ActionEvent e, String fxmlPath) {
-    try {
-        javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(fxmlPath));
-        javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) e.getSource()).getScene().getWindow();
-        stage.setScene(new javafx.scene.Scene(root));
-        stage.show();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
-                "Không thể mở trang: " + fxmlPath).show();
-    }
-}
-
- //hàm chuyển trang qua lại
-    @FXML
-private void moTrangSuatChieu(ActionEvent e) {
-    chuyenTrang(e, "/suatchieu/SuatChieu.fxml");
-}
-@FXML
-private void moTrangPhongChieu(ActionEvent e) {
-    chuyenTrang(e, "/Phong/PhongChieu.fxml");
-}
-@FXML
-private void moTrangVe(ActionEvent e) {
-    chuyenTrang(e, "/ve/ve_truycap.fxml");
-}
-@FXML
-private void moTrangThongKe(ActionEvent e) {
-    chuyenTrang(e, "/thongke/Thongke.fxml");
-}
-@FXML
-private void moTrangNhanVien(ActionEvent e) {
-    chuyenTrang(e, "/nhanvien/NhanVien.fxml");
-}
-
-@FXML
-private void moTrangKhachHang(ActionEvent e) {
-    chuyenTrang(e, "/khachhang/khachhang.fxml");
-}
 }
