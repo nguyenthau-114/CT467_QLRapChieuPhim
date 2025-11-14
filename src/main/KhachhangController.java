@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class KhachhangController {
 
@@ -261,20 +262,30 @@ public class KhachhangController {
         menuDuLieu.setManaged(false);
     }
 //tìm kiếm nâng cao
-@FXML
+ @FXML
 private void moTimKiemPopup() {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemKhachHang.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemKhachHang.fxml")
+        );
         Parent root = loader.load();
 
         TimKiemKhachHangController popup = loader.getController();
         popup.setMainController(this);
 
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm khách hàng");
-        stage.setResizable(false);
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
+
         stage.show();
 
     } catch (Exception e) {

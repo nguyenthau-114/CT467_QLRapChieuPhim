@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 
 public class NhanVienController {
 
@@ -319,17 +320,27 @@ public class NhanVienController {
     @FXML
 private void moTimKiemPopup() {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNhanVien.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemNhanVien.fxml")
+        );
         Parent root = loader.load();
 
         TimKiemNhanVienController popup = loader.getController();
         popup.setMainController(this);
 
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm nhân viên");
-        stage.setResizable(false);
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
+
         stage.show();
 
     } catch (Exception e) {

@@ -19,6 +19,14 @@ import java.time.temporal.ChronoUnit;
 import javafx.scene.Parent; 
 
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import javafx.stage.FileChooser;
+import java.io.File;
+import javafx.stage.StageStyle;
+
+
 public class SuatChieuController {
     @FXML private TextField txtMaSuatChieu, txtGioChieu, txtGiaVe, txtMaPhim, txtMaPhong;
     @FXML private DatePicker dpNgayChieu;
@@ -28,7 +36,8 @@ public class SuatChieuController {
     @FXML private TableColumn<SuatChieu, Time> colGioChieu;
     @FXML private TableColumn<SuatChieu, Float> colGiaVe;
     @FXML private Button btnDangXuat;
-
+    
+    @FXML private Button btnExportExcel;
     
     private ObservableList<SuatChieu> dsSuatChieu = FXCollections.observableArrayList();
 
@@ -302,19 +311,28 @@ public class SuatChieuController {
     }
 @FXML
 private void moTimKiemPopup() {
-
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemNangCao.fxml")
+        );
         Parent root = loader.load();
 
-        TimKiemNangCaoController popupController = loader.getController();
-        popupController.setMainController(this);
+        TimKiemNangCaoController popup = loader.getController();
+        popup.setMainController(this);
 
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm suất chiếu");
-        stage.setResizable(false);
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
+
         stage.show();
 
     } catch (Exception e) {
@@ -359,5 +377,53 @@ public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong,
         e.printStackTrace();
     }
 }
+
+@FXML
+private void xuatExcel() {
+    try {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Xuất Excel");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+        );
+        File file = fileChooser.showSaveDialog(null);
+        if (file == null) return;
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("SuatChieu");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Mã suất chiếu");
+        header.createCell(1).setCellValue("Ngày chiếu");
+        header.createCell(2).setCellValue("Giờ chiếu");
+        header.createCell(3).setCellValue("Giá vé");
+        header.createCell(4).setCellValue("Mã phim");
+        header.createCell(5).setCellValue("Mã phòng");
+        header.createCell(6).setCellValue("Trạng thái");
+
+        int rowIndex = 1;
+        for (SuatChieu sc : tableSuatChieu.getItems()) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(sc.getMasuatchieu());
+            row.createCell(1).setCellValue(sc.getNgaychieu().toString());
+            row.createCell(2).setCellValue(sc.getGiochieu().toString());
+            row.createCell(3).setCellValue(sc.getGiave());
+            row.createCell(4).setCellValue(sc.getMaphim());
+            row.createCell(5).setCellValue(sc.getMaphong());
+            row.createCell(6).setCellValue(sc.getTrangthai());
+        }
+
+        FileOutputStream out = new FileOutputStream(file);
+        wb.write(out);
+        out.close();
+        wb.close();
+
+        showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
+
+    } catch (Exception e) {
+        showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
+    }
+}
+
 
 }

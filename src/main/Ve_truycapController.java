@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Ve_truycapController {
 
@@ -226,26 +227,7 @@ public class Ve_truycapController {
 
         //tim kiem nang cao
         
-        @FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemVe.fxml"));
-        Parent root = loader.load();
 
-        TimKiemVeController popup = loader.getController();
-        popup.setMainController(this);
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm vé");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
                            String maSC, String maKH, String maGhe) {
 
@@ -277,7 +259,36 @@ public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
 
     tableVe.setItems(ketQua);
 }
+@FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemVe.fxml")
+        );
+        Parent root = loader.load();
 
+        TimKiemVeController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
       
 
 }

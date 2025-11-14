@@ -32,11 +32,12 @@ public class TimKiemPhimController {
         Stage stage = (Stage) tfMaPhim.getScene().getWindow();
         stage.close();
     }
-    @FXML private Button btnClose;
-    @FXML
+@FXML
+private Button btnClose;
+
+@FXML  // ⭐⭐ BẮT BUỘC PHẢI CÓ
 private void dongPopup() {
- 
-   Stage stage = (Stage) btnClose.getScene().getWindow();
+    Stage stage = (Stage) btnClose.getScene().getWindow();
     stage.close();
 }
 

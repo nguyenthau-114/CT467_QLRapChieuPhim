@@ -11,7 +11,7 @@ public class TimKiemNhanVienController {
     @FXML private TextField txtChucVu;
     @FXML private TextField txtSDT;
     @FXML private TextField txtEmail;
-
+    @FXML private Button btnClose;
     private NhanVienController mainController;
 
     public void setMainController(NhanVienController controller) {
@@ -30,6 +30,11 @@ public class TimKiemNhanVienController {
         );
 
         Stage stage = (Stage) txtMaNV.getScene().getWindow();
+        stage.close();
+    }
+    @FXML
+    private void dongPopup() {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
     }
 }
