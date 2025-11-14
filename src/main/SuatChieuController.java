@@ -330,23 +330,23 @@ private void moTimKiemPopup() {
     }
 }
 public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
+
     dsSuatChieu.clear();
 
     try (Connection conn = DBConnection.getConnection()) {
 
-        String sql = "SELECT * FROM suatchieu sc "
-                + "JOIN phim p ON sc.phim_maphim = p.maphim "
-                + "JOIN phongchieu pc ON sc.phongchieu_maphong = pc.maphong "
-                + "WHERE 1=1 ";
+        CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_suatchieu(?, ?, ?, ?)}");
 
-        if (ma != null && !ma.isEmpty()) sql += " AND masuatchieu LIKE '%" + ma + "%'";
-        if (ngay != null) sql += " AND ngaychieu = '" + ngay + "'";
-        if (phim != null) sql += " AND p.tenphim = '" + phim + "'";
-        if (phong != null) sql += " AND pc.maphong = '" + phong + "'";
+        // Truyền tham số
+        cs.setString(1, ma != null ? ma : "");
+        cs.setDate(2, ngay != null ? Date.valueOf(ngay) : null);
+        cs.setString(3, phim != null ? phim : "");
+        cs.setString(4, phong != null ? phong : "");
 
-        ResultSet rs = conn.createStatement().executeQuery(sql);
+        ResultSet rs = cs.executeQuery();
 
         while (rs.next()) {
+
             Date d = rs.getDate("ngaychieu");
             Time t = rs.getTime("giochieu");
 
@@ -367,6 +367,7 @@ public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong,
         e.printStackTrace();
     }
 }
+
 
 @FXML
 private void xuatExcel() {
