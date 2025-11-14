@@ -3,6 +3,8 @@ package main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class TimKiemPhongController {
 
@@ -30,4 +32,14 @@ public class TimKiemPhongController {
         Stage s = (Stage) tfMaPhong.getScene().getWindow();
         s.close();
     }
+    @FXML
+    private Button btnClose;
+
+        @FXML
+private void dongPopup() {
+ 
+   Stage stage = (Stage) btnClose.getScene().getWindow();
+    stage.close();
+}
+
 }

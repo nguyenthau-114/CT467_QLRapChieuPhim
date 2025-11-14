@@ -35,7 +35,8 @@ public class TimKiemPhimController {
     @FXML private Button btnClose;
     @FXML
 private void dongPopup() {
-    Stage stage = (Stage) btnClose.getScene().getWindow();
+ 
+   Stage stage = (Stage) btnClose.getScene().getWindow();
     stage.close();
 }
 
