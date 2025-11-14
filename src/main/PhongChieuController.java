@@ -17,6 +17,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
+import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
 
 /**
  * Controller: Quản lý Phòng chiếu
@@ -337,20 +339,30 @@ public class PhongChieuController {
     }
     //tim kiem nang cao
     
-    @FXML
+@FXML
 private void moTimKiemPopup() {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemPhong.fxml"));
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemPhong.fxml")
+        );
         Parent root = loader.load();
 
         TimKiemPhongController popup = loader.getController();
         popup.setMainController(this);
 
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm phòng chiếu");
-        stage.setResizable(false);
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(Color.TRANSPARENT);
+
+        stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
+
         stage.show();
 
     } catch (Exception e) {
