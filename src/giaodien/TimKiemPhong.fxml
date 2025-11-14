@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemPhongController"
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
+
+    <!-- Nút X đóng popup -->
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="btnClose" text="✖"
+                onAction="#dongPopup"
+                styleClass="popup-close-btn"/>
+    </HBox>
+
+    <!-- Tiêu đề -->
+    <Label text="Tìm kiếm phòng chiếu"
+           styleClass="popup-title" />
+
+    <!-- Form nhập -->
+    <GridPane hgap="10" vgap="12">
+
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Mã phòng:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Tên phòng:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTenPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Số ghế (≥):" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfSoGhe" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Loại phòng:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfLoaiPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    </GridPane>
+
+    <!-- Nút tìm -->
+    <Button text="Tìm"
+            onAction="#thucHienTim"
+            styleClass="popup-btn"/>
+
+</VBox>

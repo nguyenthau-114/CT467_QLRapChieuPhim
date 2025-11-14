@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemVeController"
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
+
+    <!-- Nút X -->
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="btnClose" text="✖"
+                onAction="#dongPopup"
+                styleClass="popup-close-btn"/>
+    </HBox>
+
+    <!-- Tiêu đề -->
+    <Label text="Tìm kiếm vé" styleClass="popup-title" />
+
+    <!-- FORM -->
+    <GridPane hgap="10" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Mã vé:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaVe" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Trạng thái:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTrangThai" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Mã suất chiếu:" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfMaSuatChieu" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Mã khách hàng:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfMaKhachHang" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Mã ghế:" GridPane.rowIndex="4"/>
+        <TextField fx:id="tfMaGhe" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="Ngày đặt:" GridPane.rowIndex="5"/>
+        <DatePicker fx:id="dpNgayDat" styleClass="popup-field"
+                    GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    </GridPane>
+
+    <!-- Nút tìm -->
+    <Button text="Tìm" onAction="#thucHienTim" styleClass="popup-btn"/>
+
+</VBox>

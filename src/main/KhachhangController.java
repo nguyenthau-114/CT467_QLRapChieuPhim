@@ -9,7 +9,18 @@ import java.sql.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 import dulieu.khachhang;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import javafx.stage.FileChooser;
+import java.io.File;
+import javafx.stage.StageStyle;
 public class KhachhangController {
 
     @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
@@ -256,6 +267,105 @@ public class KhachhangController {
         menuDuLieu.setManaged(false);
     }
 
+public void timKiemNangCao(String ma, String ten, String sdt, String email) {
 
+    ObservableList<khachhang> ketQua = FXCollections.observableArrayList();
+
+    for (khachhang kh : dsKH) {
+        boolean ok = true;
+
+        if (!ma.isEmpty() && !kh.getMaKhachHang().toLowerCase().contains(ma.toLowerCase()))
+            ok = false;
+
+        if (!ten.isEmpty() && !kh.getTenKhachHang().toLowerCase().contains(ten.toLowerCase()))
+            ok = false;
+
+        if (!sdt.isEmpty() && !kh.getSdt().toLowerCase().contains(sdt.toLowerCase()))
+            ok = false;
+
+        if (!email.isEmpty() && !kh.getEmail().toLowerCase().contains(email.toLowerCase()))
+            ok = false;
+
+        if (ok) ketQua.add(kh);
+    }
+
+    tableKH.setItems(ketQua);
 }
 
+@FXML
+private void xuatExcel() {
+    try {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Xuất Excel - Khách hàng");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+        );
+        File file = fileChooser.showSaveDialog(null);
+        if (file == null) return;
+
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("KhachHang");
+
+        // ===== TẠO HEADER =====
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Mã khách hàng");
+        header.createCell(1).setCellValue("Tên khách hàng");
+        header.createCell(2).setCellValue("Số điện thoại");
+        header.createCell(3).setCellValue("Email");
+
+        // ===== GHI DỮ LIỆU =====
+        int rowIndex = 1;
+        for (khachhang kh : tableKH.getItems()) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(kh.getMaKhachHang());
+            row.createCell(1).setCellValue(kh.getTenKhachHang());
+            row.createCell(2).setCellValue(kh.getSdt());
+            row.createCell(3).setCellValue(kh.getEmail());
+        }
+
+        // ===== LƯU FILE =====
+        FileOutputStream out = new FileOutputStream(file);
+        wb.write(out);
+        out.close();
+        wb.close();
+
+        showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
+
+    } catch (Exception e) {
+        showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
+    }
+}
+
+
+//tìm kiếm nâng cao
+ @FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemKhachHang.fxml")
+        );
+        Parent root = loader.load();
+
+        TimKiemKhachHangController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+}

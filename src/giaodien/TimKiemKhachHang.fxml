@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemKhachHangController"
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
+
+    <!-- Nút X -->
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="btnClose" text="✖"
+                onAction="#dongPopup"
+                styleClass="popup-close-btn"/>
+    </HBox>
+
+    <Label text="Tìm kiếm khách hàng" styleClass="popup-title" />
+
+    <GridPane hgap="10" vgap="12">
+
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Mã KH:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaKH" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Tên KH:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTenKH" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Số điện thoại:" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfSDT" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Email:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfEmail" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    </GridPane>
+
+    <Button text="Tìm"
+            onAction="#thucHienTim"
+            styleClass="popup-btn"/>
+
+</VBox>

@@ -1,4 +1,5 @@
 package main;
+
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,6 +8,22 @@ import javafx.scene.control.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
 import dulieu.ve;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
+import javafx.stage.StageStyle;
 
 public class Ve_truycapController {
 
@@ -19,6 +36,7 @@ public class Ve_truycapController {
 
     private ObservableList<ve> danhSachVe = FXCollections.observableArrayList();
 
+    // ================= KHỞI TẠO =================
     @FXML
     public void initialize() {
         colMaVe.setCellValueFactory(cell -> cell.getValue().maveProperty());
@@ -28,8 +46,6 @@ public class Ve_truycapController {
         colMaSuatChieu.setCellValueFactory(cell -> cell.getValue().suatchieu_masuatchieuProperty());
         colMaKhachHang.setCellValueFactory(cell -> cell.getValue().khachhang_makhachhangProperty());
         colMaGhe.setCellValueFactory(cell -> cell.getValue().ghe_magheProperty());
-
-        //taiDuLieu();
 
         // Khi chọn 1 dòng thì đổ lên form
         tableVe.setOnMouseClicked(event -> {
@@ -44,18 +60,17 @@ public class Ve_truycapController {
                 tfMaGhe.setText(selected.getGhe_maghe());
             }
         });
+
         tableVe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    
-    // 🔹 Mẹo thêm — tự động chia đều kích thước cột
-    tableVe.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-        double width = newWidth.doubleValue() / tableVe.getColumns().size();
-        tableVe.getColumns().forEach(col -> col.setPrefWidth(width));
-    });
+
+        // Tự chia đều độ rộng cột
+        tableVe.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double width = newWidth.doubleValue() / tableVe.getColumns().size();
+            tableVe.getColumns().forEach(col -> col.setPrefWidth(width));
+        });
     }
 
-    // ===========================
-    // 🔹 TẢI DỮ LIỆU
-    // ===========================
+    // ================= TẢI DỮ LIỆU =================
     @FXML
     private void taiDuLieu() {
         danhSachVe.clear();
@@ -64,7 +79,7 @@ public class Ve_truycapController {
              ResultSet rs = stmt.executeQuery("SELECT * FROM ve")) {
 
             while (rs.next()) {
-                ve ve = new ve(
+                ve v = new ve(
                         rs.getString("mave"),
                         rs.getDate("ngaydat"),
                         rs.getDouble("giave"),
@@ -73,7 +88,7 @@ public class Ve_truycapController {
                         rs.getString("khachhang_makhachhang"),
                         rs.getString("ghe_maghe")
                 );
-                danhSachVe.add(ve);
+                danhSachVe.add(v);
             }
             tableVe.setItems(danhSachVe);
         } catch (SQLException e) {
@@ -81,9 +96,7 @@ public class Ve_truycapController {
         }
     }
 
-    // ===========================
-    // 🔹 THÊM
-    // ===========================
+    // ================= THÊM =================
     @FXML
     private void onThem() {
         if (tfMaVe.getText().isEmpty()) {
@@ -104,7 +117,6 @@ public class Ve_truycapController {
             ps.setString(7, tfMaGhe.getText());
 
             ps.executeUpdate();
-            //showAlert("Thành công", "Đã thêm vé mới!");
             taiDuLieu();
             clearForm();
 
@@ -113,9 +125,7 @@ public class Ve_truycapController {
         }
     }
 
-    // ===========================
-    // 🔹 SỬA
-    // ===========================
+    // ================= SỬA =================
     @FXML
     private void onSua() {
         ve selected = tableVe.getSelectionModel().getSelectedItem();
@@ -137,7 +147,6 @@ public class Ve_truycapController {
             ps.setString(7, tfMaVe.getText());
 
             ps.executeUpdate();
-            //showAlert("Thành công", "Đã cập nhật thông tin vé!");
             taiDuLieu();
             clearForm();
 
@@ -146,9 +155,7 @@ public class Ve_truycapController {
         }
     }
 
-    // ===========================
-    // 🔹 XÓA
-    // ===========================
+    // ================= XÓA =================
     @FXML
     private void onXoa() {
         ve selected = tableVe.getSelectionModel().getSelectedItem();
@@ -163,7 +170,6 @@ public class Ve_truycapController {
 
             ps.setString(1, selected.getMave());
             ps.executeUpdate();
-            //showAlert("Thành công", "Đã xóa vé!");
             taiDuLieu();
             clearForm();
 
@@ -172,9 +178,123 @@ public class Ve_truycapController {
         }
     }
 
-    // ===========================
-    // 🔹 HÀM TIỆN ÍCH
-    // ===========================
+    // ================= XUẤT EXCEL =================
+    @FXML
+    private void xuatExcel() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách vé ra Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+
+            File file = fileChooser.showSaveDialog(tableVe.getScene().getWindow());
+            if (file == null) return;
+
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("Ve");
+
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã vé");
+            header.createCell(1).setCellValue("Ngày đặt");
+            header.createCell(2).setCellValue("Giá vé");
+            header.createCell(3).setCellValue("Trạng thái");
+            header.createCell(4).setCellValue("Mã suất chiếu");
+            header.createCell(5).setCellValue("Mã khách hàng");
+            header.createCell(6).setCellValue("Mã ghế");
+
+            int rowIndex = 1;
+            for (ve v : tableVe.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
+
+                row.createCell(0).setCellValue(v.getMave());
+                row.createCell(1).setCellValue(
+                        v.getNgaydat() != null ? v.getNgaydat().toString() : ""
+                );
+                row.createCell(2).setCellValue(v.getGiave());
+                row.createCell(3).setCellValue(v.getTrangthai());
+                row.createCell(4).setCellValue(v.getSuatchieu_masuatchieu());
+                row.createCell(5).setCellValue(v.getKhachhang_makhachhang());
+                row.createCell(6).setCellValue(v.getGhe_maghe());
+            }
+
+            for (int i = 0; i <= 6; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                wb.write(out);
+            }
+            wb.close();
+
+            showAlert("Thành công", "Xuất Excel danh sách vé thành công!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi xuất Excel", "Không thể xuất Excel: " + e.getMessage());
+        }
+    }
+
+    // ================= TÌM KIẾM NÂNG CAO =================
+    public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
+                               String maSC, String maKH, String maGhe) {
+
+        ObservableList<ve> ketQua = FXCollections.observableArrayList();
+
+        for (ve v : danhSachVe) {
+            boolean ok = true;
+
+            if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
+                ok = false;
+
+            if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
+                ok = false;
+
+            if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
+                ok = false;
+
+            if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
+                ok = false;
+
+            if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
+                ok = false;
+
+            if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
+                ok = false;
+
+            if (ok) ketQua.add(v);
+        }
+
+        tableVe.setItems(ketQua);
+    }
+
+    // ================= POPUP TÌM KIẾM =================
+    @FXML
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/giaodien/TimKiemVe.fxml")
+            );
+            Parent root = loader.load();
+
+            TimKiemVeController popup = loader.getController();
+            popup.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.TRANSPARENT);
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ================= TIỆN ÍCH KHÁC =================
     private void clearForm() {
         tfMaVe.clear();
         tfGiaVe.clear();
@@ -184,41 +304,24 @@ public class Ve_truycapController {
         tfMaGhe.clear();
         dpNgayDat.setValue(null);
     }
+
     @FXML
-    private void dangXuat(javafx.event.ActionEvent event) {
-        // Hiển thị thông báo đơn giản
+    private void dangXuat(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Đăng xuất");
         alert.setHeaderText(null);
         alert.setContentText("Bạn đã đăng xuất khỏi hệ thống!");
         alert.showAndWait();
 
-        // (Tùy chọn) Đóng cửa sổ hiện tại
-        ((javafx.stage.Stage) ((javafx.scene.Node) event.getSource())
+        ((Stage) ((javafx.scene.Node) event.getSource())
                 .getScene().getWindow()).close();
-
-        // (Hoặc mở lại màn hình đăng nhập nếu bạn có file login.fxml)
-        /*
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/login/login.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Đăng nhập");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
     }
 
-        private void showAlert(String title, String content) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(content);
-            alert.showAndWait();
-        }
-
-      
-
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }
