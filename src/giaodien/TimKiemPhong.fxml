@@ -8,11 +8,21 @@
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="main.TimKiemPhongController"
-      style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 12;">
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
 
+    <!-- Nút X đóng popup -->
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="btnClose" text="✖"
+                onAction="#dongPopup"
+                styleClass="popup-close-btn"/>
+    </HBox>
+
+    <!-- Tiêu đề -->
     <Label text="Tìm kiếm phòng chiếu"
-           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+           styleClass="popup-title" />
 
+    <!-- Form nhập -->
     <GridPane hgap="10" vgap="12">
 
         <columnConstraints>
@@ -21,22 +31,26 @@
         </columnConstraints>
 
         <Label text="Mã phòng:" GridPane.rowIndex="0"/>
-        <TextField fx:id="tfMaPhong" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
         <Label text="Tên phòng:" GridPane.rowIndex="1"/>
-        <TextField fx:id="tfTenPhong" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTenPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
         <Label text="Số ghế (≥):" GridPane.rowIndex="2"/>
-        <TextField fx:id="tfSoGhe" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfSoGhe" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
         <Label text="Loại phòng:" GridPane.rowIndex="3"/>
-        <TextField fx:id="tfLoaiPhong" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfLoaiPhong" styleClass="popup-field"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
     </GridPane>
 
+    <!-- Nút tìm -->
     <Button text="Tìm"
             onAction="#thucHienTim"
-            style="-fx-background-color:#4caf50; -fx-text-fill:white;
-                   -fx-font-weight:bold; -fx-padding:6 16; -fx-background-radius:6;" />
+            styleClass="popup-btn"/>
 
 </VBox>

@@ -1,8 +1,8 @@
 package main;
 
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import java.time.LocalDate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,45 +16,35 @@ public class TimKiemNangCaoController {
     @FXML private ComboBox<String> cbPhim;
     @FXML private ComboBox<String> cbPhong;
     @FXML private ComboBox<String> cbTrangThai;
+    @FXML private Button btnClose;
 
-    private SuatChieuController mainController; // tham chiếu ngược
+    private SuatChieuController mainController;
 
     public void setMainController(SuatChieuController controller) {
         this.mainController = controller;
     }
 
-    // Khi popup mở ra sẽ tự load dữ liệu cho combobox
     @FXML
     private void initialize() {
-        taiComboBoxTimKiem();
+        taiComboBox();
     }
 
-    private void taiComboBoxTimKiem() {
+    private void taiComboBox() {
         try (Connection conn = DBConnection.getConnection()) {
 
-            // Load phim
-            ObservableList<String> dsPhim = FXCollections.observableArrayList();
-            ResultSet rsPhim = conn.createStatement()
-                    .executeQuery("SELECT tenphim FROM phim");
-            while (rsPhim.next()) {
-                dsPhim.add(rsPhim.getString("tenphim"));
-            }
-            cbPhim.setItems(dsPhim);
+            ObservableList<String> phim = FXCollections.observableArrayList();
+            ResultSet rs1 = conn.createStatement().executeQuery("SELECT tenphim FROM phim");
+            while (rs1.next()) phim.add(rs1.getString(1));
+            cbPhim.setItems(phim);
 
-            // Load phòng
-            ObservableList<String> dsPhong = FXCollections.observableArrayList();
-            ResultSet rsPhong = conn.createStatement()
-                    .executeQuery("SELECT maphong FROM phongchieu");
-            while (rsPhong.next()) {
-                dsPhong.add(rsPhong.getString("maphong"));
-            }
-            cbPhong.setItems(dsPhong);
+            ObservableList<String> phong = FXCollections.observableArrayList();
+            ResultSet rs2 = conn.createStatement().executeQuery("SELECT maphong FROM phongchieu");
+            while (rs2.next()) phong.add(rs2.getString(1));
+            cbPhong.setItems(phong);
 
-            // Load trạng thái (cố định)
             cbTrangThai.setItems(FXCollections.observableArrayList(
-                    "Sắp ra mắt", "Sắp chiếu", "Đang chiếu", "Đã chiếu"
+                "Sắp ra mắt", "Sắp chiếu", "Đang chiếu", "Đã chiếu"
             ));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,8 +61,12 @@ public class TimKiemNangCaoController {
                 cbTrangThai.getValue()
         );
 
-        // đóng popup
-        Stage stage = (Stage) txtMaSuat.getScene().getWindow();
+        dongPopup();
+    }
+
+    @FXML
+    private void dongPopup() {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
     }
 }

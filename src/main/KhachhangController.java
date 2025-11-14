@@ -20,7 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
-
+import javafx.stage.StageStyle;
 public class KhachhangController {
 
     @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
@@ -266,27 +266,7 @@ public class KhachhangController {
         menuDuLieu.setVisible(false);
         menuDuLieu.setManaged(false);
     }
-//tìm kiếm nâng cao
-@FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemKhachHang.fxml"));
-        Parent root = loader.load();
 
-        TimKiemKhachHangController popup = loader.getController();
-        popup.setMainController(this);
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm khách hàng");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 public void timKiemNangCao(String ma, String ten, String sdt, String email) {
 
     ObservableList<khachhang> ketQua = FXCollections.observableArrayList();
@@ -356,5 +336,36 @@ private void xuatExcel() {
     }
 }
 
-}
 
+//tìm kiếm nâng cao
+ @FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemKhachHang.fxml")
+        );
+        Parent root = loader.load();
+
+        TimKiemKhachHangController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+}

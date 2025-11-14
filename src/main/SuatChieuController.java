@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
+import javafx.stage.StageStyle;
 
 
 public class SuatChieuController {
@@ -308,22 +309,31 @@ public class SuatChieuController {
             showAlert("Lỗi đăng xuất", e.getMessage(), AlertType.ERROR);
         }
     }
-    @FXML
-    private void moTimKiemPopup() {
+@FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemNangCao.fxml")
+        );
+        Parent root = loader.load();
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
-            Parent root = loader.load();
+        TimKiemNangCaoController popup = loader.getController();
+        popup.setMainController(this);
 
-            TimKiemNangCaoController popupController = loader.getController();
-            popupController.setMainController(this);
+        Stage stage = new Stage();
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Tìm kiếm suất chiếu");
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();

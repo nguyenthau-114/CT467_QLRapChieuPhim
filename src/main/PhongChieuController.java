@@ -17,17 +17,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
-import javafx.stage.FileChooser;
+import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
 
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.File;
 import java.io.FileOutputStream;
-
-
+import javafx.stage.FileChooser;
+import java.io.File;
 /**
  * Controller: Quản lý Phòng chiếu
  * - Dùng TRIGGER trong DB để tự sinh mã & chặn xóa
@@ -347,21 +344,31 @@ public class PhongChieuController {
     }
     //tim kiem nang cao
     
-    @FXML
-    private void moTimKiemPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemPhong.fxml"));
-            Parent root = loader.load();
+@FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemPhong.fxml")
+        );
+        Parent root = loader.load();
 
             TimKiemPhongController popup = loader.getController();
             popup.setMainController(this);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Tìm kiếm phòng chiếu");
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();

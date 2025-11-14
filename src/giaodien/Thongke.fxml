@@ -121,7 +121,7 @@
 
         <TableView fx:id="tableTLapDay"
                    prefHeight="260"
-                   prefWidth="1050"
+                   prefWidth="1250"
                    style="-fx-background-radius:10; -fx-border-radius:10;">
 
             <columns>

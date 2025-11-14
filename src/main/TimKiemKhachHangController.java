@@ -1,6 +1,7 @@
 package main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -10,7 +11,7 @@ public class TimKiemKhachHangController {
     @FXML private TextField tfTenKH;
     @FXML private TextField tfSDT;
     @FXML private TextField tfEmail;
-
+    @FXML private Button btnClose;
     private KhachhangController mainController;
 
     public void setMainController(KhachhangController controller) {
@@ -28,6 +29,11 @@ public class TimKiemKhachHangController {
         );
 
         Stage stage = (Stage) tfMaKH.getScene().getWindow();
+        stage.close();
+    }
+    @FXML
+    private void dongPopup() {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
     }
 }

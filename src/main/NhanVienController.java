@@ -26,6 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import javafx.stage.StageStyle;
 
 public class NhanVienController {
 
@@ -327,20 +328,30 @@ public class NhanVienController {
     
     //tìm kiếm nâng cao
     @FXML
-    private void moTimKiemPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNhanVien.fxml"));
-            Parent root = loader.load();
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemNhanVien.fxml")
+        );
+        Parent root = loader.load();
 
             TimKiemNhanVienController popup = loader.getController();
             popup.setMainController(this);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Tìm kiếm nhân viên");
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
