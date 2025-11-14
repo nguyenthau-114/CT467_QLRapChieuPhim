@@ -24,7 +24,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
-import javafx.stage.StageStyle;
 
 
 public class SuatChieuController {
@@ -311,119 +310,111 @@ public class SuatChieuController {
     }
 @FXML
 private void moTimKiemPopup() {
+
     try {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/giaodien/TimKiemNangCao.fxml")
-        );
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
         Parent root = loader.load();
 
-        TimKiemNangCaoController popup = loader.getController();
-        popup.setMainController(this);
+        TimKiemNangCaoController popupController = loader.getController();
+        popupController.setMainController(this);
 
         Stage stage = new Stage();
-
-        // ⭐ Giúp bỏ màu nền mặc định của Stage
-        stage.initStyle(StageStyle.TRANSPARENT);
-
-        Scene scene = new Scene(root);
-
-        // ⭐ Giúp bỏ nền trắng của Scene
-        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-
-        stage.setScene(scene);
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm suất chiếu");
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
-
         stage.show();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
-        dsSuatChieu.clear();
+}
+public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
 
-        try (Connection conn = DBConnection.getConnection()) {
+    dsSuatChieu.clear();
 
-            String sql = "SELECT * FROM suatchieu sc "
-                    + "JOIN phim p ON sc.phim_maphim = p.maphim "
-                    + "JOIN phongchieu pc ON sc.phongchieu_maphong = pc.maphong "
-                    + "WHERE 1=1 ";
+    try (Connection conn = DBConnection.getConnection()) {
 
-            if (ma != null && !ma.isEmpty()) sql += " AND masuatchieu LIKE '%" + ma + "%'";
-            if (ngay != null) sql += " AND ngaychieu = '" + ngay + "'";
-            if (phim != null) sql += " AND p.tenphim = '" + phim + "'";
-            if (phong != null) sql += " AND pc.maphong = '" + phong + "'";
+        CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_suatchieu(?, ?, ?, ?)}");
 
-            ResultSet rs = conn.createStatement().executeQuery(sql);
+        // Truyền tham số
+        cs.setString(1, ma != null ? ma : "");
+        cs.setDate(2, ngay != null ? Date.valueOf(ngay) : null);
+        cs.setString(3, phim != null ? phim : "");
+        cs.setString(4, phong != null ? phong : "");
 
-            while (rs.next()) {
-                Date d = rs.getDate("ngaychieu");
-                Time t = rs.getTime("giochieu");
+        ResultSet rs = cs.executeQuery();
 
-                dsSuatChieu.add(new SuatChieu(
-                        rs.getString("masuatchieu"),
-                        d,
-                        t,
-                        rs.getFloat("giave"),
-                        rs.getString("phim_maphim"),
-                        rs.getString("phongchieu_maphong"),
-                        xacDinhTrangThai(d)
-                ));
-            }
+        while (rs.next()) {
 
-            tableSuatChieu.setItems(dsSuatChieu);
+            Date d = rs.getDate("ngaychieu");
+            Time t = rs.getTime("giochieu");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            dsSuatChieu.add(new SuatChieu(
+                    rs.getString("masuatchieu"),
+                    d,
+                    t,
+                    rs.getFloat("giave"),
+                    rs.getString("phim_maphim"),
+                    rs.getString("phongchieu_maphong"),
+                    xacDinhTrangThai(d)
+            ));
         }
+
+        tableSuatChieu.setItems(dsSuatChieu);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
-    @FXML
-    private void xuatExcel() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Xuất Excel");
-            fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
-            );
-            File file = fileChooser.showSaveDialog(null);
-            if (file == null) return;
 
-            Workbook wb = new XSSFWorkbook();
-            Sheet sheet = wb.createSheet("SuatChieu");
+@FXML
+private void xuatExcel() {
+    try {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Xuất Excel");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+        );
+        File file = fileChooser.showSaveDialog(null);
+        if (file == null) return;
 
-            Row header = sheet.createRow(0);
-            header.createCell(0).setCellValue("Mã suất chiếu");
-            header.createCell(1).setCellValue("Ngày chiếu");
-            header.createCell(2).setCellValue("Giờ chiếu");
-            header.createCell(3).setCellValue("Giá vé");
-            header.createCell(4).setCellValue("Mã phim");
-            header.createCell(5).setCellValue("Mã phòng");
-            header.createCell(6).setCellValue("Trạng thái");
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("SuatChieu");
 
-            int rowIndex = 1;
-            for (SuatChieu sc : tableSuatChieu.getItems()) {
-                Row row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(sc.getMasuatchieu());
-                row.createCell(1).setCellValue(sc.getNgaychieu().toString());
-                row.createCell(2).setCellValue(sc.getGiochieu().toString());
-                row.createCell(3).setCellValue(sc.getGiave());
-                row.createCell(4).setCellValue(sc.getMaphim());
-                row.createCell(5).setCellValue(sc.getMaphong());
-                row.createCell(6).setCellValue(sc.getTrangthai());
-            }
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Mã suất chiếu");
+        header.createCell(1).setCellValue("Ngày chiếu");
+        header.createCell(2).setCellValue("Giờ chiếu");
+        header.createCell(3).setCellValue("Giá vé");
+        header.createCell(4).setCellValue("Mã phim");
+        header.createCell(5).setCellValue("Mã phòng");
+        header.createCell(6).setCellValue("Trạng thái");
 
-            FileOutputStream out = new FileOutputStream(file);
-            wb.write(out);
-            out.close();
-            wb.close();
-
-            showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
-
-        } catch (Exception e) {
-            showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
+        int rowIndex = 1;
+        for (SuatChieu sc : tableSuatChieu.getItems()) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(sc.getMasuatchieu());
+            row.createCell(1).setCellValue(sc.getNgaychieu().toString());
+            row.createCell(2).setCellValue(sc.getGiochieu().toString());
+            row.createCell(3).setCellValue(sc.getGiave());
+            row.createCell(4).setCellValue(sc.getMaphim());
+            row.createCell(5).setCellValue(sc.getMaphong());
+            row.createCell(6).setCellValue(sc.getTrangthai());
         }
+
+        FileOutputStream out = new FileOutputStream(file);
+        wb.write(out);
+        out.close();
+        wb.close();
+
+        showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
+
+    } catch (Exception e) {
+        showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
     }
+}
 
 
 }
