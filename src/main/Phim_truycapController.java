@@ -118,11 +118,14 @@ public class Phim_truycapController {
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ok) {
-                dao.insertPhim(p);
-                onTaiDuLieu();
-                tablePhim.getSelectionModel().selectLast(); // ✅ chọn dòng phim vừa thêm
-                //showAlert("Đã thêm phim thành công!");
-            }
+            dao.insertPhim(p);
+            onTaiDuLieu();
+            tablePhim.getSelectionModel().selectLast(); // ✅ chọn dòng phim vừa thêm
+            showAlert("Thành công",
+                      "Đã thêm phim thành công!",
+                      Alert.AlertType.INFORMATION);
+        }
+
         });
 
     }
@@ -145,8 +148,11 @@ public class Phim_truycapController {
             if (response == ok) {
                 dao.updatePhim(p);
                 onTaiDuLieu();
-                //showAlert("Đã cập nhật phim thành công!");
+                showAlert("Thành công",
+                          "Đã cập nhật phim thành công!",
+                          Alert.AlertType.INFORMATION);
             }
+
         });
     }
 
@@ -155,9 +161,12 @@ public class Phim_truycapController {
     public void onXoa() {
         phim selected = tablePhim.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Hãy chọn 1 dòng cần xóa");
-            return;
-        }
+        showAlert("Thiếu thông tin",
+                  "Hãy chọn 1 dòng cần xóa.",
+                  Alert.AlertType.WARNING);
+        return;
+    }
+
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận xóa");
@@ -173,21 +182,23 @@ public class Phim_truycapController {
                     dao.deletePhim(selected.getMaPhim());
                     onTaiDuLieu();
                     clearForm();
-                    //showAlert("Đã xóa phim thành công!");
+                    showAlert("Thành công",
+                              "Đã xóa phim thành công!",
+                              Alert.AlertType.INFORMATION);
                 } catch (Exception e) {
-                    // Nếu trigger báo lỗi, dòng này sẽ bắt được và hiển thị thông báo SQL
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Lỗi xóa phim");
-                    alert.setHeaderText(null);
                     // MySQL trigger SIGNAL sẽ truyền message qua e.getMessage()
-                    alert.setContentText(
-                        e.getMessage().contains("suatchieu") 
-                            ? "Không thể xóa phim vì đang có suất chiếu!" 
-                            : e.getMessage()
-                    );
-                    alert.showAndWait();
+                    if (e.getMessage() != null && e.getMessage().contains("suatchieu")) {
+                        showAlert("Không thể xóa phim",
+                                  "Không thể xóa phim vì đang có suất chiếu!",
+                                  Alert.AlertType.WARNING);
+                    } else {
+                        showAlert("Lỗi xóa phim",
+                                  e.getMessage(),
+                                  Alert.AlertType.ERROR);
+                    }
                 }
             }
+
         });
     }
 
@@ -215,25 +226,38 @@ public class Phim_truycapController {
             int doTuoi = Integer.parseInt(tfDoTuoi.getText().trim());
 
             if (ten.isEmpty()) {
-                showAlert("Tên phim bắt buộc nhập!");
-                return null;
+            showAlert("Thiếu thông tin",
+                      "Tên phim bắt buộc nhập!",
+                      Alert.AlertType.WARNING);
+            return null;
             }
 
+
+
             return new phim(ma, ten, theloai, daoDien, thoiLuong, ngayKC, doTuoi);
-        } catch (NumberFormatException e) {
-            showAlert("Thời lượng/Độ tuổi phải là số nguyên.");
+            } catch (NumberFormatException e) {
+            showAlert("Sai dữ liệu",
+                      "Thời lượng và Độ tuổi phải là số nguyên.",
+                      Alert.AlertType.ERROR);
             return null;
-        }
+            }
+
     }
 
     private void clearForm() {
         tfMaPhim.clear(); tfTenPhim.clear(); tfDaoDien.clear(); tfThoiLuong.clear(); tfDoTuoi.clear();
         dpNgayKC.setValue(null); dsTheLoai.forEach(t -> t.setSelected(false)); imgPoster.setImage(null);
     }
-    private void showAlert(String m) { new Alert(Alert.AlertType.INFORMATION, m).showAndWait(); 
-    }
+    private void showAlert(String title, String message, Alert.AlertType type) {
+    Alert alert = new Alert(type);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
+
     
-@FXML
+    @FXML
     private void moTimKiemPopup() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -320,11 +344,11 @@ public class Phim_truycapController {
             }
             wb.close();
 
-            showAlert("Xuất Excel danh sách phim thành công!");
+            showAlert("Thành công", "Xuất Excel danh sách phim thành công!", Alert.AlertType.INFORMATION);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Không thể xuất Excel: " + e.getMessage());
+            showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
