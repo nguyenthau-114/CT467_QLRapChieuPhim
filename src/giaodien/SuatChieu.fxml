@@ -19,7 +19,18 @@
         <VBox fillWidth="true" spacing="0">
 
             <!-- 🔸 HEADER -->
-            
+            <!-- 🔹 HEADER (banner trên cùng) -->
+            <AnchorPane VBox.vgrow="NEVER">
+                <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" style="-fx-background-color:white;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" >
+                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
+                        <children>
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="⏰ Quản Lý Suất Chiếu" />
+                            <Pane HBox.hgrow="ALWAYS" />
+                        </children>
+                    </HBox>
+                </children>
+            </AnchorPane>
 
             <!-- 🔸 MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
@@ -27,16 +38,11 @@
                     <Insets bottom="15" left="0" right="0" top="0" />
                 </padding>
 
-<!-- 🔸 HÀNG NÚT TÌM & XUẤT EXCEL -->
-<HBox spacing="10" alignment="CENTER_LEFT">
-    <padding>
-        <Insets top="10" bottom="5" left="10" right="10" />
-    </padding>
-
-    <!-- Nút bên trái -->
-    <Button text="🔍 Tìm"
-            onAction="#moTimKiemPopup"
-            style="-fx-background-color:#3b82f6; -fx-text-fill:white; -fx-background-radius:6;"/>
+<HBox spacing="10">
+    <!-- Nút tìm kiếm bên trái -->
+    <Button text="🔍 Tìm kiếm"
+            styleClass="search-btn"
+            onAction="#moTimKiemPopup" />
 
     <!-- Đẩy nút Excel sang phải -->
     <Pane HBox.hgrow="ALWAYS" />
@@ -44,13 +50,15 @@
     <!-- Nút bên phải -->
     <Button text="📤 Xuất Excel"
             onAction="#xuatExcel"
-            style="-fx-background-color:#22c55e; -fx-text-fill:white; -fx-font-weight:bold; -fx-background-radius:6;"/>
+            style="-fx-background-color:#22c55e;
+                   -fx-text-fill:white;
+                   -fx-font-weight:bold;
+                   -fx-background-radius:6;" />
 </HBox>
-                
                 <!-- 🔹 FORM NHẬP LIỆU -->
                 <GridPane hgap="50" prefHeight="140" prefWidth="900" vgap="36">
                     <VBox.margin>
-                        <Insets top="25" />
+                        <Insets top="54" />
                     </VBox.margin>
                     <columnConstraints>
                         <ColumnConstraints percentWidth="18" />

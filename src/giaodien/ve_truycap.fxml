@@ -34,7 +34,7 @@
                     <HBox alignment="CENTER_LEFT" prefHeight="46.0" styleClass="header-bar" style="-fx-background-color:white;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" >
                         <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
                         <children>
-                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="Quản Lý Vé" />
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="🎟 Quản Lý Vé" />
                             <Pane HBox.hgrow="ALWAYS" />
                         </children>
                     </HBox>
@@ -47,23 +47,8 @@
                 </padding>
 
                 <!-- 🔹 THANH TÌM KIẾM -->
-                <HBox alignment="CENTER_LEFT"
-                      prefHeight="40"
-                      spacing="15"
-                      AnchorPane.leftAnchor="20"
-                      AnchorPane.rightAnchor="20">
-                    <VBox.margin>
-                        <Insets top="35.0" />
-                    </VBox.margin>
-                    <children>
-                        <Label style="-fx-font-size: 13px; -fx-text-fill: #333;" text="Tìm kiếm:" />
-                        <TextField fx:id="tfTimKiem" prefWidth="220"
-                                   promptText="Nhập mã vé, khách hàng..." />
-                        <Button style="-fx-background-color: #4caf50; -fx-text-fill: white; 
-                                       -fx-font-weight: bold; -fx-padding: 5 12 5 12; -fx-background-radius: 6;"
-                                text="🔍" />
-                    </children>
-                </HBox>
+                 <Button text="🔍 Tìm kiếm" styleClass="search-btn" onAction="#moTimKiemPopup" />
+
 
                 <!-- 🔹 FORM NHẬP LIỆU -->
                 <GridPane hgap="50" prefHeight="140" prefWidth="900" vgap="20">

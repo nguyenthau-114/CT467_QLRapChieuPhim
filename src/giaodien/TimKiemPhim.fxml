@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemPhimController"
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
+      <HBox alignment="TOP_RIGHT">
+            <Button fx:id="btnClose" text="✖"
+                    onAction="#dongPopup"
+                    styleClass="popup-close-btn"/>
+        </HBox>
+
+    <Label text="Tìm kiếm phim" styleClass="popup-title" />
+
+    <GridPane hgap="10" vgap="12">
+
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Mã phim:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaPhim" styleClass="popup-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Tên phim:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTenPhim" styleClass="popup-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Thể loại:" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfTheLoai" styleClass="popup-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Đạo diễn:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfDaoDien" styleClass="popup-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Ngày khởi chiếu:" GridPane.rowIndex="4"/>
+        <DatePicker fx:id="dpNgayKC" styleClass="popup-field" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    </GridPane>
+
+    <Button text="Tìm" onAction="#thucHienTim"
+            styleClass="popup-btn"/>
+</VBox>

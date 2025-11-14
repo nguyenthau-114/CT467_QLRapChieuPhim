@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemVeController"
+      style="-fx-padding: 20; -fx-background-color: white; -fx-background-radius: 12;">
+
+    <Label text="Tìm kiếm vé"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <GridPane hgap="10" vgap="12">
+
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <Label text="Mã vé:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaVe" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="Trạng thái:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfTrangThai" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="Mã suất chiếu:" GridPane.rowIndex="2"/>
+        <TextField fx:id="tfMaSuatChieu" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+        <Label text="Mã khách hàng:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfMaKhachHang" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <Label text="Mã ghế:" GridPane.rowIndex="4"/>
+        <TextField fx:id="tfMaGhe" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label text="Ngày đặt:" GridPane.rowIndex="5"/>
+        <DatePicker fx:id="dpNgayDat" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+    </GridPane>
+
+    <Button text="Tìm"
+            onAction="#thucHienTim"
+            style="-fx-background-color:#4caf50; -fx-text-fill:white;
+                   -fx-font-weight:bold; -fx-padding:6 16; -fx-background-radius:6;" />
+
+</VBox>

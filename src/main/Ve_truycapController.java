@@ -7,6 +7,11 @@ import javafx.scene.control.*;
 import java.sql.*;
 import ketnoi_truyxuat.DBConnection;
 import dulieu.ve;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class Ve_truycapController {
 
@@ -218,6 +223,60 @@ public class Ve_truycapController {
             alert.setContentText(content);
             alert.showAndWait();
         }
+
+        //tim kiem nang cao
+        
+        @FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemVe.fxml"));
+        Parent root = loader.load();
+
+        TimKiemVeController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Tìm kiếm vé");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
+                           String maSC, String maKH, String maGhe) {
+
+    ObservableList<ve> ketQua = FXCollections.observableArrayList();
+
+    for (ve v : danhSachVe) {
+        boolean ok = true;
+
+        if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
+            ok = false;
+
+        if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
+            ok = false;
+
+        if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
+            ok = false;
+
+        if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
+            ok = false;
+
+        if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
+            ok = false;
+
+        if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
+            ok = false;
+
+        if (ok) ketQua.add(v);
+    }
+
+    tableVe.setItems(ketQua);
+}
 
       
 

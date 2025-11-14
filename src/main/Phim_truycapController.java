@@ -15,6 +15,13 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import dulieu.TheLoaiItem;
 import dulieu.phim;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.paint.Color;
 
 
 public class Phim_truycapController {
@@ -220,6 +227,66 @@ public class Phim_truycapController {
     private void showAlert(String m) { new Alert(Alert.AlertType.INFORMATION, m).showAndWait(); 
     }
     
-    
+@FXML
+private void moTimKiemPopup() {
+    try {
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/giaodien/TimKiemPhim.fxml")
+        );
+        Parent root = loader.load();
+
+        TimKiemPhimController popup = loader.getController();
+        popup.setMainController(this);
+
+        Stage stage = new Stage();
+
+        // ⭐ Giúp bỏ màu nền mặc định của Stage
+        stage.initStyle(StageStyle.TRANSPARENT);
+
+        Scene scene = new Scene(root);
+
+        // ⭐ Giúp bỏ nền trắng của Scene
+        scene.setFill(Color.TRANSPARENT);
+
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        stage.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+
+   public void timKiemNangCao(String ma, String ten, String theloai, String daodien, LocalDate ngayKC) {
+
+    ObservableList<phim> ketQua = FXCollections.observableArrayList();
+
+    for (phim p : dao.getAllPhim()) {
+        boolean ok = true;
+
+        if (!ma.isEmpty() && !p.getMaPhim().toLowerCase().contains(ma.toLowerCase()))
+            ok = false;
+
+        if (!ten.isEmpty() && !p.getTenPhim().toLowerCase().contains(ten.toLowerCase()))
+            ok = false;
+
+        if (!theloai.isEmpty() && !p.getTheLoai().toLowerCase().contains(theloai.toLowerCase()))
+            ok = false;
+
+        if (!daodien.isEmpty() && !p.getDaoDien().toLowerCase().contains(daodien.toLowerCase()))
+            ok = false;
+
+        if (ngayKC != null && (p.getNgayKhoiChieu() == null ||
+                !p.getNgayKhoiChieu().equals(ngayKC.toString())))
+            ok = false;
+
+        if (ok) ketQua.add(p);
+    }
+
+    tablePhim.setItems(ketQua);
+}
+ 
 
 }
