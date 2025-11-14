@@ -17,6 +17,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 import java.sql.*;
+import javafx.stage.FileChooser;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
 
 /**
  * Controller: Quản lý Phòng chiếu
@@ -338,56 +348,116 @@ public class PhongChieuController {
     //tim kiem nang cao
     
     @FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemPhong.fxml"));
-        Parent root = loader.load();
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemPhong.fxml"));
+            Parent root = loader.load();
 
-        TimKiemPhongController popup = loader.getController();
-        popup.setMainController(this);
+            TimKiemPhongController popup = loader.getController();
+            popup.setMainController(this);
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm phòng chiếu");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Tìm kiếm phòng chiếu");
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
-public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
+    
+    @FXML
+    private void xuatExcel() {
+        try {
+            // Hộp thoại chọn nơi lưu file
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách phòng chiếu ra Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
 
-    ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
+            File file = fileChooser.showSaveDialog(tablePhong.getScene().getWindow());
+            if (file == null) return;   // người dùng bấm Cancel
 
-    for (PhongChieu p : dsPhong) {
-        boolean ok = true;
+            // Tạo workbook + sheet
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("PhongChieu");
 
-        if (!ma.isEmpty() && !p.getMaphong().toLowerCase().contains(ma.toLowerCase()))
-            ok = false;
+            // ====== Dòng tiêu đề ======
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã phòng");
+            header.createCell(1).setCellValue("Tên phòng");
+            header.createCell(2).setCellValue("Số ghế");
+            header.createCell(3).setCellValue("Loại phòng");
 
-        if (!ten.isEmpty() && !p.getTenphong().toLowerCase().contains(ten.toLowerCase()))
-            ok = false;
+            // ====== Dữ liệu ======
+            int rowIndex = 1;
+            for (PhongChieu p : tablePhong.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
 
-        if (!loai.isEmpty() && !p.getLoaiphong().toLowerCase().contains(loai.toLowerCase()))
-            ok = false;
-
-        // số ghế >= nhập
-        if (!soGheStr.isEmpty()) {
-            try {
-                int minGhe = Integer.parseInt(soGheStr);
-                if (p.getSoghe() < minGhe) ok = false;
-            } catch (NumberFormatException e) {
-                // Nếu người dùng nhập chữ → bỏ qua điều kiện này
+                row.createCell(0).setCellValue(p.getMaphong());
+                row.createCell(1).setCellValue(p.getTenphong());
+                row.createCell(2).setCellValue(p.getSoghe());
+                row.createCell(3).setCellValue(p.getLoaiphong());
             }
+
+            // Auto size cột cho đẹp
+            for (int i = 0; i <= 3; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Ghi file
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                wb.write(out);
+            }
+            wb.close();
+
+            showAlert("Thành công",
+                      "Xuất Excel danh sách phòng chiếu thành công!",
+                      AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi xuất Excel",
+                      "Không thể xuất Excel: " + e.getMessage(),
+                      AlertType.ERROR);
+        }
+    }
+
+    
+    public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
+
+        ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
+
+        for (PhongChieu p : dsPhong) {
+            boolean ok = true;
+
+            if (!ma.isEmpty() && !p.getMaphong().toLowerCase().contains(ma.toLowerCase()))
+                ok = false;
+
+            if (!ten.isEmpty() && !p.getTenphong().toLowerCase().contains(ten.toLowerCase()))
+                ok = false;
+
+            if (!loai.isEmpty() && !p.getLoaiphong().toLowerCase().contains(loai.toLowerCase()))
+                ok = false;
+
+            // số ghế >= nhập
+            if (!soGheStr.isEmpty()) {
+                try {
+                    int minGhe = Integer.parseInt(soGheStr);
+                    if (p.getSoghe() < minGhe) ok = false;
+                } catch (NumberFormatException e) {
+                    // Nếu người dùng nhập chữ → bỏ qua điều kiện này
+                }
+            }
+
+            if (ok) ketQua.add(p);
         }
 
-        if (ok) ketQua.add(p);
+        tablePhong.setItems(ketQua);
     }
-
-    tablePhong.setItems(ketQua);
-}
 
 
 }

@@ -16,6 +16,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
+import javafx.stage.FileChooser;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
 
 public class NhanVienController {
 
@@ -317,51 +327,112 @@ public class NhanVienController {
     
     //tìm kiếm nâng cao
     @FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNhanVien.fxml"));
-        Parent root = loader.load();
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNhanVien.fxml"));
+            Parent root = loader.load();
 
-        TimKiemNhanVienController popup = loader.getController();
-        popup.setMainController(this);
+            TimKiemNhanVienController popup = loader.getController();
+            popup.setMainController(this);
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm nhân viên");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Tìm kiếm nhân viên");
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-public void timKiemNangCao(String ma, String ten, String chucvu, String sdt, String email) {
-
-    ObservableList<NhanVien> ketQua = FXCollections.observableArrayList();
-
-    for (NhanVien nv : dsNV) {
-        boolean ok = true;
-
-        if (!ma.isEmpty() && !nv.getMaNhanVien().toLowerCase().contains(ma.toLowerCase()))
-            ok = false;
-
-        if (!ten.isEmpty() && !nv.getTenNhanVien().toLowerCase().contains(ten.toLowerCase()))
-            ok = false;
-
-        if (!chucvu.isEmpty() && !nv.getChucVu().toLowerCase().contains(chucvu.toLowerCase()))
-            ok = false;
-
-        if (!sdt.isEmpty() && !nv.getSdt().toLowerCase().contains(sdt.toLowerCase()))
-            ok = false;
-
-        if (!email.isEmpty() && !nv.getEmail().toLowerCase().contains(email.toLowerCase()))
-            ok = false;
-
-        if (ok) ketQua.add(nv);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    tableNV.setItems(ketQua);
-}
+    @FXML
+    private void xuatExcel() {
+        try {
+            // Hộp thoại chọn nơi lưu
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách nhân viên ra Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+
+            File file = fileChooser.showSaveDialog(tableNV.getScene().getWindow());
+            if (file == null) return;     // người dùng bấm Cancel
+
+            // Tạo workbook + sheet
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("NhanVien");
+
+            // ====== Dòng tiêu đề ======
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã NV");
+            header.createCell(1).setCellValue("Tên nhân viên");
+            header.createCell(2).setCellValue("Chức vụ");
+            header.createCell(3).setCellValue("Số điện thoại");
+            header.createCell(4).setCellValue("Email");
+
+            // ====== Dữ liệu ======
+            int rowIndex = 1;
+            for (NhanVien nv : tableNV.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
+
+                row.createCell(0).setCellValue(nv.getMaNhanVien());
+                row.createCell(1).setCellValue(nv.getTenNhanVien());
+                row.createCell(2).setCellValue(nv.getChucVu());
+                row.createCell(3).setCellValue(nv.getSdt());
+                row.createCell(4).setCellValue(nv.getEmail());
+            }
+
+            // Auto size cột cho đẹp
+            for (int i = 0; i <= 4; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Ghi file
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                wb.write(out);
+            }
+            wb.close();
+
+            showAlert("Thành công",
+                      "Xuất Excel danh sách nhân viên thành công!",
+                      AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi xuất Excel",
+                      "Không thể xuất Excel: " + e.getMessage(),
+                      AlertType.ERROR);
+        }
+    }
+
+    public void timKiemNangCao(String ma, String ten, String chucvu, String sdt, String email) {
+
+        ObservableList<NhanVien> ketQua = FXCollections.observableArrayList();
+
+        for (NhanVien nv : dsNV) {
+            boolean ok = true;
+
+            if (!ma.isEmpty() && !nv.getMaNhanVien().toLowerCase().contains(ma.toLowerCase()))
+                ok = false;
+
+            if (!ten.isEmpty() && !nv.getTenNhanVien().toLowerCase().contains(ten.toLowerCase()))
+                ok = false;
+
+            if (!chucvu.isEmpty() && !nv.getChucVu().toLowerCase().contains(chucvu.toLowerCase()))
+                ok = false;
+
+            if (!sdt.isEmpty() && !nv.getSdt().toLowerCase().contains(sdt.toLowerCase()))
+                ok = false;
+
+            if (!email.isEmpty() && !nv.getEmail().toLowerCase().contains(email.toLowerCase()))
+                ok = false;
+
+            if (ok) ketQua.add(nv);
+        }
+
+        tableNV.setItems(ketQua);
+    }
 
 }

@@ -12,6 +12,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
 
 public class Ve_truycapController {
 
@@ -227,56 +237,124 @@ public class Ve_truycapController {
         //tim kiem nang cao
         
         @FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemVe.fxml"));
-        Parent root = loader.load();
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemVe.fxml"));
+            Parent root = loader.load();
 
-        TimKiemVeController popup = loader.getController();
-        popup.setMainController(this);
+            TimKiemVeController popup = loader.getController();
+            popup.setMainController(this);
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm vé");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Tìm kiếm vé");
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
-public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
-                           String maSC, String maKH, String maGhe) {
+    
+    @FXML
+    private void xuatExcel() {
+        try {
+            // Hộp thoại chọn nơi lưu
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách vé ra Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
 
-    ObservableList<ve> ketQua = FXCollections.observableArrayList();
+            File file = fileChooser.showSaveDialog(tableVe.getScene().getWindow());
+            if (file == null) return;   // người dùng bấm Cancel
 
-    for (ve v : danhSachVe) {
-        boolean ok = true;
+            // Tạo workbook + sheet
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("Ve");
 
-        if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
-            ok = false;
+            // ====== Dòng tiêu đề ======
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã vé");
+            header.createCell(1).setCellValue("Ngày đặt");
+            header.createCell(2).setCellValue("Giá vé");
+            header.createCell(3).setCellValue("Trạng thái");
+            header.createCell(4).setCellValue("Mã suất chiếu");
+            header.createCell(5).setCellValue("Mã khách hàng");
+            header.createCell(6).setCellValue("Mã ghế");
 
-        if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
-            ok = false;
+            // ====== Dữ liệu ======
+            int rowIndex = 1;
+            for (ve v : tableVe.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
 
-        if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
-            ok = false;
+                row.createCell(0).setCellValue(v.getMave());
 
-        if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
-            ok = false;
+                if (v.getNgaydat() != null) {
+                    row.createCell(1).setCellValue(v.getNgaydat().toString());
+                } else {
+                    row.createCell(1).setCellValue("");
+                }
 
-        if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
-            ok = false;
+                row.createCell(2).setCellValue(v.getGiave());
+                row.createCell(3).setCellValue(v.getTrangthai());
+                row.createCell(4).setCellValue(v.getSuatchieu_masuatchieu());
+                row.createCell(5).setCellValue(v.getKhachhang_makhachhang());
+                row.createCell(6).setCellValue(v.getGhe_maghe());
+            }
 
-        if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
-            ok = false;
+            // Auto-size cột
+            for (int i = 0; i <= 6; i++) {
+                sheet.autoSizeColumn(i);
+            }
 
-        if (ok) ketQua.add(v);
+            // Ghi file
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                wb.write(out);
+            }
+            wb.close();
+
+            showAlert("Thành công", "Xuất Excel danh sách vé thành công!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi xuất Excel", "Không thể xuất Excel: " + e.getMessage());
+        }
     }
 
-    tableVe.setItems(ketQua);
-}
+
+    public void timKiemNangCao(String maVe, String ngayDat, String trangThai,
+                               String maSC, String maKH, String maGhe) {
+
+        ObservableList<ve> ketQua = FXCollections.observableArrayList();
+
+        for (ve v : danhSachVe) {
+            boolean ok = true;
+
+            if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
+                ok = false;
+
+            if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
+                ok = false;
+
+            if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
+                ok = false;
+
+            if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
+                ok = false;
+
+            if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
+                ok = false;
+
+            if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
+                ok = false;
+
+            if (ok) ketQua.add(v);
+        }
+
+        tableVe.setItems(ketQua);
+    }
 
       
 

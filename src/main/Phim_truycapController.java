@@ -22,6 +22,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.paint.Color;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.File;
+import java.io.FileOutputStream;
+import javafx.stage.FileChooser;
+
 
 
 public class Phim_truycapController {
@@ -228,65 +234,132 @@ public class Phim_truycapController {
     }
     
 @FXML
-private void moTimKiemPopup() {
-    try {
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/giaodien/TimKiemPhim.fxml")
-        );
-        Parent root = loader.load();
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/giaodien/TimKiemPhim.fxml")
+            );
+            Parent root = loader.load();
 
-        TimKiemPhimController popup = loader.getController();
-        popup.setMainController(this);
+            TimKiemPhimController popup = loader.getController();
+            popup.setMainController(this);
 
-        Stage stage = new Stage();
+            Stage stage = new Stage();
 
-        // ⭐ Giúp bỏ màu nền mặc định của Stage
-        stage.initStyle(StageStyle.TRANSPARENT);
+            // ⭐ Giúp bỏ màu nền mặc định của Stage
+            stage.initStyle(StageStyle.TRANSPARENT);
 
-        Scene scene = new Scene(root);
+            Scene scene = new Scene(root);
 
-        // ⭐ Giúp bỏ nền trắng của Scene
-        scene.setFill(Color.TRANSPARENT);
+            // ⭐ Giúp bỏ nền trắng của Scene
+            scene.setFill(Color.TRANSPARENT);
 
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
 
-        stage.show();
+            stage.show();
 
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
+    @FXML
+    private void xuatExcel() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách phim ra Excel");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
 
+            File file = fileChooser.showSaveDialog(tablePhim.getScene().getWindow());
+            if (file == null) return; // người dùng bấm Cancel
 
-   public void timKiemNangCao(String ma, String ten, String theloai, String daodien, LocalDate ngayKC) {
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("Phim");
 
-    ObservableList<phim> ketQua = FXCollections.observableArrayList();
+            // ====== Dòng tiêu đề ======
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã phim");
+            header.createCell(1).setCellValue("Tên phim");
+            header.createCell(2).setCellValue("Thể loại");
+            header.createCell(3).setCellValue("Đạo diễn");
+            header.createCell(4).setCellValue("Thời lượng (phút)");
+            header.createCell(5).setCellValue("Ngày khởi chiếu");
+            header.createCell(6).setCellValue("Độ tuổi");
 
-    for (phim p : dao.getAllPhim()) {
-        boolean ok = true;
+            // ====== Dữ liệu ======
+            int rowIndex = 1;
+            for (phim p : tablePhim.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
 
-        if (!ma.isEmpty() && !p.getMaPhim().toLowerCase().contains(ma.toLowerCase()))
-            ok = false;
+                row.createCell(0).setCellValue(p.getMaPhim());
+                row.createCell(1).setCellValue(p.getTenPhim());
+                row.createCell(2).setCellValue(p.getTheLoai());
+                row.createCell(3).setCellValue(p.getDaoDien());
+                row.createCell(4).setCellValue(p.getThoiLuong());
 
-        if (!ten.isEmpty() && !p.getTenPhim().toLowerCase().contains(ten.toLowerCase()))
-            ok = false;
+                // Ngày khởi chiếu (trong model bạn đang lưu dạng String)
+                if (p.getNgayKhoiChieu() != null) {
+                    row.createCell(5).setCellValue(p.getNgayKhoiChieu());
+                } else {
+                    row.createCell(5).setCellValue("");
+                }
 
-        if (!theloai.isEmpty() && !p.getTheLoai().toLowerCase().contains(theloai.toLowerCase()))
-            ok = false;
+                row.createCell(6).setCellValue(p.getDoTuoiChoPhep());
+            }
 
-        if (!daodien.isEmpty() && !p.getDaoDien().toLowerCase().contains(daodien.toLowerCase()))
-            ok = false;
+            // Tự động chỉnh độ rộng cột cho đẹp
+            for (int i = 0; i <= 6; i++) {
+                sheet.autoSizeColumn(i);
+            }
 
-        if (ngayKC != null && (p.getNgayKhoiChieu() == null ||
-                !p.getNgayKhoiChieu().equals(ngayKC.toString())))
-            ok = false;
+            // Ghi file
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                wb.write(out);
+            }
+            wb.close();
 
-        if (ok) ketQua.add(p);
+            showAlert("Xuất Excel danh sách phim thành công!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Không thể xuất Excel: " + e.getMessage());
+        }
     }
 
-    tablePhim.setItems(ketQua);
-}
+
+
+    public void timKiemNangCao(String ma, String ten, String theloai, String daodien, LocalDate ngayKC) {
+
+        ObservableList<phim> ketQua = FXCollections.observableArrayList();
+
+        for (phim p : dao.getAllPhim()) {
+            boolean ok = true;
+
+            if (!ma.isEmpty() && !p.getMaPhim().toLowerCase().contains(ma.toLowerCase()))
+                ok = false;
+
+            if (!ten.isEmpty() && !p.getTenPhim().toLowerCase().contains(ten.toLowerCase()))
+                ok = false;
+
+            if (!theloai.isEmpty() && !p.getTheLoai().toLowerCase().contains(theloai.toLowerCase()))
+                ok = false;
+
+            if (!daodien.isEmpty() && !p.getDaoDien().toLowerCase().contains(daodien.toLowerCase()))
+                ok = false;
+
+            if (ngayKC != null && (p.getNgayKhoiChieu() == null ||
+                    !p.getNgayKhoiChieu().equals(ngayKC.toString())))
+                ok = false;
+
+            if (ok) ketQua.add(p);
+        }
+
+        tablePhim.setItems(ketQua);
+    }
+
+   
  
 
 }
