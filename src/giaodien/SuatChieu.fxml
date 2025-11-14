@@ -27,8 +27,26 @@
                     <Insets bottom="15" left="0" right="0" top="0" />
                 </padding>
 
-                <Button text="🔍 Tìm" onAction="#moTimKiemPopup" />
+<!-- 🔸 HÀNG NÚT TÌM & XUẤT EXCEL -->
+<HBox spacing="10" alignment="CENTER_LEFT">
+    <padding>
+        <Insets top="10" bottom="5" left="10" right="10" />
+    </padding>
 
+    <!-- Nút bên trái -->
+    <Button text="🔍 Tìm"
+            onAction="#moTimKiemPopup"
+            style="-fx-background-color:#3b82f6; -fx-text-fill:white; -fx-background-radius:6;"/>
+
+    <!-- Đẩy nút Excel sang phải -->
+    <Pane HBox.hgrow="ALWAYS" />
+
+    <!-- Nút bên phải -->
+    <Button text="📤 Xuất Excel"
+            onAction="#xuatExcel"
+            style="-fx-background-color:#22c55e; -fx-text-fill:white; -fx-font-weight:bold; -fx-background-radius:6;"/>
+</HBox>
+                
                 <!-- 🔹 FORM NHẬP LIỆU -->
                 <GridPane hgap="50" prefHeight="140" prefWidth="900" vgap="36">
                     <VBox.margin>
