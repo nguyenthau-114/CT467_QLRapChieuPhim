@@ -65,7 +65,7 @@
                 <!-- 🔹 FORM NHẬP LIỆU -->
                 <GridPane hgap="70" prefHeight="112.0" prefWidth="954.0" vgap="35.0">
                     <VBox.margin>
-                        <Insets top="82" />
+                        <Insets top="80" />
                     </VBox.margin>
                     <columnConstraints>
                         <ColumnConstraints percentWidth="18.0" />
@@ -95,7 +95,7 @@
                 <!-- 🔹 NÚT THAO TÁC -->
                 <HBox spacing="10">
                     <VBox.margin>
-                        <Insets top="42.0" />
+                        <Insets top="40.0" />
                     </VBox.margin>
                     <children>
                         <Button fx:id="btnThem" onAction="#themPhong" styleClass="action-btn" text="Thêm" />

@@ -23,7 +23,7 @@
                         <padding><Insets bottom="3" left="20" right="20" top="3"/></padding>
                         <children>
                             <Label prefHeight="23" prefWidth="300"
-                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#0d47a1;"
+                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;"
                                    text="⏰ Quản Lý Suất Chiếu"/>
                             <Pane HBox.hgrow="ALWAYS"/>
                         </children>
@@ -103,7 +103,7 @@
 
                 <!-- ACTION BUTTONS -->
                 <HBox spacing="10">
-                    <VBox.margin><Insets top="42"/></VBox.margin>
+                    <VBox.margin><Insets top="20"/></VBox.margin>
                     <children>
                         <Button fx:id="btnThem" onAction="#themSuatChieu"
                                 styleClass="action-btn" text="Thêm"/>

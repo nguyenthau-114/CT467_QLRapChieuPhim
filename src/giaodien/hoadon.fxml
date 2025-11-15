@@ -2,12 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,115 +16,106 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700" prefWidth="1200"
-            stylesheets="@fxml.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.HoaDonController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HoaDonController">
 
+     <!-- 🔹 NỘI DUNG CHÍNH -->
     <center>
-        <VBox fillWidth="true">
+        <VBox fillWidth="true" spacing="0">
 
-            <!-- HEADER -->
+            <!-- 🔹 HEADER (banner trên cùng) -->
             <AnchorPane VBox.vgrow="NEVER">
                 <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46"
-                          styleClass="header-bar"
-                          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-                          AnchorPane.topAnchor="0">
-                        <padding><Insets bottom="3" left="20" right="20" top="3"/></padding>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" style="-fx-background-color:white;" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
                         <children>
-                            <Label prefHeight="23" prefWidth="300"
-                                   style="-fx-font-size:18; -fx-font-weight:bold;"
-                                   text="🧾 Quản Lý Hóa Đơn"/>
-                            <Pane HBox.hgrow="ALWAYS"/>
+                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="🎫 Quản Lý Hóa Đơn" />
+                            <Pane HBox.hgrow="ALWAYS" />
                         </children>
                     </HBox>
                 </children>
             </AnchorPane>
+         
 
             <!-- MAIN CONTENT – GIỐNG 100% NHANVIEN -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
 
-                <padding><Insets bottom="15"/></padding>
+                <padding><Insets bottom="15" /></padding>
 
                 <!-- Thanh nút -->
                 <HBox spacing="10">
-                    <Button text="🔍 Tìm kiếm" styleClass="search-btn"
-                            onAction="#moTimKiemPopup"/>
-                    <Pane HBox.hgrow="ALWAYS"/>
-                    <Button text="📤 Xuất Excel" onAction="#xuatExcel"
-                            style="-fx-background-color:#22c55e;
-                                   -fx-text-fill:white;
-                                   -fx-font-weight:bold;
-                                   -fx-background-radius:6;"/>
+                    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e;                                    -fx-text-fill:white;                                    -fx-font-weight:bold;                                    -fx-background-radius:6;" text="📤 Xuất Excel" />
                 </HBox>
 
                 <!-- FORM -->
                 <AnchorPane prefHeight="184">
                     <children>
-                        <GridPane hgap="70" layoutX="22" layoutY="15" vgap="35">
+                        <GridPane hgap="90.0" layoutX="22.0" layoutY="15.0" prefHeight="174.0" prefWidth="971.0" vgap="25.0">
                             <columnConstraints>
-                                <ColumnConstraints percentWidth="21"/>
-                                <ColumnConstraints percentWidth="29"/>
-                                <ColumnConstraints percentWidth="21"/>
-                                <ColumnConstraints percentWidth="29"/>
+                                <ColumnConstraints percentWidth="21" />
+                                <ColumnConstraints percentWidth="29" />
+                                <ColumnConstraints percentWidth="21" />
+                                <ColumnConstraints percentWidth="29" />
                             </columnConstraints>
 
                             <children>
 
-                                <Label text="Mã hóa đơn:" GridPane.rowIndex="0"/>
-                                <TextField fx:id="txtMaHD" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                                           promptText="Nhập mã hóa đơn (VD: HD01)"/>
+                                <Label text="Mã hóa đơn:" GridPane.rowIndex="0" />
+                                <TextField fx:id="txtMaHD" promptText="Nhập mã hóa đơn (VD: HD01)" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                <Label text="Số lượng combo:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-                                <TextField fx:id="txtSoLuong" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                                           promptText="Nhập số lượng combo"/>
+                                <Label text="Số lượng combo:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                <TextField fx:id="txtSoLuong" promptText="Nhập số lượng combo" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                                <Label text="Ngày mua:" GridPane.rowIndex="1"/>
-                                <DatePicker fx:id="dpNgayMua" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Ngày mua:" GridPane.rowIndex="1" />
+                                <DatePicker fx:id="dpNgayMua" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                <Label text="Tổng tiền:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                                <TextField fx:id="txtTongTien" GridPane.columnIndex="3" GridPane.rowIndex="1"
-                                           promptText="Nhập tổng tiền"/>
+                                <Label text="Tổng tiền:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <TextField fx:id="txtTongTien" promptText="Nhập tổng tiền" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                                <Label text="Mã khách hàng:" GridPane.rowIndex="2"/>
-                                <TextField fx:id="txtMaKH" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                                           promptText="Nhập mã khách hàng"/>
+                                <Label text="Mã khách hàng:" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtMaKH" promptText="Nhập mã khách hàng" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                                <Label text="Mã combo:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                                <TextField fx:id="txtMaCombo" GridPane.columnIndex="3" GridPane.rowIndex="2"
-                                           promptText="Nhập mã combo bắp nước"/>
-
-                                <Label text="Mã nhân viên:" GridPane.rowIndex="3"/>
-                                <TextField fx:id="txtMaNV" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                                           promptText="Nhập mã nhân viên lập hóa đơn"/>
+                                <Label text="Mã combo:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtMaCombo" promptText="Nhập mã combo bắp nước" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                             </children>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="27.733343505859374" minHeight="14.933325195312499" prefHeight="27.733343505859374" />
+                        <RowConstraints maxHeight="49.8666748046875" minHeight="37.066656494140624" prefHeight="37.066656494140624" />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
                         </GridPane>
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="5" top="20" />
+                    </VBox.margin>
                 </AnchorPane>
 
-                <!-- NÚT CHỨC NĂNG -->
-                <HBox spacing="10">
+                            <!-- NÚT CHỨC NĂNG -->
+                <HBox prefHeight="76.0" prefWidth="1154.0" spacing="10">
                     <children>
-                        <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm"/>
-                        <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa"/>
-                        <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa"/>
-                        <Button fx:id="btnTaiDuLieu" onAction="#onTaiDuLieu" styleClass="action-btn" text="Tải dữ liệu"/>
+                        <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
+                        <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
+                        <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
+                        <Button fx:id="btnTaiDuLieu" onAction="#onTaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
                     </children>
+                    <VBox.margin>
+                        <Insets bottom="20" />
+                    </VBox.margin>
                 </HBox>
 
                 <!-- BẢNG -->
-                <TableView fx:id="tableHD" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tableHD" prefHeight="371.0" prefWidth="1154.0" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colMaHD" text="Mã HĐ"/>
-                        <TableColumn fx:id="colSoLuong" text="SL Combo"/>
-                        <TableColumn fx:id="colNgayMua" text="Ngày mua"/>
-                        <TableColumn fx:id="colTongTien" text="Tổng tiền"/>
-                        <TableColumn fx:id="colMaKH" text="Mã KH"/>
-                        <TableColumn fx:id="colMaCombo" text="Mã Combo"/>
-                        <TableColumn fx:id="colMaNV" text="Mã NV"/>
+                        <TableColumn fx:id="colMaHD" text="Mã HĐ" />
+                        <TableColumn fx:id="colSoLuong" text="SL Combo" />
+                        <TableColumn fx:id="colNgayMua" text="Ngày mua" />
+                        <TableColumn fx:id="colTongTien" text="Tổng tiền" />
+                        <TableColumn fx:id="colMaKH" text="Mã KH" />
+                        <TableColumn fx:id="colMaCombo" text="Mã Combo" />
+                        <TableColumn fx:id="colMaNV" text="Mã NV" />
                     </columns>
                 </TableView>
 
