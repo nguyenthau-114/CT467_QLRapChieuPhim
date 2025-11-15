@@ -5,16 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
 
 import java.sql.*;
-
-import javafx.scene.layout.VBox;
-
-import dulieu.HoaDon;   // ⭐ MODEL MỚI
+import dulieu.HoaDon;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,12 +23,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class HoaDonController {
 
-    // ===================== FXML ======================
     @FXML private TextField txtMaHD, txtSoLuong, txtTongTien, txtMaKH, txtMaCombo, txtMaNV;
     @FXML private DatePicker dpNgayMua;
 
@@ -45,19 +38,19 @@ public class HoaDonController {
     @FXML private TableColumn<HoaDon,Date> colNgayMua;
 
     @FXML private TextField txtTimKiem;
-    @FXML private Button btnDangXuat;
 
     private final ObservableList<HoaDon> dsHD = FXCollections.observableArrayList();
 
-    // Lưu dữ liệu gốc
     private String originalMaHD = "", originalMaKH = "", originalMaCombo = "", originalMaNV = "";
     private int originalSoLuong = 0;
     private double originalTongTien = 0;
     private Date originalNgayMua = null;
 
-    // ===================== KHỞI TẠO ======================
+    // ==================================================
     @FXML
     public void initialize() {
+
+        txtTongTien.setEditable(false);
 
         colMaHD.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaHD()));
         colSoLuong.setCellValueFactory(c -> new javafx.beans.property.SimpleIntegerProperty(c.getValue().getSoLuong()).asObject());
@@ -69,7 +62,6 @@ public class HoaDonController {
 
         tableHD.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        // Khi click chọn hàng → đổ lên form
         tableHD.setOnMouseClicked(event -> {
             HoaDon hd = tableHD.getSelectionModel().getSelectedItem();
             if (hd != null) {
@@ -81,7 +73,6 @@ public class HoaDonController {
                 txtMaCombo.setText(hd.getMaCombo());
                 txtMaNV.setText(hd.getMaNV());
 
-                // Lưu bản gốc
                 originalMaHD = hd.getMaHD();
                 originalSoLuong = hd.getSoLuong();
                 originalNgayMua = hd.getNgayMua();
@@ -93,7 +84,7 @@ public class HoaDonController {
         });
     }
 
-    // ===================== TẢI DỮ LIỆU ======================
+    // ==================================================
     @FXML
     public void onTaiDuLieu() {
         dsHD.clear();
@@ -114,23 +105,22 @@ public class HoaDonController {
             }
 
             tableHD.setItems(dsHD);
-            System.out.println("Đã tải " + dsHD.size() + " hóa đơn.");
 
         } catch (SQLException e) {
             showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
         }
     }
 
-    // ===================== THÊM ======================
+    // ==================================================
     @FXML
     public void onThem() {
+
         if (txtMaHD.getText().isEmpty()
-            || txtSoLuong.getText().isEmpty()
-            || dpNgayMua.getValue() == null
-            || txtTongTien.getText().isEmpty()
-            || txtMaKH.getText().isEmpty()
-            || txtMaCombo.getText().isEmpty()
-            || txtMaNV.getText().isEmpty()) {
+                || txtSoLuong.getText().isEmpty()
+                || dpNgayMua.getValue() == null
+                || txtMaKH.getText().isEmpty()
+                || txtMaCombo.getText().isEmpty()
+                || txtMaNV.getText().isEmpty()) {
 
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
             return;
@@ -143,19 +133,19 @@ public class HoaDonController {
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                     "INSERT INTO hoadon VALUES (?,?,?,?,?,?,?)")) {
+                     "INSERT INTO hoadon (mahoadon, soluongcombo, ngaymua, tongtien, khachhang_makhachhang, bapnuoc_macombo, Nhanvien_manhanvien) " +
+                             "VALUES (?, ?, ?, NULL, ?, ?, ?)")) {
 
             ps.setString(1, txtMaHD.getText());
             ps.setInt(2, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(3, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(4, Double.parseDouble(txtTongTien.getText()));
-            ps.setString(5, txtMaKH.getText());
-            ps.setString(6, txtMaCombo.getText());
-            ps.setString(7, txtMaNV.getText());
+            ps.setString(4, txtMaKH.getText());
+            ps.setString(5, txtMaCombo.getText());
+            ps.setString(6, txtMaNV.getText());
 
             ps.executeUpdate();
 
-            showAlert("Thành công", "Đã thêm hóa đơn!", AlertType.INFORMATION);
+            showAlert("Thành công", "Đã thêm hóa đơn! Tổng tiền sẽ tự cập nhật.", AlertType.INFORMATION);
             onTaiDuLieu();
             clearFields();
 
@@ -164,9 +154,10 @@ public class HoaDonController {
         }
     }
 
-    // ===================== SỬA ======================
+    // ==================================================
     @FXML
     public void onSua() {
+
         if (txtMaHD.getText().isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng chọn hóa đơn cần sửa!", AlertType.WARNING);
             return;
@@ -175,7 +166,7 @@ public class HoaDonController {
         String ma = txtMaHD.getText().trim();
 
         if (!ma.equals(originalMaHD)) {
-            showAlert("Không thể sửa mã", "Mã hóa đơn là định danh duy nhất!", AlertType.WARNING);
+            showAlert("Không thể sửa mã", "Mã hóa đơn là duy nhất!", AlertType.WARNING);
             txtMaHD.setText(originalMaHD);
             return;
         }
@@ -186,15 +177,15 @@ public class HoaDonController {
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                     "UPDATE hoadon SET soluongcombo=?, ngaymua=?, tongtien=?, khachhang_makhachhang=?, bapnuoc_macombo=?, Nhanvien_manhanvien=? WHERE mahoadon=?")) {
+                     "UPDATE hoadon SET soluongcombo=?, ngaymua=?, khachhang_makhachhang=?, " +
+                             "bapnuoc_macombo=?, Nhanvien_manhanvien=? WHERE mahoadon=?")) {
 
             ps.setInt(1, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(2, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(3, Double.parseDouble(txtTongTien.getText()));
-            ps.setString(4, txtMaKH.getText());
-            ps.setString(5, txtMaCombo.getText());
-            ps.setString(6, txtMaNV.getText());
-            ps.setString(7, ma);
+            ps.setString(3, txtMaKH.getText());
+            ps.setString(4, txtMaCombo.getText());
+            ps.setString(5, txtMaNV.getText());
+            ps.setString(6, ma);
 
             ps.executeUpdate();
             showAlert("Thành công", "Đã cập nhật hóa đơn!", AlertType.INFORMATION);
@@ -207,7 +198,7 @@ public class HoaDonController {
         }
     }
 
-    // ===================== XÓA ======================
+    // ==================================================
     @FXML
     public void onXoa() {
         String ma = txtMaHD.getText().trim();
@@ -217,7 +208,7 @@ public class HoaDonController {
             return;
         }
 
-        if (!showConfirmDialog("Xóa hóa đơn", "Bạn có chắc chắn muốn xóa hóa đơn này?"))
+        if (!showConfirmDialog("Xóa hóa đơn", "Bạn có chắc chắn muốn xóa?"))
             return;
 
         try (Connection conn = DBConnection.getConnection();
@@ -236,57 +227,7 @@ public class HoaDonController {
         }
     }
 
-    // ===================== EXPORT EXCEL ======================
-    @FXML
-    private void xuatExcel() {
-        try {
-            FileChooser chooser = new FileChooser();
-            chooser.setTitle("Xuất Excel hóa đơn");
-            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-
-            File file = chooser.showSaveDialog(tableHD.getScene().getWindow());
-            if (file == null) return;
-
-            Workbook wb = new XSSFWorkbook();
-            Sheet sheet = wb.createSheet("HoaDon");
-
-            Row header = sheet.createRow(0);
-            header.createCell(0).setCellValue("Mã HĐ");
-            header.createCell(1).setCellValue("SL Combo");
-            header.createCell(2).setCellValue("Ngày mua");
-            header.createCell(3).setCellValue("Tổng tiền");
-            header.createCell(4).setCellValue("Mã KH");
-            header.createCell(5).setCellValue("Mã combo");
-            header.createCell(6).setCellValue("Mã NV");
-
-            int rowIndex = 1;
-            for (HoaDon hd : tableHD.getItems()) {
-                Row row = sheet.createRow(rowIndex++);
-
-                row.createCell(0).setCellValue(hd.getMaHD());
-                row.createCell(1).setCellValue(hd.getSoLuong());
-                row.createCell(2).setCellValue(hd.getNgayMua().toString());
-                row.createCell(3).setCellValue(hd.getTongTien());
-                row.createCell(4).setCellValue(hd.getMaKH());
-                row.createCell(5).setCellValue(hd.getMaCombo());
-                row.createCell(6).setCellValue(hd.getMaNV());
-            }
-
-            for (int i = 0; i < 7; i++) sheet.autoSizeColumn(i);
-
-            try (FileOutputStream out = new FileOutputStream(file)) {
-                wb.write(out);
-            }
-
-            showAlert("Thành công", "Đã xuất Excel!", AlertType.INFORMATION);
-            wb.close();
-
-        } catch (Exception e) {
-            showAlert("Lỗi xuất Excel", e.getMessage(), AlertType.ERROR);
-        }
-    }
-
-    // ===================== TÌM KIẾM CƠ BẢN ======================
+    // ==================================================
     @FXML
     public void onTimKiem() {
         String key = txtTimKiem.getText().trim().toLowerCase();
@@ -306,7 +247,7 @@ public class HoaDonController {
         tableHD.setItems(kq);
     }
 
-    // ===================== POPUP SEARCH ======================
+    // ==================================================
     @FXML
     private void moTimKiemPopup() {
         try {
@@ -331,8 +272,61 @@ public class HoaDonController {
         }
     }
 
-    // ===================== TÌM KIẾM NÂNG CAO ======================
-    public void timKiemNangCao(String maHD, String ngay, String sl, String tong,
+    // ==================================================
+    // ⭐ Hàm xuất Excel — ĐÃ THÊM ĐẦY ĐỦ
+    @FXML
+    private void xuatExcel() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất danh sách hóa đơn");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
+            );
+
+            File file = fileChooser.showSaveDialog(tableHD.getScene().getWindow());
+            if (file == null) return;
+
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("HoaDon");
+
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Mã HĐ");
+            header.createCell(1).setCellValue("Số lượng");
+            header.createCell(2).setCellValue("Ngày mua");
+            header.createCell(3).setCellValue("Tổng tiền");
+            header.createCell(4).setCellValue("Mã KH");
+            header.createCell(5).setCellValue("Mã Combo");
+            header.createCell(6).setCellValue("Mã NV");
+
+            int rowIndex = 1;
+            for (HoaDon hd : tableHD.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(hd.getMaHD());
+                row.createCell(1).setCellValue(hd.getSoLuong());
+                row.createCell(2).setCellValue(hd.getNgayMua().toString());
+                row.createCell(3).setCellValue(hd.getTongTien());
+                row.createCell(4).setCellValue(hd.getMaKH());
+                row.createCell(5).setCellValue(hd.getMaCombo());
+                row.createCell(6).setCellValue(hd.getMaNV());
+            }
+
+            for (int i = 0; i <= 6; i++) sheet.autoSizeColumn(i);
+
+            FileOutputStream out = new FileOutputStream(file);
+            wb.write(out);
+            out.close();
+            wb.close();
+
+            showAlert("Thành công", "Xuất Excel thành công!", AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
+
+    // ==================================================
+    public void timKiemNangCao(String maHD, String sl, String ngay, String tong,
                                String maKH, String maCombo, String maNV) {
 
         ObservableList<HoaDon> kq = FXCollections.observableArrayList();
@@ -343,10 +337,10 @@ public class HoaDonController {
             if (!maHD.isEmpty() && !hd.getMaHD().toLowerCase().contains(maHD.toLowerCase()))
                 ok = false;
 
-            if (!ngay.isEmpty() && !hd.getNgayMua().toString().equals(ngay))
+            if (!sl.isEmpty() && hd.getSoLuong() != Integer.parseInt(sl))
                 ok = false;
 
-            if (!sl.isEmpty() && hd.getSoLuong() != Integer.parseInt(sl))
+            if (!ngay.isEmpty() && !hd.getNgayMua().toString().equals(ngay))
                 ok = false;
 
             if (!tong.isEmpty() && hd.getTongTien() != Double.parseDouble(tong))
@@ -367,7 +361,7 @@ public class HoaDonController {
         tableHD.setItems(kq);
     }
 
-    // ===================== TOOL ======================
+    // ==================================================
     private void clearFields() {
         txtMaHD.clear();
         txtSoLuong.clear();
