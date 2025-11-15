@@ -155,7 +155,7 @@ public class HoaDonController {
 
             ps.executeUpdate();
 
-            showAlert("Thành công", "Đã thêm hóa đơn!", AlertType.INFORMATION);
+            showAlert("Thành công", "Đã thêm hóa đơn thành công!", AlertType.INFORMATION);
             onTaiDuLieu();
             clearFields();
 
@@ -197,7 +197,7 @@ public class HoaDonController {
             ps.setString(7, ma);
 
             ps.executeUpdate();
-            showAlert("Thành công", "Đã cập nhật hóa đơn!", AlertType.INFORMATION);
+            showAlert("Thành công", "Đã cập nhật hóa đơn thành công!", AlertType.INFORMATION);
 
             onTaiDuLieu();
             clearFields();
@@ -226,7 +226,7 @@ public class HoaDonController {
             ps.setString(1, ma);
             ps.executeUpdate();
 
-            showAlert("Thành công", "Đã xóa hóa đơn!", AlertType.INFORMATION);
+            showAlert("Thành công", "Đã xóa hóa đơn thành công!", AlertType.INFORMATION);
 
             onTaiDuLieu();
             clearFields();
