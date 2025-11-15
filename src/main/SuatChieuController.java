@@ -15,9 +15,7 @@ import ketnoi_truyxuat.DBConnection;
 import javafx.stage.Modality;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import javafx.scene.Parent; 
-
+import javafx.scene.Parent;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,20 +23,19 @@ import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
 
-
 public class SuatChieuController {
+
     @FXML private TextField txtMaSuatChieu, txtGioChieu, txtGiaVe, txtMaPhim, txtMaPhong;
     @FXML private DatePicker dpNgayChieu;
+
     @FXML private TableView<SuatChieu> tableSuatChieu;
-    @FXML private TableColumn<SuatChieu, String> colMaSuatChieu, colMaPhim, colMaPhong, colTrangThai;
+    @FXML private TableColumn<SuatChieu, String> colMaSuatChieu, colMaPhim, colMaPhong;
     @FXML private TableColumn<SuatChieu, Date> colNgayChieu;
     @FXML private TableColumn<SuatChieu, Time> colGioChieu;
     @FXML private TableColumn<SuatChieu, Float> colGiaVe;
-    @FXML private Button btnDangXuat;
-    
-    @FXML private Button btnExportExcel;
-    
+
     private ObservableList<SuatChieu> dsSuatChieu = FXCollections.observableArrayList();
+
 
     // ======================== KHỞI TẠO ========================
     @FXML
@@ -50,11 +47,9 @@ public class SuatChieuController {
         colGiaVe.setCellValueFactory(c -> new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getGiave()));
         colMaPhim.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaphim()));
         colMaPhong.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaphong()));
-        colTrangThai.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getTrangthai()));
 
         tableSuatChieu.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        // Listener
         tableSuatChieu.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, sc) -> {
             if (sc != null) {
                 txtMaSuatChieu.setText(sc.getMasuatchieu());
@@ -65,6 +60,8 @@ public class SuatChieuController {
                 txtMaPhong.setText(sc.getMaphong());
             }
         });
+
+        taiLaiDuLieu();
     }
 
     // ===================== TẢI DỮ LIỆU =====================
@@ -79,19 +76,13 @@ public class SuatChieuController {
             ResultSet rs = st.executeQuery(sql);
 
             while (rs.next()) {
-                Date ngay = rs.getDate("ngaychieu");
-                Time gio = rs.getTime("giochieu");
-
-                String trangThai = xacDinhTrangThai(ngay);
-
                 dsSuatChieu.add(new SuatChieu(
                         rs.getString("masuatchieu"),
-                        ngay,
-                        gio,
+                        rs.getDate("ngaychieu"),
+                        rs.getTime("giochieu"),
                         rs.getFloat("giave"),
                         rs.getString("phim_maphim"),
-                        rs.getString("phongchieu_maphong"),
-                        trangThai
+                        rs.getString("phongchieu_maphong")
                 ));
             }
 
@@ -102,19 +93,6 @@ public class SuatChieuController {
         }
     }
 
-    // ===================== TÍNH TRẠNG THÁI =====================
-    private String xacDinhTrangThai(Date ngayChieu) {
-
-        LocalDate ngay = ngayChieu.toLocalDate();
-        LocalDate homNay = LocalDate.now();
-
-        long daysDiff = ChronoUnit.DAYS.between(homNay, ngay);
-
-        if (daysDiff < -30) return "Đã chiếu";
-        if (daysDiff <= 30) return "Đang chiếu";
-        if (daysDiff <= 60) return "Sắp chiếu";
-        return "Sắp ra mắt";
-    }
 
     // ===================== THÊM SUẤT CHIẾU =====================
     @FXML
@@ -127,44 +105,41 @@ public class SuatChieuController {
         LocalDate ngay = dpNgayChieu.getValue();
 
         if (ngay == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ!", AlertType.WARNING);
             return;
         }
 
-        // === Kiểm tra giờ hợp lệ (08:00–23:30) ===
+        Time gioNhap;
         try {
-            Time gioNhap = Time.valueOf(gio.length() == 5 ? gio + ":00" : gio);
-
-            Time gioMin = Time.valueOf("08:00:00");
-            Time gioMax = Time.valueOf("23:30:00");
-
-            if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
-                showAlert("⛔ Giờ chiếu không hợp lệ",
-                        "Giờ chiếu phải từ 08:00 đến 23:30!",
-                        AlertType.ERROR);
-                return;
-            }
+            gioNhap = Time.valueOf(gio.length() == 5 ? gio + ":00" : gio);
         } catch (Exception ex) {
-            showAlert("Lỗi định dạng giờ", "Giờ phải nhập dạng HH:MM hoặc HH:MM:SS", AlertType.ERROR);
+            showAlert("Lỗi giờ chiếu", "Giờ phải dạng HH:MM hoặc HH:MM:SS", AlertType.ERROR);
             return;
         }
 
-        // === Kiểm tra lịch trùng ===
+        // ⭐ KIỂM TRA GIỜ CHIẾU (giống Trigger SQL)
+        Time gioMin = Time.valueOf("08:00:00");
+        Time gioMax = Time.valueOf("23:30:00");
+
+        if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
+            showAlert("Giờ chiếu không hợp lệ!", "Chỉ cho phép 08:00 - 23:30", AlertType.ERROR);
+            return;
+        }
+
         try (Connection conn = DBConnection.getConnection()) {
 
             String sqlCheck = "SELECT fn_kiemtra_lichtrung(?, ?, ?, ?) AS trung";
             PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
-
             psCheck.setString(1, phong);
             psCheck.setDate(2, Date.valueOf(ngay));
-            psCheck.setTime(3, Time.valueOf(gio.length() == 5 ? gio + ":00" : gio));
+            psCheck.setTime(3, gioNhap);
             psCheck.setString(4, phim);
 
             ResultSet rs = psCheck.executeQuery();
             rs.next();
 
             if (rs.getInt("trung") == 1) {
-                showAlert("⛔ Lịch trùng", "Phòng '" + phong + "' đã có suất chiếu trùng!", AlertType.WARNING);
+                showAlert("⛔ Lịch trùng", "Phòng này đã có suất chiếu!", AlertType.WARNING);
                 return;
             }
 
@@ -173,7 +148,7 @@ public class SuatChieuController {
             );
 
             ps.setDate(1, Date.valueOf(ngay));
-            ps.setTime(2, Time.valueOf(gio.length() == 5 ? gio + ":00" : gio));
+            ps.setTime(2, gioNhap);
             ps.setFloat(3, Float.parseFloat(gia));
             ps.setString(4, phim);
             ps.setString(5, phong);
@@ -187,10 +162,10 @@ public class SuatChieuController {
         } catch (SQLException e) {
             showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
         }
-        
     }
 
-    // ===================== SỬA SUẤT CHIẾU =====================
+
+    // ===================== SỬA =====================
     @FXML
     public void suaSuatChieu() {
 
@@ -202,31 +177,27 @@ public class SuatChieuController {
         LocalDate ngay = dpNgayChieu.getValue();
 
         if (ma.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn suất chiếu cần sửa!", AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Chọn suất chiếu cần sửa!", AlertType.WARNING);
             return;
         }
 
-        // === Kiểm tra giờ hợp lệ (06:00–23:30) ===
         Time gioNhap;
         try {
             gioNhap = Time.valueOf(gio.length() == 5 ? gio + ":00" : gio);
-
-            Time gioMin = Time.valueOf("08:00:00");
-            Time gioMax = Time.valueOf("23:30:00");
-
-            if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
-                showAlert("⛔ Giờ chiếu không hợp lệ",
-                        "Giờ chiếu phải nằm trong khoảng 08:00 → 23:30!",
-                        AlertType.ERROR);
-                return;
-            }
-
         } catch (Exception e) {
-            showAlert("Lỗi giờ chiếu", "Giờ phải đúng định dạng HH:MM hoặc HH:MM:SS", AlertType.ERROR);
+            showAlert("Lỗi giờ chiếu", "Giờ phải đúng định dạng!", AlertType.ERROR);
             return;
         }
 
-        // === Thực hiện UPDATE ===
+        // ⭐ KIỂM TRA GIỜ CHIẾU (08:00 - 23:30)
+        Time gioMin = Time.valueOf("08:00:00");
+        Time gioMax = Time.valueOf("23:30:00");
+
+        if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
+            showAlert("Giờ chiếu không hợp lệ!", "Chỉ cho phép 08:00 - 23:30", AlertType.ERROR);
+            return;
+        }
+
         try (Connection conn = DBConnection.getConnection()) {
 
             PreparedStatement ps = conn.prepareStatement(
@@ -251,14 +222,15 @@ public class SuatChieuController {
         }
     }
 
-    // ===================== XÓA SUẤT CHIẾU =====================
+
+    // ===================== XÓA =====================
     @FXML
     public void xoaSuatChieu() {
 
         String ma = txtMaSuatChieu.getText().trim();
 
         if (ma.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn suất chiếu cần xóa!", AlertType.WARNING);
+            showAlert("Thiếu thông tin", "Chọn suất chiếu cần xóa!", AlertType.WARNING);
             return;
         }
 
@@ -276,7 +248,112 @@ public class SuatChieuController {
             showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
-    
+
+
+    // ===================== TÌM KIẾM NÂNG CAO =====================
+    @FXML
+    private void moTimKiemPopup() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
+            Parent root = loader.load();
+
+            TimKiemNangCaoController popupController = loader.getController();
+            popupController.setMainController(this);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Tìm kiếm suất chiếu");
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
+
+        dsSuatChieu.clear();
+
+        try (Connection conn = DBConnection.getConnection()) {
+
+            CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_suatchieu(?, ?, ?, ?)}");
+
+            cs.setString(1, ma != null ? ma : "");
+            cs.setDate(2, ngay != null ? Date.valueOf(ngay) : null);
+            cs.setString(3, phim != null ? phim : "");
+            cs.setString(4, phong != null ? phong : "");
+
+            ResultSet rs = cs.executeQuery();
+
+            while (rs.next()) {
+
+                dsSuatChieu.add(new SuatChieu(
+                        rs.getString("masuatchieu"),
+                        rs.getDate("ngaychieu"),
+                        rs.getTime("giochieu"),
+                        rs.getFloat("giave"),
+                        rs.getString("phim_maphim"),
+                        rs.getString("phongchieu_maphong")
+                ));
+            }
+
+            tableSuatChieu.setItems(dsSuatChieu);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // ===================== XUẤT EXCEL =====================
+    @FXML
+    private void xuatExcel() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Xuất Excel");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+
+            File file = fileChooser.showSaveDialog(null);
+            if (file == null) return;
+
+            Workbook wb = new XSSFWorkbook();
+            Sheet sheet = wb.createSheet("SuatChieu");
+
+            Row header = sheet.createRow(0);
+
+            header.createCell(0).setCellValue("Mã suất chiếu");
+            header.createCell(1).setCellValue("Ngày chiếu");
+            header.createCell(2).setCellValue("Giờ chiếu");
+            header.createCell(3).setCellValue("Giá vé");
+            header.createCell(4).setCellValue("Mã phim");
+            header.createCell(5).setCellValue("Mã phòng");
+
+            int rowIndex = 1;
+            for (SuatChieu sc : tableSuatChieu.getItems()) {
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(sc.getMasuatchieu());
+                row.createCell(1).setCellValue(sc.getNgaychieu().toString());
+                row.createCell(2).setCellValue(sc.getGiochieu().toString());
+                row.createCell(3).setCellValue(sc.getGiave());
+                row.createCell(4).setCellValue(sc.getMaphim());
+                row.createCell(5).setCellValue(sc.getMaphong());
+            }
+
+            FileOutputStream out = new FileOutputStream(file);
+            wb.write(out);
+            out.close();
+            wb.close();
+
+            showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
 
     // ===================== HỖ TRỢ =====================
     private void clearFields() {
@@ -295,126 +372,4 @@ public class SuatChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    @FXML
-    private void dangXuat(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/DangNhap.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(loader.load()));
-            stage.setTitle("Đăng nhập hệ thống");
-            stage.show();
-        } catch (Exception e) {
-            showAlert("Lỗi đăng xuất", e.getMessage(), AlertType.ERROR);
-        }
-    }
-@FXML
-private void moTimKiemPopup() {
-
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
-        Parent root = loader.load();
-
-        TimKiemNangCaoController popupController = loader.getController();
-        popupController.setMainController(this);
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Tìm kiếm suất chiếu");
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
-
-    dsSuatChieu.clear();
-
-    try (Connection conn = DBConnection.getConnection()) {
-
-        CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_suatchieu(?, ?, ?, ?)}");
-
-        // Truyền tham số
-        cs.setString(1, ma != null ? ma : "");
-        cs.setDate(2, ngay != null ? Date.valueOf(ngay) : null);
-        cs.setString(3, phim != null ? phim : "");
-        cs.setString(4, phong != null ? phong : "");
-
-        ResultSet rs = cs.executeQuery();
-
-        while (rs.next()) {
-
-            Date d = rs.getDate("ngaychieu");
-            Time t = rs.getTime("giochieu");
-
-            dsSuatChieu.add(new SuatChieu(
-                    rs.getString("masuatchieu"),
-                    d,
-                    t,
-                    rs.getFloat("giave"),
-                    rs.getString("phim_maphim"),
-                    rs.getString("phongchieu_maphong"),
-                    xacDinhTrangThai(d)
-            ));
-        }
-
-        tableSuatChieu.setItems(dsSuatChieu);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-
-@FXML
-private void xuatExcel() {
-    try {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Xuất Excel");
-        fileChooser.getExtensionFilters().add(
-            new FileChooser.ExtensionFilter("Excel Files", "*.xlsx")
-        );
-        File file = fileChooser.showSaveDialog(null);
-        if (file == null) return;
-
-        Workbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet("SuatChieu");
-
-        Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("Mã suất chiếu");
-        header.createCell(1).setCellValue("Ngày chiếu");
-        header.createCell(2).setCellValue("Giờ chiếu");
-        header.createCell(3).setCellValue("Giá vé");
-        header.createCell(4).setCellValue("Mã phim");
-        header.createCell(5).setCellValue("Mã phòng");
-        header.createCell(6).setCellValue("Trạng thái");
-
-        int rowIndex = 1;
-        for (SuatChieu sc : tableSuatChieu.getItems()) {
-            Row row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue(sc.getMasuatchieu());
-            row.createCell(1).setCellValue(sc.getNgaychieu().toString());
-            row.createCell(2).setCellValue(sc.getGiochieu().toString());
-            row.createCell(3).setCellValue(sc.getGiave());
-            row.createCell(4).setCellValue(sc.getMaphim());
-            row.createCell(5).setCellValue(sc.getMaphong());
-            row.createCell(6).setCellValue(sc.getTrangthai());
-        }
-
-        FileOutputStream out = new FileOutputStream(file);
-        wb.write(out);
-        out.close();
-        wb.close();
-
-        showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
-
-    } catch (Exception e) {
-        showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
-    }
-}
-
-
 }
