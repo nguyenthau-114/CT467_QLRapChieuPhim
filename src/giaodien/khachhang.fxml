@@ -107,6 +107,8 @@
                         <TableColumn fx:id="colTenKH" text="Tên khách hàng" />
                         <TableColumn fx:id="colSDT" text="Số điện thoại" />
                         <TableColumn fx:id="colEmail" text="Email" />
+                        <!-- ⭐ CỘT MỚI -->
+                        <TableColumn fx:id="colTongVe" text="Tổng vé" />
                     </columns>
                     <VBox.margin><Insets top="10.0" /></VBox.margin>
                 </TableView>

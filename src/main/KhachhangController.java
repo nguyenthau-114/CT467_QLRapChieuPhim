@@ -21,7 +21,10 @@ import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
 import javafx.stage.StageStyle;
+
+
 public class KhachhangController {
+    
 
     @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
     @FXML private TableView<khachhang> tableKH;
@@ -70,14 +73,19 @@ public class KhachhangController {
              ResultSet rs = st.executeQuery("SELECT * FROM khachhang ORDER BY makhachhang ASC")) {
 
             while (rs.next()) {
-                dsKH.add(new khachhang(
+                khachhang kh = new khachhang(
                         rs.getString("makhachhang"),
                         rs.getString("tenkhachhang"),
                         rs.getString("sdt"),
                         rs.getString("email")
-                ));
+                );
+
+                // ⭐ TẠO CỘT GIẢ (bạn muốn bao nhiêu cũng được)
+                kh.setTongVe((int)(Math.random() * 10));  // ví dụ: random từ 0 → 9
+
+                dsKH.add(kh);
             }
-            tableKH.setItems(dsKH);
+
 
         } catch (SQLException e) {
             showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
@@ -371,4 +379,5 @@ private void moTimKiemPopup() {
         e.printStackTrace();
     }
 }
+
 }

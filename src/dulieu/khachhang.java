@@ -5,6 +5,14 @@ public class khachhang {
     private String tenKhachHang;
     private String sdt;
     private String email;
+    private int tongVe;
+    public int getTongVe() {
+        return tongVe;
+    }
+    public void setTongVe(int tongVe) {
+    this.tongVe = tongVe;
+}
+
 
     public khachhang(String maKhachHang, String tenKhachHang, String sdt, String email) {
         this.maKhachHang = maKhachHang;
