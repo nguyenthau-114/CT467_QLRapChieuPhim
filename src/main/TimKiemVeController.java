@@ -15,6 +15,8 @@ public class TimKiemVeController {
     @FXML private TextField tfMaGhe;
     @FXML private DatePicker dpNgayDat;
     @FXML private Button btnClose;
+    @FXML private TextField tfNgay;
+
 
     private Ve_truycapController mainController;
 
@@ -38,8 +40,7 @@ public class TimKiemVeController {
 
         Stage s = (Stage) tfMaVe.getScene().getWindow();
         s.close();
-    }
-    @FXML
+    }    @FXML
     private void dongPopup() {
         Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();

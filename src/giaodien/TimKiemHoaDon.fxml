@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="12" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.TimKiemHoaDonController"
+      stylesheets="@fxml.css"
+      styleClass="popup-box">
+
+    <!-- Nút X -->
+    <HBox alignment="TOP_RIGHT">
+        <Button fx:id="btnClose" text="✖"
+                onAction="#dongPopup"
+                styleClass="popup-close-btn"/>
+    </HBox>
+
+    <!-- TIÊU ĐỀ -->
+    <Label text="Tìm kiếm hóa đơn" styleClass="popup-title" />
+
+    <!-- FORM -->
+    <GridPane hgap="10" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="40"/>
+            <ColumnConstraints percentWidth="60"/>
+        </columnConstraints>
+
+        <!-- Mã hóa đơn -->
+        <Label text="Mã hóa đơn:" GridPane.rowIndex="0"/>
+        <TextField fx:id="tfMaHD" styleClass="popup-field"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Số lượng combo -->
+        <Label text="Số lượng combo:" GridPane.rowIndex="1"/>
+        <TextField fx:id="tfSoLuong" styleClass="popup-field"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Ngày mua -->
+        <Label text="Ngày mua:" GridPane.rowIndex="2"/>
+        <DatePicker fx:id="dpNgayMua" styleClass="popup-field"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Tổng tiền -->
+        <Label text="Tổng tiền:" GridPane.rowIndex="3"/>
+        <TextField fx:id="tfTongTien" styleClass="popup-field"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <!-- Mã khách hàng -->
+        <Label text="Mã khách hàng:" GridPane.rowIndex="4"/>
+        <TextField fx:id="tfMaKH" styleClass="popup-field"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <!-- Mã combo -->
+        <Label text="Mã combo:" GridPane.rowIndex="5"/>
+        <TextField fx:id="tfMaCombo" styleClass="popup-field"
+                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <!-- Mã nhân viên -->
+        <Label text="Mã nhân viên:" GridPane.rowIndex="6"/>
+        <TextField fx:id="tfMaNV" styleClass="popup-field"
+                   GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <!-- Nút TÌM -->
+    <Button text="Tìm"
+            fx:id="btnTim"
+            onAction="#thucHienTim"
+            styleClass="popup-btn"/>
+
+</VBox>

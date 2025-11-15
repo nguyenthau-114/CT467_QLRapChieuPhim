@@ -40,7 +40,7 @@ public class FXMLController {
     @FXML private void moTrangSuatChieu(){ loadView("/giaodien/SuatChieu.fxml", "Đang mở: Suất Chiếu"); }
     @FXML private void moTrangPhong()     { loadView("/giaodien/PhongChieu.fxml", "Đang mở: Phòng Chiếu"); }
     @FXML private void moTrangVe()        { loadView("/giaodien/ve_truycap.fxml", "Đang mở: Vé"); }
-    @FXML private void moTrangNhanVien()  { loadView("/giaodien/nhanvien.fxml", "Đang mở: Nhân Viên"); }
+    @FXML private void moTrangHoaDon()  { loadView("/giaodien/hoadon.fxml", "Đang mở: Hóa Đơn"); }
     @FXML private void moTrangKhachHang() { loadView("/giaodien/khachhang.fxml", "Đang mở: Khách Hàng"); }
 
 

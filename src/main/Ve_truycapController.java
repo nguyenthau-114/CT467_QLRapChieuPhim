@@ -119,6 +119,7 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
+            showAlert("Thành công", "Đã thêm vé thành công!" + Alert.AlertType.INFORMATION);
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể thêm vé:\n" + e.getMessage());
@@ -149,6 +150,7 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
+            showAlert("Thành công", "Đã cập nhật vé thành công!" + Alert.AlertType.INFORMATION);
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể sửa vé:\n" + e.getMessage());
@@ -172,6 +174,7 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
+            showAlert("Thành công", "Đã xóa vé thành công!" + Alert.AlertType.INFORMATION);
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể xóa vé:\n" + e.getMessage());
