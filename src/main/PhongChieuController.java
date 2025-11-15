@@ -160,7 +160,7 @@ public class PhongChieuController {
 
                     taiDuLieu();
                     clearFields();
-                    showAlert("Thành công", "Đã thêm phòng mới!" , AlertType.INFORMATION);
+                    showAlert("Thành công", "Đã thêm phòng thành công!" , AlertType.INFORMATION);
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -250,6 +250,9 @@ public class PhongChieuController {
 
                     taiDuLieu();
                     clearFields();
+                    showAlert("Thành công", "Đã cập nhật phòng thành công!", AlertType.INFORMATION);
+
+                    
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -288,6 +291,7 @@ public class PhongChieuController {
                     if (rows > 0) {
                         taiDuLieu();
                         clearFields();
+                        showAlert("Thành công", "Đã xóa phòng chiếu thành công!", AlertType.INFORMATION);
                     } else {
                         showAlert("Không tìm thấy",
                                 "Không có phòng chiếu có mã '" + maPhong + "'.",
@@ -307,7 +311,7 @@ public class PhongChieuController {
                     // Bị chặn bởi FK RESTRICT
                     if (err == 1451) {
                         showAlert("Không thể xóa phòng",
-                                "Phòng đang bị ràng buộc bởi bảng suất chiếu nên không thể xóa.",
+                                "Đang có suất chiếu tại phòng nên không thể xóa.",
                                 AlertType.WARNING);
                         return;
                     }

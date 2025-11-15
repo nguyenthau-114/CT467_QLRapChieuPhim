@@ -77,7 +77,7 @@
                 </VBox>
 
                 <!-- nhân viên / khách hàng -->
-                <Button text="Nhân Viên" onAction="#moTrangNhanVien"
+                <Button text="Hóa Đơn" onAction="#moTrangHoaDon"
                         prefHeight="25" prefWidth="108"
                         styleClass="header-orange"/>
 

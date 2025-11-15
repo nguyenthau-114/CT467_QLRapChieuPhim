@@ -113,6 +113,7 @@ public class KhachhangController {
 
                     onTaiDuLieu();
                     clearFields();
+                    showAlert("Thành công", "Đã thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
 
                 } catch (SQLException e) {
                     showAlert("Lỗi thêm khách hàng", e.getMessage(), Alert.AlertType.ERROR);
@@ -170,6 +171,7 @@ public class KhachhangController {
 
                     onTaiDuLieu();
                     clearFields();
+                    showAlert("Thành công", "Thông tin khách hàng đã được cập nhật!", Alert.AlertType.INFORMATION);
 
                 } catch (SQLException e) {
                     showAlert("Lỗi cập nhật", e.getMessage(), Alert.AlertType.ERROR);
@@ -202,6 +204,7 @@ public class KhachhangController {
 
                     onTaiDuLieu();
                     clearFields();
+                    showAlert("Thành công", "Đã xóa khách hàng thành công!", Alert.AlertType.INFORMATION);
 
                 } catch (SQLException e) {
                     showAlert("Lỗi xóa khách hàng", e.getMessage(), Alert.AlertType.ERROR);
