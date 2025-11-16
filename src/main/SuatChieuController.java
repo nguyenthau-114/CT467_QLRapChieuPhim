@@ -61,7 +61,7 @@ public class SuatChieuController {
             }
         });
 
-        taiLaiDuLieu();
+        
     }
 
     // ===================== TẢI DỮ LIỆU =====================

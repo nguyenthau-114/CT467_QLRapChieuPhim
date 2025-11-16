@@ -52,22 +52,22 @@
 
                        <children>
                         <Label text="Mã phim:" />
-                        <TextField fx:id="tfMaPhim" GridPane.columnIndex="1" />
+                        <TextField fx:id="tfMaPhim" promptText="Nhập mã phim" GridPane.columnIndex="1" />
 
                            <Label text="Tên phim:" GridPane.rowIndex="1" />
-                        <TextField fx:id="tfTenPhim" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfTenPhim" promptText="Nhập tên phim" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                            <Label text="Thể loại:" GridPane.rowIndex="2" />
                         <ListView fx:id="lvTheLoai" prefHeight="150.0" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                            <Label text="Thời lượng:" GridPane.columnIndex="2" />
-                        <TextField fx:id="tfThoiLuong" GridPane.columnIndex="3" />
+                        <TextField fx:id="tfThoiLuong" promptText="Nhập thời lượng" GridPane.columnIndex="3" />
 
                            <Label text="Đạo diễn:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextField fx:id="tfDaoDien" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfDaoDien" promptText="Nhập đạo diễn" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                            <Label text="Độ tuổi:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="tfDoTuoi" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="tfDoTuoi" promptText="Nhập độ tuổi" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                            <Label text="Ngày khởi chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                         <DatePicker fx:id="dpNgayKC" prefHeight="39.0" prefWidth="318.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
