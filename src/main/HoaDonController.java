@@ -108,8 +108,7 @@ public class HoaDonController {
                         rs.getDate("ngaymua"),
                         rs.getDouble("tongtien"),
                         rs.getString("khachhang_makhachhang"),
-                        rs.getString("bapnuoc_macombo"),
-                        rs.getString("Nhanvien_manhanvien")
+                        rs.getString("bapnuoc_macombo")
                 ));
             }
 
@@ -143,7 +142,7 @@ public class HoaDonController {
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                     "INSERT INTO hoadon VALUES (?,?,?,?,?,?,?)")) {
+                     "INSERT INTO hoadon VALUES (?,?,?,?,?,?)")) {
 
             ps.setString(1, txtMaHD.getText());
             ps.setInt(2, Integer.parseInt(txtSoLuong.getText()));
@@ -186,7 +185,7 @@ public class HoaDonController {
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
-                     "UPDATE hoadon SET soluongcombo=?, ngaymua=?, tongtien=?, khachhang_makhachhang=?, bapnuoc_macombo=?, Nhanvien_manhanvien=? WHERE mahoadon=?")) {
+                     "UPDATE hoadon SET soluongcombo=?, ngaymua=?, tongtien=?, khachhang_makhachhang=?, bapnuoc_macombo=? WHERE mahoadon=?")) {
 
             ps.setInt(1, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(2, Date.valueOf(dpNgayMua.getValue()));
@@ -194,7 +193,7 @@ public class HoaDonController {
             ps.setString(4, txtMaKH.getText());
             ps.setString(5, txtMaCombo.getText());
       
-            ps.setString(7, ma);
+            ps.setString(6, ma);
 
             ps.executeUpdate();
             showAlert("Thành công", "Đã cập nhật hóa đơn thành công!", AlertType.INFORMATION);
@@ -257,7 +256,6 @@ public class HoaDonController {
             header.createCell(3).setCellValue("Tổng tiền");
             header.createCell(4).setCellValue("Mã KH");
             header.createCell(5).setCellValue("Mã combo");
-            header.createCell(6).setCellValue("Mã NV");
 
             int rowIndex = 1;
             for (HoaDon hd : tableHD.getItems()) {
@@ -269,7 +267,6 @@ public class HoaDonController {
                 row.createCell(3).setCellValue(hd.getTongTien());
                 row.createCell(4).setCellValue(hd.getMaKH());
                 row.createCell(5).setCellValue(hd.getMaCombo());
-                row.createCell(6).setCellValue(hd.getMaNV());
             }
 
             for (int i = 0; i < 7; i++) sheet.autoSizeColumn(i);
@@ -299,7 +296,7 @@ public class HoaDonController {
         for (HoaDon hd : dsHD) {
             if (hd.getMaHD().toLowerCase().contains(key)
                     || hd.getMaKH().toLowerCase().contains(key)
-                    || hd.getMaNV().toLowerCase().contains(key))
+                    )
                 kq.add(hd);
         }
 
@@ -333,7 +330,7 @@ public class HoaDonController {
 
     // ===================== TÌM KIẾM NÂNG CAO ======================
     public void timKiemNangCao(String maHD, String ngay, String sl, String tong,
-                               String maKH, String maCombo, String maNV) {
+                               String maKH, String maCombo) {
 
         ObservableList<HoaDon> kq = FXCollections.observableArrayList();
 
@@ -358,8 +355,7 @@ public class HoaDonController {
             if (!maCombo.isEmpty() && !hd.getMaCombo().toLowerCase().contains(maCombo.toLowerCase()))
                 ok = false;
 
-            if (!maNV.isEmpty() && !hd.getMaNV().toLowerCase().contains(maNV.toLowerCase()))
-                ok = false;
+           
 
             if (ok) kq.add(hd);
         }

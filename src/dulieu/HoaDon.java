@@ -11,18 +11,16 @@ public class HoaDon {
 
     private String maKH;
     private String maCombo;
-    private String maNV;
 
     // ===== Constructor =====
     public HoaDon(String maHD, int soLuong, Date ngayMua, double tongTien,
-                  String maKH, String maCombo, String maNV) {
+                  String maKH, String maCombo) {
         this.maHD = maHD;
         this.soLuong = soLuong;
         this.ngayMua = ngayMua;
         this.tongTien = tongTien;
         this.maKH = maKH;
         this.maCombo = maCombo;
-        this.maNV = maNV;
     }
 
     // ===== Getter =====
@@ -50,7 +48,4 @@ public class HoaDon {
         return maCombo;
     }
 
-    public String getMaNV() {
-        return maNV;
-    }
 }

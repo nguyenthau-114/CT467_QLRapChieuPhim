@@ -12,7 +12,6 @@ public class TimKiemHoaDonController {
     @FXML private TextField tfTongTien;
     @FXML private TextField tfMaKH;
     @FXML private TextField tfMaCombo;
-    @FXML private TextField tfMaNV;
 
     @FXML private Button btnClose;
 
@@ -35,8 +34,7 @@ public class TimKiemHoaDonController {
                 ngay,
                 tfTongTien.getText().trim(),
                 tfMaKH.getText().trim(),
-                tfMaCombo.getText().trim(),
-                tfMaNV.getText().trim()
+                tfMaCombo.getText().trim()
         );
 
         Stage stage = (Stage) tfMaHD.getScene().getWindow();
