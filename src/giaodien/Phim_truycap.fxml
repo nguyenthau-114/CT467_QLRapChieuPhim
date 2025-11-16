@@ -17,140 +17,94 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Phim_truycapController">
+<BorderPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Phim_truycapController">
 
-    <!-- 🔹 SIDEBAR TRÁI -->
-    
+    <center>
+        <VBox fillWidth="true" spacing="0" VBox.vgrow="ALWAYS">
 
-    <!-- 🔹 NỘI DUNG CHÍNH -->
-<!-- 🔹 NỘI DUNG CHÍNH (Header nằm ngoài main-content) -->
-<center>
-    <VBox fillWidth="true" spacing="0" VBox.vgrow="ALWAYS">
-
-        <!-- 🔸 HEADER (nằm ngoài nội dung chính nhưng không tràn sidebar) -->
-<!-- 🔸 HEADER (bọc trong AnchorPane để giãn full chiều ngang vùng center) -->
-         <!-- 🔹 HEADER (banner trên cùng) -->
+            <!-- HEADER -->
             <AnchorPane VBox.vgrow="NEVER">
-                <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46.0" style="-fx-background-color:white;" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
-                        <children>
-                            <Label prefHeight="23.0" prefWidth="300.0" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="🎬 Quản Lý Phim" />
-                            <Pane HBox.hgrow="ALWAYS" />
-                        </children>
-                    </HBox>
-                </children>
+                <HBox alignment="CENTER_LEFT" prefHeight="46" style="-fx-background-color:white;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                    <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
+                    <Label style="-fx-font-size:18; -fx-font-weight:bold;" text="🎬 Quản Lý Phim" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                </HBox>
             </AnchorPane>
 
+            <!-- MAIN CONTENT -->
+            <VBox fillWidth="true" spacing="10" styleClass="main-content" VBox.vgrow="ALWAYS">
 
-        <!-- 🔸 MAIN CONTENT (nội dung chính bên dưới header) -->
-        <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
-            <padding>
-                <Insets bottom="15" left="0" right="0" top="0" />
-            </padding>
-<HBox spacing="10">
-    <!-- Nút tìm kiếm bên trái -->
-    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
-
-    <!-- Đẩy nút Excel sang phải -->
-    <Pane HBox.hgrow="ALWAYS" />
-
-    <!-- Nút bên phải -->
-    <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e;                    -fx-text-fill:white;                    -fx-font-weight:bold;                    -fx-background-radius:6;" text="📤 Xuất Excel" />
-</HBox>
-            <!-- 🔸 FORM NHẬP -->
-            <AnchorPane prefHeight="140.0" prefWidth="953.0">
-                <children>
-                    <GridPane hgap="90.0" layoutX="2.0" layoutY="15.0" prefHeight="183.0" prefWidth="1115.0" vgap="20.0">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="14.0" />
-                            <ColumnConstraints percentWidth="31.0" />
-                            <ColumnConstraints percentWidth="18.0" />
-                            <ColumnConstraints percentWidth="37.0" />
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints /><RowConstraints /><RowConstraints maxHeight="32.80003967285157" minHeight="23.20001831054688" prefHeight="28.533346557617193" /><RowConstraints maxHeight="46.399981689453114" minHeight="36.799960327148426" prefHeight="41.0666534423828" />
-                        </rowConstraints>
-
-                        <children>
-                            <Label text="Mã phim:" GridPane.rowIndex="0" />
-                            <TextField fx:id="tfMaPhim" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-                            <Label text="Tên phim:" GridPane.rowIndex="1" />
-                            <TextField fx:id="tfTenPhim" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-                            <Label text="Thể loại:" GridPane.rowIndex="2" />
-                            <ListView fx:id="lvTheLoai" prefHeight="50" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-                            <Label text="Thời lượng:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                            <TextField fx:id="tfThoiLuong" prefHeight="28.0" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
-                            <Label text="Đạo diễn:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                            <TextField fx:id="tfDaoDien" prefHeight="27.0" prefWidth="298.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-
-                            <Label text="Độ tuổi:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                            <TextField fx:id="tfDoTuoi" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-
-                            <!-- ẢNH + NÚT CHỌN -->
-                            <HBox spacing="10" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
-                                <children>
-                                    <VBox alignment="CENTER" spacing="5" />
-     
-                                  <Label maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="220.0" text="Ngày khởi chiếu:">
-                                 <HBox.margin>
-                                    <Insets top="14.0" />
-                                 </HBox.margin>
-                                 <padding>
-                                    <Insets left="-10.0" />
-                                 </padding>
-                              </Label>
-                                  <DatePicker fx:id="dpNgayKC" prefHeight="37.0" prefWidth="320.0">
-                                 <HBox.margin>
-                                    <Insets top="5.0" />
-                                 </HBox.margin>
-                              </DatePicker>
-                                </children>
-                            </HBox>
-                        </children>
-                    </GridPane>
-                        
-                </children>
-               <VBox.margin>
-                  <Insets top="7.0" />
-               </VBox.margin>
-            </AnchorPane>
-
-            <!-- 🔸 CÁC NÚT CHỨC NĂNG -->
-            <HBox spacing="10">
-                    <VBox.margin>
-                        <Insets top="23.0" />
-                    </VBox.margin>
-                    <children>
-                        <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
-                        <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
-                        <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
-                        <Button fx:id="btnTaiDuLieu" onAction="#onTaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
-                    </children>
+                <!-- Hàng nút -->
+                <HBox spacing="10">
+                    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
+                    <Pane HBox.hgrow="ALWAYS" />
+                    <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e; -fx-text-fill:white; -fx-font-weight:bold;" text="📤 Xuất Excel" />
                 </HBox>
 
-            <!-- 🔸 BẢNG DỮ LIỆU -->
-            <TableView fx:id="tablePhim" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="colMaPhim" text="Mã phim" />
-                    <TableColumn fx:id="colTenPhim" text="Tên phim" />
-                    <TableColumn fx:id="colTheLoai" text="Thể loại" />
-                    <TableColumn fx:id="colDaoDien" text="Đạo diễn" />
-                    <TableColumn fx:id="colThoiLuong" text="Thời lượng (phút)" />
-                    <TableColumn fx:id="colNgayKhoiChieu" text="Ngày khởi chiếu" />
-                    <TableColumn fx:id="colDoTuoi" text="Độ tuổi" />
-                </columns>
-                <VBox.margin>
-                    <Insets top="25.0" />
-                </VBox.margin>
-            </TableView>
+                   <!-- FORM -->
+                <GridPane hgap="40" maxWidth="Infinity" prefHeight="157.0" prefWidth="1071.0" vgap="20.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="20" />
+                        <ColumnConstraints percentWidth="30" />
+                        <ColumnConstraints percentWidth="20" />
+                        <ColumnConstraints percentWidth="30" />
+                    </columnConstraints>
 
+                       <children>
+                        <Label text="Mã phim:" />
+                        <TextField fx:id="tfMaPhim" GridPane.columnIndex="1" />
+
+                           <Label text="Tên phim:" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfTenPhim" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                           <Label text="Thể loại:" GridPane.rowIndex="2" />
+                        <ListView fx:id="lvTheLoai" prefHeight="150.0" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                           <Label text="Thời lượng:" GridPane.columnIndex="2" />
+                        <TextField fx:id="tfThoiLuong" GridPane.columnIndex="3" />
+
+                           <Label text="Đạo diễn:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfDaoDien" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                           <Label text="Độ tuổi:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="tfDoTuoi" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                           <Label text="Ngày khởi chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <DatePicker fx:id="dpNgayKC" prefHeight="39.0" prefWidth="318.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                    </children>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+                  <RowConstraints maxHeight="29.333333333333343" minHeight="29.0" prefHeight="29.333333333333343" />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+
+                <!-- Nút -->
+                <HBox spacing="10">
+                    <Button fx:id="btnThem" onAction="#onThem" styleClass="action-btn" text="Thêm" />
+                    <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
+                    <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
+                    <Button fx:id="btnTaiDuLieu" onAction="#onTaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
+                </HBox>
+
+                <!-- Bảng -->
+                <TableView fx:id="tablePhim" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colMaPhim" text="Mã phim" />
+                        <TableColumn fx:id="colTenPhim" text="Tên phim" />
+                        <TableColumn fx:id="colTheLoai" text="Thể loại" />
+                        <TableColumn fx:id="colDaoDien" text="Đạo diễn" />
+                        <TableColumn fx:id="colThoiLuong" text="Thời lượng (phút)" />
+                        <TableColumn fx:id="colNgayKhoiChieu" text="Ngày khởi chiếu" />
+                        <TableColumn fx:id="colDoTuoi" text="Độ tuổi" />
+                    </columns>
+                </TableView>
+
+            </VBox>
         </VBox>
-    </VBox>
-</center>
+    </center>
 
 </BorderPane>
