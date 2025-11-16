@@ -42,12 +42,15 @@
                 </HBox>
 
                    <!-- FORM -->
-                <GridPane hgap="40" maxWidth="Infinity" prefHeight="157.0" prefWidth="1071.0" vgap="20.0">
+                <GridPane hgap="50" prefHeight="140" prefWidth="900" vgap="20">
+                    <VBox.margin>
+                        <Insets top="25" bottom="15" />
+                    </VBox.margin>
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="20" />
-                        <ColumnConstraints percentWidth="30" />
-                        <ColumnConstraints percentWidth="20" />
-                        <ColumnConstraints percentWidth="30" />
+                        <ColumnConstraints percentWidth="18.0" />
+                        <ColumnConstraints percentWidth="25.0" />
+                        <ColumnConstraints percentWidth="18.0" />
+                        <ColumnConstraints percentWidth="25.0" />
                     </columnConstraints>
 
                        <children>
@@ -67,7 +70,7 @@
                         <TextField fx:id="tfDaoDien" promptText="Nhập đạo diễn" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                            <Label text="Độ tuổi:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField fx:id="tfDoTuoi" promptText="Nhập độ tuổi" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="tfDoTuoi" prefHeight="27.0" prefWidth="256.0" promptText="Nhập độ tuổi" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                            <Label text="Ngày khởi chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                         <DatePicker fx:id="dpNgayKC" prefHeight="39.0" prefWidth="318.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />

@@ -126,7 +126,6 @@ public class HoaDonController {
         if (txtMaHD.getText().isEmpty()
             || txtSoLuong.getText().isEmpty()
             || dpNgayMua.getValue() == null
-            || txtTongTien.getText().isEmpty()
             || txtMaKH.getText().isEmpty()
             || txtMaCombo.getText().isEmpty()
             ) {
@@ -147,7 +146,7 @@ public class HoaDonController {
             ps.setString(1, txtMaHD.getText());
             ps.setInt(2, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(3, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(4, Double.parseDouble(txtTongTien.getText()));
+            ps.setDouble(4, java.sql.Types.DOUBLE);
             ps.setString(5, txtMaKH.getText());
             ps.setString(6, txtMaCombo.getText());
           
@@ -189,7 +188,7 @@ public class HoaDonController {
 
             ps.setInt(1, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(2, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(3, Double.parseDouble(txtTongTien.getText()));
+            ps.setDouble(3, java.sql.Types.DOUBLE);
             ps.setString(4, txtMaKH.getText());
             ps.setString(5, txtMaCombo.getText());
       
