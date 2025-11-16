@@ -60,8 +60,6 @@ public class SuatChieuController {
                 txtMaPhong.setText(sc.getMaphong());
             }
         });
-
-        taiLaiDuLieu();
     }
 
     // ===================== TẢI DỮ LIỆU =====================

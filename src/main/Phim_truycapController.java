@@ -36,7 +36,6 @@ public class Phim_truycapController {
     @FXML private TextField tfMaPhim, tfTenPhim, tfDaoDien, tfThoiLuong, tfDoTuoi;
     @FXML private DatePicker dpNgayKC;
     @FXML private ListView<TheLoaiItem> lvTheLoai;
-    @FXML private ImageView imgPoster;
 
     // Table
     @FXML private TableView<phim> tablePhim;
@@ -204,15 +203,7 @@ public class Phim_truycapController {
 
 
 
-    @FXML
-    public void onChonAnh() {
-        FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Ảnh", "*.png", "*.jpg", "*.jpeg"));
-        File f = fc.showOpenDialog(imgPoster.getScene().getWindow());
-        if (f != null) imgPoster.setImage(new Image(f.toURI().toString()));
-        // Giai đoạn này chỉ hiển thị; lưu DB sẽ làm sau (blob/path).
-    }
-
+    
     // Helpers
     private phim buildPhimFromForm() {
         try {
@@ -246,7 +237,7 @@ public class Phim_truycapController {
 
     private void clearForm() {
         tfMaPhim.clear(); tfTenPhim.clear(); tfDaoDien.clear(); tfThoiLuong.clear(); tfDoTuoi.clear();
-        dpNgayKC.setValue(null); dsTheLoai.forEach(t -> t.setSelected(false)); imgPoster.setImage(null);
+        dpNgayKC.setValue(null); dsTheLoai.forEach(t -> t.setSelected(false));
     }
     private void showAlert(String title, String message, Alert.AlertType type) {
     Alert alert = new Alert(type);

@@ -255,7 +255,6 @@ public class HoaDonController {
             header.createCell(3).setCellValue("Tổng tiền");
             header.createCell(4).setCellValue("Mã KH");
             header.createCell(5).setCellValue("Mã combo");
-            header.createCell(6).setCellValue("Mã NV");
 
             int rowIndex = 1;
             for (HoaDon hd : tableHD.getItems()) {
@@ -295,7 +294,8 @@ public class HoaDonController {
         ObservableList<HoaDon> kq = FXCollections.observableArrayList();
         for (HoaDon hd : dsHD) {
             if (hd.getMaHD().toLowerCase().contains(key)
-                    || hd.getMaKH().toLowerCase().contains(key))
+                    || hd.getMaKH().toLowerCase().contains(key)
+                    )
                 kq.add(hd);
         }
 
@@ -329,7 +329,7 @@ public class HoaDonController {
 
     // ===================== TÌM KIẾM NÂNG CAO ======================
     public void timKiemNangCao(String maHD, String ngay, String sl, String tong,
-                               String maKH, String maCombo, String maNV) {
+                               String maKH, String maCombo) {
 
         ObservableList<HoaDon> kq = FXCollections.observableArrayList();
 
@@ -353,6 +353,8 @@ public class HoaDonController {
 
             if (!maCombo.isEmpty() && !hd.getMaCombo().toLowerCase().contains(maCombo.toLowerCase()))
                 ok = false;
+
+           
 
             if (ok) kq.add(hd);
         }

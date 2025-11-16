@@ -11,6 +11,7 @@ public class HoaDon {
 
     private String maKH;
     private String maCombo;
+
     // ===== Constructor =====
     public HoaDon(String maHD, int soLuong, Date ngayMua, double tongTien,
                   String maKH, String maCombo) {
@@ -46,6 +47,5 @@ public class HoaDon {
     public String getMaCombo() {
         return maCombo;
     }
-
 
 }
