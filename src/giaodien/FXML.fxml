@@ -23,7 +23,7 @@
                         prefHeight="28.0" prefWidth="104.0" 
                         style="-fx-background-color:#ff5252;-fx-text-fill:white;-fx-font-weight:bold; 
                                 -fx-background-radius:6;-fx-padding:5 15 5 15;" 
-                        text="Đăng xuất">
+                        text="Đăng xuất" onAction="#dangXuat">
                     <HBox.margin>
                         <Insets right="13"/>   <!-- ĐẨY QUA TRÁI 20px -->
                     </HBox.margin>
