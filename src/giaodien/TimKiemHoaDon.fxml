@@ -58,11 +58,7 @@
         <TextField fx:id="tfMaCombo" styleClass="popup-field"
                    GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-        <!-- Mã nhân viên -->
-        <Label text="Mã nhân viên:" GridPane.rowIndex="6"/>
-        <TextField fx:id="tfMaNV" styleClass="popup-field"
-                   GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-
+       
     </GridPane>
 
     <!-- Nút TÌM -->
