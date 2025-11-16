@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.SuatChieuController">
+<BorderPane prefHeight="700" prefWidth="1200" stylesheets="@fxml.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.SuatChieuController">
 
     <center>
         <VBox fillWidth="true" spacing="0">
@@ -17,15 +24,11 @@
             <!-- HEADER -->
             <AnchorPane VBox.vgrow="NEVER">
                 <children>
-                    <HBox alignment="CENTER_LEFT" prefHeight="46" styleClass="header-bar"
-                          style="-fx-background-color:white;"
-                          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                        <padding><Insets bottom="3" left="20" right="20" top="3"/></padding>
+                    <HBox alignment="CENTER_LEFT" prefHeight="46" style="-fx-background-color:white;" styleClass="header-bar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                        <padding><Insets bottom="3" left="20" right="20" top="3" /></padding>
                         <children>
-                            <Label prefHeight="23" prefWidth="300"
-                                   style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;"
-                                   text="⏰ Quản Lý Suất Chiếu"/>
-                            <Pane HBox.hgrow="ALWAYS"/>
+                            <Label prefHeight="23" prefWidth="300" style="-fx-font-size:18; -fx-font-weight:bold; -fx-text-fill:#12h3u;" text="⏰ Quản Lý Suất Chiếu" />
+                            <Pane HBox.hgrow="ALWAYS" />
                         </children>
                     </HBox>
                 </children>
@@ -34,100 +37,82 @@
             <!-- MAIN CONTENT -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
 
-                <padding><Insets bottom="15" left="0" right="0" top="0"/></padding>
+                <padding><Insets bottom="15" left="0" right="0" top="0" /></padding>
 
                 <!-- SEARCH + EXCEL -->
                 <HBox spacing="10">
-                    <Button text="🔍 Tìm kiếm"
-                            styleClass="search-btn"
-                            onAction="#moTimKiemPopup"/>
+                    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
 
-                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Pane HBox.hgrow="ALWAYS" />
 
-                    <Button text="📤 Xuất Excel"
-                            onAction="#xuatExcel"
-                            style="-fx-background-color:#22c55e;
-                                   -fx-text-fill:white;
-                                   -fx-font-weight:bold;
-                                   -fx-background-radius:6;"/>
+                    <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e;                                    -fx-text-fill:white;                                    -fx-font-weight:bold;                                    -fx-background-radius:6;" text="📤 Xuất Excel" />
                 </HBox>
 
                 <!-- FORM INPUT -->
                 <GridPane hgap="70" prefHeight="140" prefWidth="954" vgap="35">
-                    <VBox.margin><Insets top="54"/></VBox.margin>
+                    <VBox.margin><Insets top="54" /></VBox.margin>
 
                     <columnConstraints>
-                        <ColumnConstraints percentWidth="18"/>
-                        <ColumnConstraints percentWidth="25"/>
-                        <ColumnConstraints percentWidth="18"/>
-                        <ColumnConstraints percentWidth="25"/>
+                        <ColumnConstraints percentWidth="18" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="18" />
+                        <ColumnConstraints percentWidth="25" />
                     </columnConstraints>
 
                     <children>
 
                         <!-- Row 1 -->
-                        <Label text="Mã suất chiếu:" GridPane.rowIndex="0"/>
-                        <TextField fx:id="txtMaSuatChieu" promptText="Nhập mã (VD: SC001)"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="Mã suất chiếu:" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtMaSuatChieu" promptText="Nhập mã (VD: SC001)" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Giờ chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                        <TextField fx:id="txtGioChieu" promptText="HH:MM:SS"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                        <Label text="Giờ chiếu:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtGioChieu" promptText="HH:MM:SS" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
                         <!-- Row 2 -->
-                        <Label text="Ngày chiếu:" GridPane.rowIndex="1"/>
-                        <DatePicker fx:id="dpNgayChieu" promptText="Chọn ngày chiếu"
-                                    GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Ngày chiếu:" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="dpNgayChieu" prefHeight="37.0" prefWidth="243.0" promptText="Chọn ngày chiếu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                        <TextField fx:id="txtGiaVe" promptText="Nhập giá vé"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                        <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtGiaVe" promptText="Nhập giá vé" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                         <!-- Row 3 -->
-                        <Label text="Mã phim:" GridPane.rowIndex="2"/>
-                        <TextField fx:id="txtMaPhim" promptText="Nhập mã phim"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Mã phim:" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaPhim" promptText="Nhập mã phim" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Mã phòng:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng chiếu"
-                                   GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                        <Label text="Mã phòng:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMaPhong" promptText="Nhập mã phòng chiếu" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                     </children>
 
                     <rowConstraints>
-                        <RowConstraints/>
-                        <RowConstraints/>
-                        <RowConstraints/>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
                     </rowConstraints>
                 </GridPane>
 
                 <!-- ACTION BUTTONS -->
                 <HBox spacing="10">
-                    <VBox.margin><Insets top="20"/></VBox.margin>
+                    <VBox.margin><Insets top="20" /></VBox.margin>
                     <children>
-                        <Button fx:id="btnThem" onAction="#themSuatChieu"
-                                styleClass="action-btn" text="Thêm"/>
-                        <Button fx:id="btnSua" onAction="#suaSuatChieu"
-                                styleClass="action-btn" text="Sửa"/>
-                        <Button fx:id="btnXoa" onAction="#xoaSuatChieu"
-                                styleClass="action-btn" text="Xóa"/>
-                        <Button fx:id="btnTai" onAction="#taiLaiDuLieu"
-                                styleClass="action-btn" text="Tải dữ liệu"/>
+                        <Button fx:id="btnThem" onAction="#themSuatChieu" styleClass="action-btn" text="Thêm" />
+                        <Button fx:id="btnSua" onAction="#suaSuatChieu" styleClass="action-btn" text="Sửa" />
+                        <Button fx:id="btnXoa" onAction="#xoaSuatChieu" styleClass="action-btn" text="Xóa" />
+                        <Button fx:id="btnTai" onAction="#taiLaiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
                     </children>
                 </HBox>
 
                 <!-- DATA TABLE -->
-                <TableView fx:id="tableSuatChieu" prefHeight="300" prefWidth="1005"
-                           VBox.vgrow="ALWAYS">
-                    <VBox.margin><Insets top="25"/></VBox.margin>
+                <TableView fx:id="tableSuatChieu" prefHeight="300" prefWidth="1005" VBox.vgrow="ALWAYS">
+                    <VBox.margin><Insets top="25" /></VBox.margin>
 
                     <columns>
-                        <TableColumn fx:id="colMaSuatChieu" prefWidth="150" text="Mã suất chiếu"/>
-                        <TableColumn fx:id="colNgayChieu" prefWidth="150" text="Ngày chiếu"/>
-                        <TableColumn fx:id="colGioChieu" prefWidth="120" text="Giờ chiếu"/>
-                        <TableColumn fx:id="colGiaVe" prefWidth="120" text="Giá vé"/>
-                        <TableColumn fx:id="colMaPhim" prefWidth="150" text="Mã phim"/>
-                        <TableColumn fx:id="colMaPhong" prefWidth="150" text="Mã phòng"/>
+                        <TableColumn fx:id="colMaSuatChieu" prefWidth="150" text="Mã suất chiếu" />
+                        <TableColumn fx:id="colNgayChieu" prefWidth="150" text="Ngày chiếu" />
+                        <TableColumn fx:id="colGioChieu" prefWidth="120" text="Giờ chiếu" />
+                        <TableColumn fx:id="colGiaVe" prefWidth="120" text="Giá vé" />
+                        <TableColumn fx:id="colMaPhim" prefWidth="150" text="Mã phim" />
+                        <TableColumn fx:id="colMaPhong" prefWidth="150" text="Mã phòng" />
                         <!-- ❌ Không có cột Trạng thái -->
                     </columns>
                 </TableView>
