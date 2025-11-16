@@ -35,11 +35,11 @@ import javafx.stage.StageStyle;
 public class HoaDonController {
 
     // ===================== FXML ======================
-    @FXML private TextField txtMaHD, txtSoLuong, txtTongTien, txtMaKH, txtMaCombo, txtMaNV;
+    @FXML private TextField txtMaHD, txtSoLuong, txtTongTien, txtMaKH, txtMaCombo;
     @FXML private DatePicker dpNgayMua;
 
     @FXML private TableView<HoaDon> tableHD;
-    @FXML private TableColumn<HoaDon,String> colMaHD, colMaKH, colMaCombo, colMaNV;
+    @FXML private TableColumn<HoaDon,String> colMaHD, colMaKH, colMaCombo;
     @FXML private TableColumn<HoaDon,Integer> colSoLuong;
     @FXML private TableColumn<HoaDon,Double> colTongTien;
     @FXML private TableColumn<HoaDon,Date> colNgayMua;
@@ -50,7 +50,7 @@ public class HoaDonController {
     private final ObservableList<HoaDon> dsHD = FXCollections.observableArrayList();
 
     // Lưu dữ liệu gốc
-    private String originalMaHD = "", originalMaKH = "", originalMaCombo = "", originalMaNV = "";
+    private String originalMaHD = "", originalMaKH = "", originalMaCombo = "";
     private int originalSoLuong = 0;
     private double originalTongTien = 0;
     private Date originalNgayMua = null;
@@ -65,7 +65,7 @@ public class HoaDonController {
         colTongTien.setCellValueFactory(c -> new javafx.beans.property.SimpleDoubleProperty(c.getValue().getTongTien()).asObject());
         colMaKH.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaKH()));
         colMaCombo.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaCombo()));
-        colMaNV.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaNV()));
+        
 
         tableHD.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
@@ -79,7 +79,7 @@ public class HoaDonController {
                 txtTongTien.setText(String.valueOf(hd.getTongTien()));
                 txtMaKH.setText(hd.getMaKH());
                 txtMaCombo.setText(hd.getMaCombo());
-                txtMaNV.setText(hd.getMaNV());
+
 
                 // Lưu bản gốc
                 originalMaHD = hd.getMaHD();
@@ -88,7 +88,7 @@ public class HoaDonController {
                 originalTongTien = hd.getTongTien();
                 originalMaKH = hd.getMaKH();
                 originalMaCombo = hd.getMaCombo();
-                originalMaNV = hd.getMaNV();
+  
             }
         });
     }
@@ -130,7 +130,7 @@ public class HoaDonController {
             || txtTongTien.getText().isEmpty()
             || txtMaKH.getText().isEmpty()
             || txtMaCombo.getText().isEmpty()
-            || txtMaNV.getText().isEmpty()) {
+            ) {
 
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
             return;
@@ -151,7 +151,7 @@ public class HoaDonController {
             ps.setDouble(4, Double.parseDouble(txtTongTien.getText()));
             ps.setString(5, txtMaKH.getText());
             ps.setString(6, txtMaCombo.getText());
-            ps.setString(7, txtMaNV.getText());
+          
 
             ps.executeUpdate();
 
@@ -193,7 +193,7 @@ public class HoaDonController {
             ps.setDouble(3, Double.parseDouble(txtTongTien.getText()));
             ps.setString(4, txtMaKH.getText());
             ps.setString(5, txtMaCombo.getText());
-            ps.setString(6, txtMaNV.getText());
+      
             ps.setString(7, ma);
 
             ps.executeUpdate();
@@ -375,7 +375,6 @@ public class HoaDonController {
         txtTongTien.clear();
         txtMaKH.clear();
         txtMaCombo.clear();
-        txtMaNV.clear();
     }
 
     private void showAlert(String title, String msg, AlertType type) {

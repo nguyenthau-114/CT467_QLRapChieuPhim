@@ -29,6 +29,7 @@ public class KhachhangController {
     @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
     @FXML private TableView<khachhang> tableKH;
     @FXML private TableColumn<khachhang, String> colMaKH, colTenKH, colSDT, colEmail;
+    @FXML private TableColumn<khachhang, Integer> colTongVe;
 
     private ObservableList<khachhang> dsKH = FXCollections.observableArrayList();
 
@@ -40,57 +41,69 @@ public class KhachhangController {
 
     // ---------------- KHỞI TẠO ----------------
     @FXML
-    public void initialize() {
-        colMaKH.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaKhachHang()));
-        colTenKH.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getTenKhachHang()));
-        colSDT.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getSdt()));
-        colEmail.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getEmail()));
+public void initialize() {
 
-        tableKH.setOnMouseClicked(event -> {
-            khachhang selected = tableKH.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                tfMaKH.setText(selected.getMaKhachHang());
-                tfTenKH.setText(selected.getTenKhachHang());
-                tfSDT.setText(selected.getSdt());
-                tfEmail.setText(selected.getEmail());
+    colMaKH.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getMaKhachHang()));
+    colTenKH.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getTenKhachHang()));
+    colSDT.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getSdt()));
+    colEmail.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getEmail()));
 
-                originalMaKH = selected.getMaKhachHang();
-                originalTenKH = selected.getTenKhachHang();
-                originalSDT = selected.getSdt();
-                originalEmail = selected.getEmail();
-            }
-        });
+    // ⭐ CỘT TỔNG VÉ
+    colTongVe.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleIntegerProperty(c.getValue().getTongVe()).asObject()
+    );
 
-        tableKH.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    }
+    tableKH.setOnMouseClicked(event -> {
+        khachhang selected = tableKH.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            tfMaKH.setText(selected.getMaKhachHang());
+            tfTenKH.setText(selected.getTenKhachHang());
+            tfSDT.setText(selected.getSdt());
+            tfEmail.setText(selected.getEmail());
+        }
+    });
+
+    tableKH.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+}
+
 
     // ---------------- TẢI DỮ LIỆU ----------------
     @FXML
-    public void onTaiDuLieu() {
-        dsKH.clear();
-        try (Connection conn = DBConnection.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM khachhang ORDER BY makhachhang ASC")) {
+public void onTaiDuLieu() {
+    dsKH.clear();
+    try (Connection conn = DBConnection.getConnection();
+         Statement st = conn.createStatement();
+         ResultSet rs = st.executeQuery("SELECT * FROM khachhang ORDER BY makhachhang ASC")) {
 
-            while (rs.next()) {
-                khachhang kh = new khachhang(
-                        rs.getString("makhachhang"),
-                        rs.getString("tenkhachhang"),
-                        rs.getString("sdt"),
-                        rs.getString("email")
-                );
+        while (rs.next()) {
+            khachhang kh = new khachhang(
+                    rs.getString("makhachhang"),
+                    rs.getString("tenkhachhang"),
+                    rs.getString("sdt"),
+                    rs.getString("email")
+            );
 
-                // ⭐ TẠO CỘT GIẢ (bạn muốn bao nhiêu cũng được)
-                kh.setTongVe((int)(Math.random() * 10));  // ví dụ: random từ 0 → 9
+            // ⭐ LẤY TỔNG VÉ THẬT TỪ BẢNG VE
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "SELECT COUNT(*) AS tongve FROM ve WHERE khachhang_makhachhang = ?")) {
 
-                dsKH.add(kh);
+                ps.setString(1, kh.getMaKhachHang());
+                ResultSet rs2 = ps.executeQuery();
+                if (rs2.next()) {
+                    kh.setTongVe(rs2.getInt("tongve"));
+                }
             }
 
-
-        } catch (SQLException e) {
-            showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
+            dsKH.add(kh);
         }
+
+        tableKH.setItems(dsKH);
+
+    } catch (SQLException e) {
+        showAlert("Lỗi tải dữ liệu", e.getMessage(), Alert.AlertType.ERROR);
     }
+}
+
 
     // ---------------- THÊM ----------------
     @FXML

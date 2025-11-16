@@ -115,7 +115,6 @@
                         <TableColumn fx:id="colTongTien" text="Tổng tiền" />
                         <TableColumn fx:id="colMaKH" text="Mã KH" />
                         <TableColumn fx:id="colMaCombo" text="Mã Combo" />
-                        <TableColumn fx:id="colMaNV" text="Mã NV" />
                     </columns>
                 </TableView>
 
