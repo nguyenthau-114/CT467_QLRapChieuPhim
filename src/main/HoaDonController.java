@@ -226,6 +226,36 @@ public class HoaDonController {
             showAlert("Lỗi cập nhật", e.getMessage(), AlertType.ERROR);
         }
     }
+    // ===================== XÓA ======================
+        @FXML
+        public void onXoa() {
+            String ma = txtMaHD.getText().trim();
+
+            if (ma.isEmpty()) {
+                showAlert("Thiếu thông tin", "Vui lòng chọn hóa đơn cần xóa!", AlertType.WARNING);
+                return;
+            }
+
+            if (!showConfirmDialog("Xóa hóa đơn", "Bạn có chắc chắn muốn xóa hóa đơn này?")) {
+                return;
+            }
+
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement ps = conn.prepareStatement("DELETE FROM hoadon WHERE mahoadon=?")) {
+
+                ps.setString(1, ma);
+                ps.executeUpdate();
+
+                showAlert("Thành công", "Đã xóa hóa đơn thành công!", AlertType.INFORMATION);
+
+                onTaiDuLieu();
+                clearFields();
+
+            } catch (SQLException e) {
+                showAlert("Lỗi xóa hóa đơn", e.getMessage(), AlertType.ERROR);
+            }
+        }
+
 
 
     // ===================== EXPORT EXCEL ======================
@@ -275,6 +305,7 @@ public class HoaDonController {
             showAlert("Lỗi xuất Excel", e.getMessage(), AlertType.ERROR);
         }
     }
+    
 
     // ===================== TÌM KIẾM CƠ BẢN ======================
     @FXML
