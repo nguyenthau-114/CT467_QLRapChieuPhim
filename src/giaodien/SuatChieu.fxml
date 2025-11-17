@@ -70,7 +70,7 @@
 
                         <!-- Row 2 -->
                         <Label text="Ngày chiếu:" GridPane.rowIndex="1" />
-                        <DatePicker fx:id="dpNgayChieu" prefHeight="37.0" prefWidth="243.0" promptText="Chọn ngày chiếu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <DatePicker fx:id="dpNgayChieu" prefHeight="38.0" prefWidth="259.0" promptText="Chọn ngày chiếu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label text="Giá vé:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <TextField fx:id="txtGiaVe" promptText="Nhập giá vé" GridPane.columnIndex="3" GridPane.rowIndex="1" />

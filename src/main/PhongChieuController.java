@@ -25,11 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import javafx.stage.FileChooser;
 import java.io.File;
-/**
- * Controller: Quản lý Phòng chiếu
- * - Dùng TRIGGER trong DB để tự sinh mã & chặn xóa
- * - Controller chỉ hiển thị thông báo dựa trên lỗi từ DB (SIGNAL 45000 / FK 1451 / trùng mã 1062)
- */
+
 public class PhongChieuController {
 
     @FXML private TextField txtMaPhong, txtTenPhong, txtSoGhe, txtLoaiPhong;
@@ -39,7 +35,6 @@ public class PhongChieuController {
 
     private final ObservableList<PhongChieu> dsPhong = FXCollections.observableArrayList();
 
-    // Lưu dữ liệu gốc khi chọn dòng (để so sánh & khóa mã)
     private String originalMaphong   = "";
     private String originalTenphong  = "";
     private int    originalSoghe     = 0;
@@ -56,8 +51,6 @@ public class PhongChieuController {
 
         // Tự co giãn cột
         tablePhong.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // Click chọn -> đổ ra form + lưu bản gốc + khóa mã (không cho sửa khi đang edit)
         tablePhong.setOnMouseClicked(event -> {
             PhongChieu selected = tablePhong.getSelectionModel().getSelectedItem();
             if (selected != null) {
@@ -71,11 +64,8 @@ public class PhongChieuController {
                 originalSoghe     = selected.getSoghe();
                 originalLoaiphong = selected.getLoaiphong();
 
-                txtMaPhong.setDisable(true); // khóa không cho sửa mã khi đang edit
             }
         });
-
-        // Tải dữ liệu ban đầ
     }
 
     // ================== TẢI DỮ LIỆU ==================
@@ -88,7 +78,6 @@ public class PhongChieuController {
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 dsPhong.add(new PhongChieu(
                         rs.getString("maphong"),
@@ -98,7 +87,6 @@ public class PhongChieuController {
                 ));
             }
             tablePhong.setItems(dsPhong);
-
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
@@ -112,12 +100,10 @@ public class PhongChieuController {
         String tenPhong    = txtTenPhong.getText().trim();
         String soGheStr    = txtSoGhe.getText().trim();
         String loaiPhong   = txtLoaiPhong.getText().trim();
-
         if (tenPhong.isEmpty() || soGheStr.isEmpty() || loaiPhong.isEmpty()) {
             showAlert("Thiếu thông tin", "Vui lòng nhập Tên phòng, Số ghế và Loại phòng!", AlertType.WARNING);
             return;
         }
-
         int soGhe;
         try {
             soGhe = Integer.parseInt(soGheStr);
@@ -126,7 +112,6 @@ public class PhongChieuController {
             showAlert("Số ghế không hợp lệ", "Số ghế phải là số nguyên dương.", AlertType.WARNING);
             return;
         }
-
         Alert confirm = new Alert(AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận thêm phòng");
         confirm.setHeaderText(null);
@@ -139,7 +124,6 @@ public class PhongChieuController {
             if (res == dongY) {
                 try (Connection conn = DBConnection.getConnection()) {
 
-                    // Nếu người dùng để trống Mã phòng -> KHÔNG liệt kê cột maphong, để trigger BEFORE INSERT tự gán
                     if (maPhongNhap.isEmpty()) {
                         String sql = "INSERT INTO phongchieu (tenphong, soghe, loaiphong) VALUES (?, ?, ?)";
                         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -159,18 +143,15 @@ public class PhongChieuController {
                             ps.executeUpdate();
                         }
                     }
-
                     taiDuLieu();
                     clearFields();
                     showAlert("Thành công", "Đã thêm phòng thành công!" , AlertType.INFORMATION);
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                     String sqlState = e.getSQLState();
                     int err = e.getErrorCode();
 
                     if ("45000".equals(sqlState)) {
-                        // Thông điệp do trigger SIGNAL cung cấp (ví dụ: validate dữ liệu)
                         showAlert("Không thể thêm phòng", e.getMessage(), AlertType.WARNING);
                         return;
                     }
@@ -185,7 +166,6 @@ public class PhongChieuController {
             }
         });
     }
-
     // ================== SỬA ==================
     @FXML
     public void suaPhong() {
@@ -202,7 +182,6 @@ public class PhongChieuController {
             showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ thông tin để sửa!", AlertType.WARNING);
             return;
         }
-
         int soGhe;
         try {
             soGhe = Integer.parseInt(soGheStr);
@@ -211,16 +190,14 @@ public class PhongChieuController {
             showAlert("Số ghế không hợp lệ", "Số ghế phải là số nguyên dương.", AlertType.WARNING);
             return;
         }
-
-        // Không cho đổi mã phòng (đã khóa input khi chọn dòng)
-        if (!maPhong.equals(originalMaphong) && !originalMaphong.isEmpty()) {
+        // Không cho đổi mã phòng
+        if (!maPhong.equals(originalMaphong)) {
             showAlert("Không thể thay đổi mã phòng",
                       "Mã phòng là định danh duy nhất và không thể chỉnh sửa.\nHệ thống sẽ giữ nguyên mã cũ.",
                       AlertType.WARNING);
             txtMaPhong.setText(originalMaphong);
             return;
         }
-
         boolean khongThayDoi =
                 tenPhong.equals(originalTenphong) &&
                 loaiPhong.equals(originalLoaiphong) &&
@@ -254,8 +231,6 @@ public class PhongChieuController {
                     clearFields();
                     showAlert("Thành công", "Đã cập nhật phòng thành công!", AlertType.INFORMATION);
 
-                    
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                     showAlert("Lỗi cập nhật", e.getMessage(), AlertType.ERROR);
@@ -263,7 +238,6 @@ public class PhongChieuController {
             }
         });
     }
-
     // ================== XÓA (hiển thị thông điệp từ trigger/FK) ==================
     @FXML
     public void xoaPhong() {
@@ -272,7 +246,6 @@ public class PhongChieuController {
             showAlert("Thiếu thông tin", "Vui lòng chọn phòng chiếu cần xóa!", AlertType.WARNING);
             return;
         }
-
         Alert confirm = new Alert(AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận xóa phòng");
         confirm.setHeaderText(null);
@@ -305,12 +278,10 @@ public class PhongChieuController {
                     String sqlState = e.getSQLState();
                     int err = e.getErrorCode();
 
-                    // Bị chặn bởi trigger SIGNAL 45000 (trg_before_delete_phong_check_suatchieu)
                     if ("45000".equals(sqlState)) {
                         showAlert("Không thể xóa phòng", e.getMessage(), AlertType.WARNING);
                         return;
                     }
-                    // Bị chặn bởi FK RESTRICT
                     if (err == 1451) {
                         showAlert("Không thể xóa phòng",
                                 "Đang có suất chiếu tại phòng nên không thể xóa.",
@@ -323,7 +294,6 @@ public class PhongChieuController {
             }
         });
     }
-
     // ================== TIỆN ÍCH ==================
     private void clearFields() {
         txtMaPhong.clear();
@@ -331,7 +301,6 @@ public class PhongChieuController {
         txtSoGhe.clear();
         txtLoaiPhong.clear();
 
-        // mở lại mã để phục vụ thêm mới
         txtMaPhong.setDisable(false);
 
         // reset bản gốc
@@ -348,7 +317,7 @@ public class PhongChieuController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    //tim kiem nang cao
+
     
 @FXML
 private void moTimKiemPopup() {
@@ -360,22 +329,13 @@ private void moTimKiemPopup() {
 
             TimKiemPhongController popup = loader.getController();
             popup.setMainController(this);
-
         Stage stage = new Stage();
-
-        // ⭐ Giúp bỏ màu nền mặc định của Stage
         stage.initStyle(StageStyle.TRANSPARENT);
-
         Scene scene = new Scene(root);
-
-        // ⭐ Giúp bỏ nền trắng của Scene
         scene.setFill(Color.TRANSPARENT);
-
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
-
         stage.show();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -394,7 +354,6 @@ private void moTimKiemPopup() {
             File file = fileChooser.showSaveDialog(tablePhong.getScene().getWindow());
             if (file == null) return;   // người dùng bấm Cancel
 
-            // Tạo workbook + sheet
             Workbook wb = new XSSFWorkbook();
             Sheet sheet = wb.createSheet("PhongChieu");
 
@@ -416,12 +375,10 @@ private void moTimKiemPopup() {
                 row.createCell(3).setCellValue(p.getLoaiphong());
             }
 
-            // Auto size cột cho đẹp
             for (int i = 0; i <= 3; i++) {
                 sheet.autoSizeColumn(i);
             }
 
-            // Ghi file
             try (FileOutputStream out = new FileOutputStream(file)) {
                 wb.write(out);
             }
@@ -439,36 +396,26 @@ private void moTimKiemPopup() {
         }
     }
 
-    
     public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
-
         ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
-
         for (PhongChieu p : dsPhong) {
             boolean ok = true;
-
             if (!ma.isEmpty() && !p.getMaphong().toLowerCase().contains(ma.toLowerCase()))
                 ok = false;
-
             if (!ten.isEmpty() && !p.getTenphong().toLowerCase().contains(ten.toLowerCase()))
                 ok = false;
-
             if (!loai.isEmpty() && !p.getLoaiphong().toLowerCase().contains(loai.toLowerCase()))
                 ok = false;
-
             // số ghế >= nhập
             if (!soGheStr.isEmpty()) {
                 try {
                     int minGhe = Integer.parseInt(soGheStr);
                     if (p.getSoghe() < minGhe) ok = false;
                 } catch (NumberFormatException e) {
-                    // Nếu người dùng nhập chữ → bỏ qua điều kiện này
                 }
             }
-
             if (ok) ketQua.add(p);
         }
-
         tablePhong.setItems(ketQua);
     }
 

@@ -49,6 +49,14 @@ public class Phim_truycapController {
             new TheLoaiItem("Viễn tưởng"), new TheLoaiItem("Phiêu lưu"),
             new TheLoaiItem("Tâm lý")
     );
+    private String originalMaPhim = "";
+    private String originalTenPhim  = "";
+    private String originalTheLoai  = "";
+    private String originalDaoDien  = "";
+    private int    originalThoiLuong = 0;
+    private String originalNgayKC   = "";
+    private int    originalDoTuoi   = 0;
+
 
     @FXML
     public void initialize() {
@@ -80,6 +88,13 @@ public class Phim_truycapController {
             for (String s : picked) {
                 dsTheLoai.stream().filter(t -> t.getName().equalsIgnoreCase(s)).findFirst().ifPresent(t -> t.setSelected(true));
             }
+            originalMaPhim   = p.getMaPhim();
+            originalTenPhim  = p.getTenPhim();
+            originalTheLoai  = p.getTheLoai();
+            originalDaoDien  = p.getDaoDien();
+            originalThoiLuong = p.getThoiLuong();
+            originalNgayKC   = (p.getNgayKhoiChieu() == null ? "" : p.getNgayKhoiChieu());
+            originalDoTuoi   = p.getDoTuoiChoPhep();
         });
          // --- Cấu hình dữ liệu cột ---
     colMaPhim.setCellValueFactory(new PropertyValueFactory<>("maPhim"));
@@ -95,11 +110,14 @@ public class Phim_truycapController {
         // ListView checkbox
         lvTheLoai.setItems(dsTheLoai);
         lvTheLoai.setCellFactory(CheckBoxListCell.forListView(TheLoaiItem::selectedProperty));
+        
     }
 
     @FXML
     public void onTaiDuLieu() {
         tablePhim.setItems(FXCollections.observableArrayList(dao.getAllPhim()));
+        clearForm();
+        tablePhim.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -132,29 +150,62 @@ public class Phim_truycapController {
 
     @FXML
     public void onSua() {
+        if (originalMaPhim == null || originalMaPhim.isEmpty()) {
+        showAlert("Thiếu thông tin",
+                  "Vui lòng chọn phim cần sửa trong bảng trước!",
+                  Alert.AlertType.WARNING);
+        return;
+    }
+        // Lấy dữ liệu phim từ form
         phim p = buildPhimFromForm();
-        if (p == null) return;
+        if (p == null) return; 
+        
+        String maForm = tfMaPhim.getText().trim();
+        if (!maForm.equals(originalMaPhim)) {
+            showAlert("Không thể sửa mã phim",
+                      "Mã phim là định danh duy nhất, không thể thay đổi",Alert.AlertType.WARNING);
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Xác nhận sửa");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Bạn có chắc muốn cập nhật thông tin phim này không?");
-        ButtonType ok = new ButtonType("Xác nhận", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
-        confirm.getButtonTypes().setAll(ok, cancel);
+            tfMaPhim.setText(originalMaPhim);
+            return;
+        }
+        String ngayKcForm = (p.getNgayKhoiChieu() == null ? "" : p.getNgayKhoiChieu());
+        boolean khongThayDoi =
+                p.getTenPhim().equals(originalTenPhim) &&
+                p.getTheLoai().equals(originalTheLoai) &&
+                p.getDaoDien().equals(originalDaoDien) &&
+                p.getThoiLuong() == originalThoiLuong &&
+                ngayKcForm.equals(originalNgayKC == null ? "" : originalNgayKC) &&
+                p.getDoTuoiChoPhep() == originalDoTuoi;
 
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ok) {
-                dao.updatePhim(p);
-                onTaiDuLieu();
-                showAlert("Thành công",
-                          "Đã cập nhật phim thành công!",
-                          Alert.AlertType.INFORMATION);
-            }
+        if (khongThayDoi) {
+            showAlert("Không có thay đổi",
+                      "Bạn chưa thay đổi thông tin nào để cập nhật!",
+                      Alert.AlertType.INFORMATION);
+            return;
+        }
 
+        Alert confirm = new Alert(
+                Alert.AlertType.CONFIRMATION,"Bạn có chắc muốn cập nhật thông tin phim này không?",
+                ButtonType.YES, ButtonType.NO);
+                confirm.setHeaderText(null);
+                confirm.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.YES) {
+                        dao.updatePhim(p);
+
+                        onTaiDuLieu();
+                        clearForm(); 
+                        originalMaPhim   = "";
+                        originalTenPhim  = "";
+                        originalTheLoai  = "";
+                        originalDaoDien  = "";
+                        originalThoiLuong = 0;
+                        originalNgayKC   = "";
+                        originalDoTuoi   = 0;
+
+                        showAlert("Thành công", "Đã cập nhật phim thành công!", Alert.AlertType.INFORMATION);
+                    }
         });
     }
-
 
     @FXML
     public void onXoa() {
@@ -165,7 +216,6 @@ public class Phim_truycapController {
                   Alert.AlertType.WARNING);
         return;
     }
-
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận xóa");
@@ -201,9 +251,6 @@ public class Phim_truycapController {
         });
     }
 
-
-
-    
     // Helpers
     private phim buildPhimFromForm() {
         try {
@@ -222,8 +269,6 @@ public class Phim_truycapController {
                       Alert.AlertType.WARNING);
             return null;
             }
-
-
 
             return new phim(ma, ten, theloai, daoDien, thoiLuong, ngayKC, doTuoi);
             } catch (NumberFormatException e) {
@@ -247,7 +292,6 @@ public class Phim_truycapController {
     alert.showAndWait();
 }
 
-    
     @FXML
     private void moTimKiemPopup() {
         try {
@@ -255,25 +299,15 @@ public class Phim_truycapController {
                     getClass().getResource("/giaodien/TimKiemPhim.fxml")
             );
             Parent root = loader.load();
-
             TimKiemPhimController popup = loader.getController();
             popup.setMainController(this);
-
             Stage stage = new Stage();
-
-            // ⭐ Giúp bỏ màu nền mặc định của Stage
             stage.initStyle(StageStyle.TRANSPARENT);
-
             Scene scene = new Scene(root);
-
-            // ⭐ Giúp bỏ nền trắng của Scene
             scene.setFill(Color.TRANSPARENT);
-
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
-
             stage.show();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -314,17 +348,14 @@ public class Phim_truycapController {
                 row.createCell(3).setCellValue(p.getDaoDien());
                 row.createCell(4).setCellValue(p.getThoiLuong());
 
-                // Ngày khởi chiếu (trong model bạn đang lưu dạng String)
                 if (p.getNgayKhoiChieu() != null) {
                     row.createCell(5).setCellValue(p.getNgayKhoiChieu());
                 } else {
                     row.createCell(5).setCellValue("");
                 }
-
                 row.createCell(6).setCellValue(p.getDoTuoiChoPhep());
             }
 
-            // Tự động chỉnh độ rộng cột cho đẹp
             for (int i = 0; i <= 6; i++) {
                 sheet.autoSizeColumn(i);
             }

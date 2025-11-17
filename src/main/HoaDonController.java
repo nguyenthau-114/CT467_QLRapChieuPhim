@@ -9,27 +9,20 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import ketnoi_truyxuat.DBConnection;
-
 import java.sql.*;
-
 import javafx.scene.layout.VBox;
-
 import dulieu.HoaDon;   // ⭐ MODEL MỚI
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.FileChooser;
-
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
 import java.io.FileOutputStream;
-
 import javafx.stage.StageStyle;
 
 public class HoaDonController {
@@ -97,6 +90,8 @@ public class HoaDonController {
     @FXML
     public void onTaiDuLieu() {
         dsHD.clear();
+        clearFields();
+        tableHD.getSelectionModel().clearSelection();
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery("SELECT * FROM hoadon ORDER BY mahoadon ASC")) {
@@ -126,7 +121,6 @@ public class HoaDonController {
         if (txtMaHD.getText().isEmpty()
             || txtSoLuong.getText().isEmpty()
             || dpNgayMua.getValue() == null
-            || txtTongTien.getText().isEmpty()
             || txtMaKH.getText().isEmpty()
             || txtMaCombo.getText().isEmpty()
             ) {
@@ -147,7 +141,7 @@ public class HoaDonController {
             ps.setString(1, txtMaHD.getText());
             ps.setInt(2, Integer.parseInt(txtSoLuong.getText()));
             ps.setDate(3, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(4, Double.parseDouble(txtTongTien.getText()));
+            ps.setDouble(4, java.sql.Types.DOUBLE);
             ps.setString(5, txtMaKH.getText());
             ps.setString(6, txtMaCombo.getText());
           
@@ -170,7 +164,6 @@ public class HoaDonController {
             showAlert("Thiếu thông tin", "Vui lòng chọn hóa đơn cần sửa!", AlertType.WARNING);
             return;
         }
-
         String ma = txtMaHD.getText().trim();
 
         if (!ma.equals(originalMaHD)) {
@@ -179,61 +172,61 @@ public class HoaDonController {
             return;
         }
 
+        Date ngayMuaMoi;
+        int soLuongMoi;
+        double tongTienMoi;
+
+        try {
+            ngayMuaMoi = Date.valueOf(dpNgayMua.getValue());
+            soLuongMoi = Integer.parseInt(txtSoLuong.getText().trim());
+            tongTienMoi = Double.parseDouble(txtTongTien.getText().trim());
+        } catch (Exception ex) {
+            showAlert("Dữ liệu không hợp lệ",
+                      "Ngày mua, số lượng hoặc tổng tiền không hợp lệ!", AlertType.ERROR);
+            return;
+        }
+        String maKHMoi = txtMaKH.getText().trim();
+        String maComboMoi = txtMaCombo.getText().trim();
+
+        boolean sameDate = (originalNgayMua == null && ngayMuaMoi == null)
+                           || (originalNgayMua != null && originalNgayMua.equals(ngayMuaMoi));
+
+        boolean khongThayDoi =
+                sameDate &&
+                soLuongMoi == originalSoLuong &&
+                tongTienMoi == originalTongTien &&
+                maKHMoi.equals(originalMaKH) &&
+                maComboMoi.equals(originalMaCombo);
+
+        if (khongThayDoi) {
+            showAlert("Không có thay đổi",
+                      "Bạn chưa thay đổi thông tin nào để cập nhật!", AlertType.INFORMATION);
+            return;
+        }
+        // ⭐ Hộp thoại xác nhận như cũ
         if (!showConfirmDialog("Xác nhận", "Bạn muốn cập nhật hóa đơn này?")) {
             return;
         }
-
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(
                      "UPDATE hoadon SET soluongcombo=?, ngaymua=?, tongtien=?, khachhang_makhachhang=?, bapnuoc_macombo=? WHERE mahoadon=?")) {
 
-            ps.setInt(1, Integer.parseInt(txtSoLuong.getText()));
-            ps.setDate(2, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(3, Double.parseDouble(txtTongTien.getText()));
-            ps.setString(4, txtMaKH.getText());
-            ps.setString(5, txtMaCombo.getText());
-      
+            ps.setInt(1, soLuongMoi);
+            ps.setDate(2, ngayMuaMoi);
+            ps.setDouble(3, tongTienMoi);              // 🔁 dùng đúng tổng tiền mới
+            ps.setString(4, maKHMoi);
+            ps.setString(5, maComboMoi);
             ps.setString(6, ma);
 
             ps.executeUpdate();
             showAlert("Thành công", "Đã cập nhật hóa đơn thành công!", AlertType.INFORMATION);
-
             onTaiDuLieu();
             clearFields();
-
         } catch (SQLException e) {
             showAlert("Lỗi cập nhật", e.getMessage(), AlertType.ERROR);
         }
     }
 
-    // ===================== XÓA ======================
-    @FXML
-    public void onXoa() {
-        String ma = txtMaHD.getText().trim();
-
-        if (ma.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng chọn hóa đơn cần xóa!", AlertType.WARNING);
-            return;
-        }
-
-        if (!showConfirmDialog("Xóa hóa đơn", "Bạn có chắc chắn muốn xóa hóa đơn này?"))
-            return;
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM hoadon WHERE mahoadon=?")) {
-
-            ps.setString(1, ma);
-            ps.executeUpdate();
-
-            showAlert("Thành công", "Đã xóa hóa đơn thành công!", AlertType.INFORMATION);
-
-            onTaiDuLieu();
-            clearFields();
-
-        } catch (SQLException e) {
-            showAlert("Lỗi xóa hóa đơn", e.getMessage(), AlertType.ERROR);
-        }
-    }
 
     // ===================== EXPORT EXCEL ======================
     @FXML
@@ -303,65 +296,6 @@ public class HoaDonController {
         tableHD.setItems(kq);
     }
 
-    // ===================== POPUP SEARCH ======================
-    @FXML
-    private void moTimKiemPopup() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/giaodien/TimKiemHoaDon.fxml")
-            );
-            Parent root = loader.load();
-
-            TimKiemHoaDonController popup = loader.getController();
-            popup.setMainController(this);
-
-            Stage stage = new Stage(StageStyle.TRANSPARENT);
-            Scene scene = new Scene(root);
-            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ===================== TÌM KIẾM NÂNG CAO ======================
-    public void timKiemNangCao(String maHD, String ngay, String sl, String tong,
-                               String maKH, String maCombo) {
-
-        ObservableList<HoaDon> kq = FXCollections.observableArrayList();
-
-        for (HoaDon hd : dsHD) {
-            boolean ok = true;
-
-            if (!maHD.isEmpty() && !hd.getMaHD().toLowerCase().contains(maHD.toLowerCase()))
-                ok = false;
-
-            if (!ngay.isEmpty() && !hd.getNgayMua().toString().equals(ngay))
-                ok = false;
-
-            if (!sl.isEmpty() && hd.getSoLuong() != Integer.parseInt(sl))
-                ok = false;
-
-            if (!tong.isEmpty() && hd.getTongTien() != Double.parseDouble(tong))
-                ok = false;
-
-            if (!maKH.isEmpty() && !hd.getMaKH().toLowerCase().contains(maKH.toLowerCase()))
-                ok = false;
-
-            if (!maCombo.isEmpty() && !hd.getMaCombo().toLowerCase().contains(maCombo.toLowerCase()))
-                ok = false;
-
-           
-
-            if (ok) kq.add(hd);
-        }
-
-        tableHD.setItems(kq);
-    }
 
     // ===================== TOOL ======================
     private void clearFields() {
@@ -371,6 +305,13 @@ public class HoaDonController {
         txtTongTien.clear();
         txtMaKH.clear();
         txtMaCombo.clear();
+        
+        originalMaHD = "";
+        originalMaKH = "";
+        originalMaCombo = "";
+        originalSoLuong = 0;
+        originalTongTien = 0;
+        originalNgayMua = null;
     }
 
     private void showAlert(String title, String msg, AlertType type) {

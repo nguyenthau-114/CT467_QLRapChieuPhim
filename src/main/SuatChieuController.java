@@ -35,6 +35,12 @@ public class SuatChieuController {
     @FXML private TableColumn<SuatChieu, Float> colGiaVe;
 
     private ObservableList<SuatChieu> dsSuatChieu = FXCollections.observableArrayList();
+        // Lưu bản gốc để kiểm tra sửa đổi
+    private String originalMaSuatChieu = "", originalMaPhim = "", originalMaPhong = "";
+    private Date originalNgayChieu = null;
+    private Time originalGioChieu = null;
+    private float originalGiaVe = 0f;
+
 
 
     // ======================== KHỞI TẠO ========================
@@ -58,16 +64,23 @@ public class SuatChieuController {
                 txtGiaVe.setText(String.valueOf(sc.getGiave()));
                 txtMaPhim.setText(sc.getMaphim());
                 txtMaPhong.setText(sc.getMaphong());
+                
+                originalMaSuatChieu = sc.getMasuatchieu();
+                originalNgayChieu   = sc.getNgaychieu();
+                originalGioChieu    = sc.getGiochieu();
+                originalGiaVe       = sc.getGiave();
+                originalMaPhim      = sc.getMaphim();
+                originalMaPhong     = sc.getMaphong();
             }
         });
-
-        
     }
 
     // ===================== TẢI DỮ LIỆU =====================
     @FXML
     public void taiLaiDuLieu() {
         dsSuatChieu.clear();
+        clearFields();
+        tableSuatChieu.getSelectionModel().clearSelection();
 
         try (Connection conn = DBConnection.getConnection()) {
 
@@ -87,12 +100,10 @@ public class SuatChieuController {
             }
 
             tableSuatChieu.setItems(dsSuatChieu);
-
         } catch (SQLException e) {
             showAlert("Lỗi tải dữ liệu", e.getMessage(), AlertType.ERROR);
         }
     }
-
 
     // ===================== THÊM SUẤT CHIẾU =====================
     @FXML
@@ -137,7 +148,6 @@ public class SuatChieuController {
 
             ResultSet rs = psCheck.executeQuery();
             rs.next();
-
             if (rs.getInt("trung") == 1) {
                 showAlert("⛔ Lịch trùng", "Phòng này đã có suất chiếu!", AlertType.WARNING);
                 return;
@@ -146,7 +156,6 @@ public class SuatChieuController {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO suatchieu (ngaychieu, giochieu, giave, phim_maphim, phongchieu_maphong) VALUES (?, ?, ?, ?, ?)"
             );
-
             ps.setDate(1, Date.valueOf(ngay));
             ps.setTime(2, gioNhap);
             ps.setFloat(3, Float.parseFloat(gia));
@@ -163,8 +172,6 @@ public class SuatChieuController {
             showAlert("Lỗi thêm suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
-
-
     // ===================== SỬA =====================
     @FXML
     public void suaSuatChieu() {
@@ -180,6 +187,19 @@ public class SuatChieuController {
             showAlert("Thiếu thông tin", "Chọn suất chiếu cần sửa!", AlertType.WARNING);
             return;
         }
+        
+        if (!ma.equals(originalMaSuatChieu)) {
+            showAlert("Không thể sửa mã suất chiếu",
+                      "Mã suất chiếu là định danh duy nhất, không thể thay đổi!",
+                      AlertType.WARNING);
+            txtMaSuatChieu.setText(originalMaSuatChieu);
+            return;
+        }
+        
+        if (ngay == null || gio.isEmpty() || gia.isEmpty() || phim.isEmpty() || phong.isEmpty()) {
+            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ!", AlertType.WARNING);
+            return;
+        }
 
         Time gioNhap;
         try {
@@ -189,107 +209,106 @@ public class SuatChieuController {
             return;
         }
 
+        
         // ⭐ KIỂM TRA GIỜ CHIẾU (08:00 - 23:30)
         Time gioMin = Time.valueOf("08:00:00");
         Time gioMax = Time.valueOf("23:30:00");
-
+        
         if (gioNhap.before(gioMin) || gioNhap.after(gioMax)) {
             showAlert("Giờ chiếu không hợp lệ!", "Chỉ cho phép 08:00 - 23:30", AlertType.ERROR);
             return;
         }
+        float giaFloat;
+        try {
+            giaFloat = Float.parseFloat(gia);
+        } catch (NumberFormatException ex) {
+            showAlert("Lỗi giá vé", "Giá vé phải là số!", AlertType.ERROR);
+            return;
+        }
+        boolean sameDate = (originalNgayChieu == null && ngay == null)
+                       || (originalNgayChieu != null && originalNgayChieu.equals(Date.valueOf(ngay)));
+        boolean sameTime = (originalGioChieu == null && gioNhap == null)
+                           || (originalGioChieu != null && originalGioChieu.equals(gioNhap));
 
+        boolean khongThayDoi =
+                sameDate &&
+                sameTime &&
+                originalGiaVe == giaFloat &&
+                originalMaPhim.equals(phim) &&
+                originalMaPhong.equals(phong);
+
+        if (khongThayDoi) {
+            showAlert("Không có thay đổi",
+                      "Bạn chưa thay đổi thông tin nào để cập nhật!",
+                      AlertType.INFORMATION);
+            return;
+        }
         try (Connection conn = DBConnection.getConnection()) {
-
             PreparedStatement ps = conn.prepareStatement(
                     "UPDATE suatchieu SET ngaychieu=?, giochieu=?, giave=?, phim_maphim=?, phongchieu_maphong=? WHERE masuatchieu=?"
             );
-
             ps.setDate(1, Date.valueOf(ngay));
             ps.setTime(2, gioNhap);
             ps.setFloat(3, Float.parseFloat(gia));
             ps.setString(4, phim);
             ps.setString(5, phong);
             ps.setString(6, ma);
-
             ps.executeUpdate();
-
             taiLaiDuLieu();
             clearFields();
             showAlert("🎉 Thành công", "Đã sửa suất chiếu!", AlertType.INFORMATION);
-
         } catch (SQLException e) {
             showAlert("Lỗi sửa suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
 
-
     // ===================== XÓA =====================
     @FXML
     public void xoaSuatChieu() {
-
         String ma = txtMaSuatChieu.getText().trim();
-
         if (ma.isEmpty()) {
             showAlert("Thiếu thông tin", "Chọn suất chiếu cần xóa!", AlertType.WARNING);
             return;
         }
-
         try (Connection conn = DBConnection.getConnection()) {
-
             PreparedStatement ps = conn.prepareStatement("DELETE FROM suatchieu WHERE masuatchieu=?");
             ps.setString(1, ma);
             ps.executeUpdate();
-
             taiLaiDuLieu();
             clearFields();
             showAlert("🗑️ Đã xóa", "Xóa suất chiếu thành công!", AlertType.INFORMATION);
-
         } catch (SQLException e) {
             showAlert("Lỗi xóa suất chiếu", e.getMessage(), AlertType.ERROR);
         }
     }
-
-
     // ===================== TÌM KIẾM NÂNG CAO =====================
     @FXML
     private void moTimKiemPopup() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/TimKiemNangCao.fxml"));
             Parent root = loader.load();
-
             TimKiemNangCaoController popupController = loader.getController();
             popupController.setMainController(this);
-
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Tìm kiếm suất chiếu");
             stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
     public void timKiemNangCao(String ma, LocalDate ngay, String phim, String phong, String trangthai) {
-
         dsSuatChieu.clear();
-
         try (Connection conn = DBConnection.getConnection()) {
-
             CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_suatchieu(?, ?, ?, ?)}");
-
             cs.setString(1, ma != null ? ma : "");
             cs.setDate(2, ngay != null ? Date.valueOf(ngay) : null);
             cs.setString(3, phim != null ? phim : "");
             cs.setString(4, phong != null ? phong : "");
-
             ResultSet rs = cs.executeQuery();
-
             while (rs.next()) {
-
                 dsSuatChieu.add(new SuatChieu(
                         rs.getString("masuatchieu"),
                         rs.getDate("ngaychieu"),
@@ -299,14 +318,11 @@ public class SuatChieuController {
                         rs.getString("phongchieu_maphong")
                 ));
             }
-
             tableSuatChieu.setItems(dsSuatChieu);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     // ===================== XUẤT EXCEL =====================
     @FXML
@@ -315,22 +331,17 @@ public class SuatChieuController {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Xuất Excel");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-
             File file = fileChooser.showSaveDialog(null);
             if (file == null) return;
-
             Workbook wb = new XSSFWorkbook();
             Sheet sheet = wb.createSheet("SuatChieu");
-
             Row header = sheet.createRow(0);
-
             header.createCell(0).setCellValue("Mã suất chiếu");
             header.createCell(1).setCellValue("Ngày chiếu");
             header.createCell(2).setCellValue("Giờ chiếu");
             header.createCell(3).setCellValue("Giá vé");
             header.createCell(4).setCellValue("Mã phim");
             header.createCell(5).setCellValue("Mã phòng");
-
             int rowIndex = 1;
             for (SuatChieu sc : tableSuatChieu.getItems()) {
                 Row row = sheet.createRow(rowIndex++);
@@ -341,14 +352,11 @@ public class SuatChieuController {
                 row.createCell(4).setCellValue(sc.getMaphim());
                 row.createCell(5).setCellValue(sc.getMaphong());
             }
-
             FileOutputStream out = new FileOutputStream(file);
             wb.write(out);
             out.close();
             wb.close();
-
             showAlert("Thành công", "Xuất Excel thành công!", Alert.AlertType.INFORMATION);
-
         } catch (Exception e) {
             showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -363,6 +371,8 @@ public class SuatChieuController {
         txtGiaVe.clear();
         txtMaPhim.clear();
         txtMaPhong.clear();
+        
+        
     }
 
     private void showAlert(String title, String message, AlertType type) {

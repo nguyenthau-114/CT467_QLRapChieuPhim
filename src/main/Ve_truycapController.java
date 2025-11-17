@@ -35,6 +35,15 @@ public class Ve_truycapController {
     @FXML private TableColumn<ve, Double> colGiaVe;
 
     private ObservableList<ve> danhSachVe = FXCollections.observableArrayList();
+    // ⭐ Lưu dữ liệu gốc khi chọn dòng
+    private String originalMaVe = "";
+    private Date   originalNgayDat = null;
+    private double originalGiaVe = 0;
+    private String originalTrangThai = "";
+    private String originalMaSuatChieu = "";
+    private String originalMaKhachHang = "";
+    private String originalMaGhe = "";
+
 
     // ================= KHỞI TẠO =================
     @FXML
@@ -58,8 +67,17 @@ public class Ve_truycapController {
                 tfMaSuatChieu.setText(selected.getSuatchieu_masuatchieu());
                 tfMaKhachHang.setText(selected.getKhachhang_makhachhang());
                 tfMaGhe.setText(selected.getGhe_maghe());
+                
+                originalMaVe        = selected.getMave();
+                originalNgayDat     = selected.getNgaydat();
+                originalGiaVe       = selected.getGiave();
+                originalTrangThai   = selected.getTrangthai();
+                originalMaSuatChieu = selected.getSuatchieu_masuatchieu();
+                originalMaKhachHang = selected.getKhachhang_makhachhang();
+                originalMaGhe       = selected.getGhe_maghe();
             }
         });
+        
 
         tableVe.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -74,6 +92,8 @@ public class Ve_truycapController {
     @FXML
     private void taiDuLieu() {
         danhSachVe.clear();
+        clearForm();
+        tableVe.getSelectionModel().clearSelection();
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM ve")) {
@@ -119,7 +139,7 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
-            showAlert("Thành công", "Đã thêm vé thành công!" + Alert.AlertType.INFORMATION);
+            showAlert("Thành công", "Đã thêm vé thành công!");
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể thêm vé:\n" + e.getMessage());
@@ -135,6 +155,50 @@ public class Ve_truycapController {
             return;
         }
 
+        // ⭐ KHÔNG CHO SỬA MÃ VÉ
+        String maForm = tfMaVe.getText().trim();
+        if (!maForm.equals(originalMaVe)) {
+            showAlert("Không thể sửa mã vé",
+                      "Mã vé là định danh duy nhất, không thể thay đổi");
+            tfMaVe.setText(originalMaVe);  // trả lại mã cũ
+            return;
+        }
+
+        // ⭐ LẤY GIÁ TRỊ TRÊN FORM ĐỂ SO SÁNH
+        Date ngayForm;
+        double giaForm;
+        try {
+            ngayForm = Date.valueOf(dpNgayDat.getValue());
+            giaForm  = Double.parseDouble(tfGiaVe.getText().trim());
+        } catch (Exception ex) {
+            showAlert("Dữ liệu không hợp lệ",
+                      "Ngày đặt hoặc Giá vé không hợp lệ!");
+            return;
+        }
+
+        String trangForm = tfTrangThai.getText().trim();
+        String maSC      = tfMaSuatChieu.getText().trim();
+        String maKH      = tfMaKhachHang.getText().trim();
+        String maGhe     = tfMaGhe.getText().trim();
+
+        boolean sameDate = (originalNgayDat == null && ngayForm == null)
+                           || (originalNgayDat != null && originalNgayDat.equals(ngayForm));
+
+        boolean khongThayDoi =
+                sameDate &&
+                giaForm == originalGiaVe &&
+                trangForm.equals(originalTrangThai) &&
+                maSC.equals(originalMaSuatChieu) &&
+                maKH.equals(originalMaKhachHang) &&
+                maGhe.equals(originalMaGhe);
+
+        if (khongThayDoi) {
+            showAlert("Không có thay đổi",
+                      "Bạn chưa thay đổi thông tin nào để cập nhật!");
+            return;
+        }
+
+        // ⭐ ĐOẠN NÀY GIỮ NGUYÊN LOGIC CŨ
         String sql = "UPDATE ve SET ngaydat=?, giave=?, trangthai=?, suatchieu_masuatchieu=?, khachhang_makhachhang=?, ghe_maghe=? WHERE mave=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -150,7 +214,7 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
-            showAlert("Thành công", "Đã cập nhật vé thành công!" + Alert.AlertType.INFORMATION);
+            showAlert("Thành công", "Đã cập nhật vé thành công!");
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể sửa vé:\n" + e.getMessage());
@@ -174,7 +238,8 @@ public class Ve_truycapController {
             ps.executeUpdate();
             taiDuLieu();
             clearForm();
-            showAlert("Thành công", "Đã xóa vé thành công!" + Alert.AlertType.INFORMATION);
+            showAlert("Thành công", "Đã thêm xóa thành công!");
+
 
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể xóa vé:\n" + e.getMessage());
@@ -246,28 +311,20 @@ public class Ve_truycapController {
 
         for (ve v : danhSachVe) {
             boolean ok = true;
-
             if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
                 ok = false;
-
             if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
                 ok = false;
-
             if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
                 ok = false;
-
             if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
                 ok = false;
-
             if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
                 ok = false;
-
             if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
                 ok = false;
-
             if (ok) ketQua.add(v);
         }
-
         tableVe.setItems(ketQua);
     }
 
@@ -306,6 +363,14 @@ public class Ve_truycapController {
         tfMaKhachHang.clear();
         tfMaGhe.clear();
         dpNgayDat.setValue(null);
+        
+        originalMaVe = "";
+        originalNgayDat = null;
+        originalGiaVe = 0;
+        originalTrangThai = "";
+        originalMaSuatChieu = "";
+        originalMaKhachHang = "";
+        originalMaGhe = "";
     }
 
     @FXML

@@ -41,13 +41,6 @@
 
                 <padding><Insets bottom="15" /></padding>
 
-                <!-- Thanh nút -->
-                <HBox spacing="10">
-                    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
-                    <Pane HBox.hgrow="ALWAYS" />
-                    <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e;                                    -fx-text-fill:white;                                    -fx-font-weight:bold;                                    -fx-background-radius:6;" text="📤 Xuất Excel" />
-                </HBox>
-
                 <!-- FORM -->
                 <AnchorPane prefHeight="184">
                     <children>

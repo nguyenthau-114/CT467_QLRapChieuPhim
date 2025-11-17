@@ -24,7 +24,7 @@ import javafx.stage.StageStyle;
 
 
 public class KhachhangController {
-    
+   
 
     @FXML private TextField tfMaKH, tfTenKH, tfSDT, tfEmail, tfTimKiem;
     @FXML private TableView<khachhang> tableKH;
@@ -71,6 +71,8 @@ public void initialize() {
     @FXML
 public void onTaiDuLieu() {
     dsKH.clear();
+    clearFields();
+    tableKH.getSelectionModel().clearSelection();
     try (Connection conn = DBConnection.getConnection();
          Statement st = conn.createStatement();
          ResultSet rs = st.executeQuery("SELECT * FROM khachhang ORDER BY makhachhang ASC")) {
@@ -85,7 +87,9 @@ public void onTaiDuLieu() {
 
             // ⭐ LẤY TỔNG VÉ THẬT TỪ BẢNG VE
             try (PreparedStatement ps = conn.prepareStatement(
-                    "SELECT COUNT(*) AS tongve FROM ve WHERE khachhang_makhachhang = ?")) {
+                    "SELECT COUNT(*) AS tongve FROM ve " +
+    "WHERE khachhang_makhachhang = ? " +
+    "AND trangthai IN ( 'Đã sử dụng')")) {
 
                 ps.setString(1, kh.getMaKhachHang());
                 ResultSet rs2 = ps.executeQuery();
