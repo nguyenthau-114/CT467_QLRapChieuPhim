@@ -8,19 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
-
-
-import java.sql.*;
-import javafx.scene.layout.VBox;
-import ketnoi_truyxuat.DBConnection;
-import main.ThongkeController;
 
 public class LoginController {
 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    @FXML private Button loginButton;
 
     // ============================================
     //  XỬ LÝ KHI NHẤN NÚT ĐĂNG NHẬP
@@ -46,7 +38,7 @@ public class LoginController {
             return;
         }
 
-        // ===== 2️⃣ Đăng nhập ADMIN (Fix cứng) =====
+        // ===== 2️⃣ CHỈ CHO PHÉP ADMIN ĐĂNG NHẬP =====
         if (email.equals("admin@gmail.com") && password.equals("12345678")) {
 
             // 🔔 THÔNG BÁO TRƯỚC
@@ -54,38 +46,11 @@ public class LoginController {
 
             // ➜ CHUYỂN TRANG
             chuyenTrangThongKe(event, "Quản trị viên");
-
             return;
         }
 
-        // ===== 3️⃣ Kiểm tra tài khoản trong database =====
-        String sql = "SELECT tennhanvien FROM nhanvien WHERE email = ? AND matkhau = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, email);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String tenNV = rs.getString("tennhanvien");
-
-                // 🔔 Thông báo trước
-                showAlert("Thành công", "Chào mừng " + tenNV + "!");
-
-                // ➜ CHUYỂN TRANG
-                chuyenTrangThongKe(event, tenNV);
-
-            } else {
-                showAlert("Lỗi", "Sai email hoặc mật khẩu!");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Lỗi", "Không thể kết nối CSDL!");
-        }
+        // ❌ Nếu không phải admin → Sai tài khoản
+        showAlert("Lỗi", "Sai email hoặc mật khẩu!");
     }
 
     // ==================================================
@@ -106,10 +71,7 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-}
-
+    }
 
     // ==================================================
     //  HÀM HIỆN ALERT
@@ -119,44 +81,6 @@ public class LoginController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait(); // Đợi bấm OK xong mới chạy tiếp chương trình
+        alert.showAndWait(); 
     }
-    /*@FXML private Label statusLabel;
-
-    @FXML private VBox menuDuLieu;
-
-    @FXML
-    private void hienMenuDuLieu() {
-        menuDuLieu.setVisible(true);
-        menuDuLieu.setManaged(true);
-    }
-
-    @FXML
-    private void anMenuDuLieu() {
-        new Thread(() -> {
-            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
-            javafx.application.Platform.runLater(() -> {
-                if (!menuDuLieu.isHover()) {
-                    menuDuLieu.setVisible(false);
-                    menuDuLieu.setManaged(false);
-                }
-            });
-        }).start();
-    }
-
-    @FXML
-    private void giuMenuKhiHover() {
-        menuDuLieu.setVisible(true);
-        menuDuLieu.setManaged(true);
-    }
-
-    @FXML
-    private void anMenuKhiRoi() {
-        menuDuLieu.setVisible(false);
-        menuDuLieu.setManaged(false);
-    }
-    @FXML
-    private void dangXuat() {
-        statusLabel.setText("📌 Bạn đã đăng xuất.");
-    }*/
 }

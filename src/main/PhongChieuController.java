@@ -82,6 +82,8 @@ public class PhongChieuController {
     @FXML
     public void taiDuLieu() {
         dsPhong.clear();
+        clearFields();
+        tablePhong.getSelectionModel().clearSelection();
         String sql = "SELECT maphong, tenphong, soghe, loaiphong FROM phongchieu ORDER BY maphong ASC";
         try (Connection conn = DBConnection.getConnection();
              Statement st = conn.createStatement();
