@@ -309,23 +309,41 @@ public class Ve_truycapController {
 
         ObservableList<ve> ketQua = FXCollections.observableArrayList();
 
-        for (ve v : danhSachVe) {
-            boolean ok = true;
-            if (!maVe.isEmpty() && !v.getMave().toLowerCase().contains(maVe.toLowerCase()))
-                ok = false;
-            if (!trangThai.isEmpty() && !v.getTrangthai().toLowerCase().contains(trangThai.toLowerCase()))
-                ok = false;
-            if (!maSC.isEmpty() && !v.getSuatchieu_masuatchieu().toLowerCase().contains(maSC.toLowerCase()))
-                ok = false;
-            if (!maKH.isEmpty() && !v.getKhachhang_makhachhang().toLowerCase().contains(maKH.toLowerCase()))
-                ok = false;
-            if (!maGhe.isEmpty() && !v.getGhe_maghe().toLowerCase().contains(maGhe.toLowerCase()))
-                ok = false;
-            if (!ngayDat.isEmpty() && !v.getNgaydat().toString().equals(ngayDat))
-                ok = false;
-            if (ok) ketQua.add(v);
+        try (Connection conn = DBConnection.getConnection()) {
+
+            CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_ve(?, ?, ?, ?, ?, ?)}");
+
+            cs.setString(1, maVe != null ? maVe : "");
+
+            if (ngayDat != null && !ngayDat.isEmpty())
+                cs.setDate(2, Date.valueOf(ngayDat));
+            else
+                cs.setNull(2, Types.DATE);
+
+            cs.setString(3, trangThai != null ? trangThai : "");
+            cs.setString(4, maSC != null ? maSC : "");
+            cs.setString(5, maKH != null ? maKH : "");
+            cs.setString(6, maGhe != null ? maGhe : "");
+
+            ResultSet rs = cs.executeQuery();
+
+            while (rs.next()) {
+                ketQua.add(new ve(
+                        rs.getString("mave"),
+                        rs.getDate("ngaydat"),
+                        rs.getDouble("giave"),
+                        rs.getString("trangthai"),
+                        rs.getString("suatchieu_masuatchieu"),
+                        rs.getString("khachhang_makhachhang"),
+                        rs.getString("ghe_maghe")
+                ));
+            }
+
+            tableVe.setItems(ketQua);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        tableVe.setItems(ketQua);
     }
 
     // ================= POPUP TÌM KIẾM =================

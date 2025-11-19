@@ -396,28 +396,47 @@ private void moTimKiemPopup() {
         }
     }
 
-    public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
-        ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
-        for (PhongChieu p : dsPhong) {
-            boolean ok = true;
-            if (!ma.isEmpty() && !p.getMaphong().toLowerCase().contains(ma.toLowerCase()))
-                ok = false;
-            if (!ten.isEmpty() && !p.getTenphong().toLowerCase().contains(ten.toLowerCase()))
-                ok = false;
-            if (!loai.isEmpty() && !p.getLoaiphong().toLowerCase().contains(loai.toLowerCase()))
-                ok = false;
-            // số ghế >= nhập
-            if (!soGheStr.isEmpty()) {
-                try {
-                    int minGhe = Integer.parseInt(soGheStr);
-                    if (p.getSoghe() < minGhe) ok = false;
-                } catch (NumberFormatException e) {
+            public void timKiemNangCao(String ma, String ten, String soGheStr, String loai) {
+            ObservableList<PhongChieu> ketQua = FXCollections.observableArrayList();
+
+            try (Connection conn = DBConnection.getConnection()) {
+
+                CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_phong(?, ?, ?, ?)}");
+
+                cs.setString(1, ma != null ? ma : "");
+                cs.setString(2, ten != null ? ten : "");
+
+                // xử lý số ghế
+                if (soGheStr != null && !soGheStr.isEmpty()) {
+                    try {
+                        cs.setInt(3, Integer.parseInt(soGheStr));
+                    } catch (Exception e) {
+                        cs.setNull(3, Types.INTEGER);
+                    }
+                } else {
+                    cs.setNull(3, Types.INTEGER);
                 }
+
+                cs.setString(4, loai != null ? loai : "");
+
+                ResultSet rs = cs.executeQuery();
+
+                while (rs.next()) {
+                    ketQua.add(new PhongChieu(
+                            rs.getString("maphong"),
+                            rs.getString("tenphong"),
+                            rs.getInt("soghe"),
+                            rs.getString("loaiphong")
+                    ));
+                }
+
+                tablePhong.setItems(ketQua);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (ok) ketQua.add(p);
         }
-        tablePhong.setItems(ketQua);
-    }
+
 
 
 }

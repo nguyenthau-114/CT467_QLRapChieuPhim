@@ -1,5 +1,6 @@
 package main;
 
+import ketnoi_truyxuat.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import dulieu.TheLoaiItem;
+import java.sql.*;
 import dulieu.phim;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -373,37 +375,48 @@ public class Phim_truycapController {
             showAlert("Lỗi", "Không thể xuất Excel: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
-
-
-
     public void timKiemNangCao(String ma, String ten, String theloai, String daodien, LocalDate ngayKC) {
+    ObservableList<phim> ketQua = FXCollections.observableArrayList();
 
-        ObservableList<phim> ketQua = FXCollections.observableArrayList();
+    try (Connection conn = DBConnection.getConnection()) {
 
-        for (phim p : dao.getAllPhim()) {
-            boolean ok = true;
+        CallableStatement cs = conn.prepareCall("{CALL sp_timkiem_phim(?, ?, ?, ?, ?, ?)}");
 
-            if (!ma.isEmpty() && !p.getMaPhim().toLowerCase().contains(ma.toLowerCase()))
-                ok = false;
+        cs.setString(1, ma != null ? ma : "");
+        cs.setString(2, ten != null ? ten : "");
+        cs.setString(3, theloai != null ? theloai : "");
+        cs.setString(4, daodien != null ? daodien : "");
 
-            if (!ten.isEmpty() && !p.getTenPhim().toLowerCase().contains(ten.toLowerCase()))
-                ok = false;
+        if (ngayKC != null)
+            cs.setDate(5, Date.valueOf(ngayKC));
+        else
+            cs.setNull(5, Types.DATE);
 
-            if (!theloai.isEmpty() && !p.getTheLoai().toLowerCase().contains(theloai.toLowerCase()))
-                ok = false;
+        cs.setNull(6, Types.INTEGER); // độ tuổi không dùng
 
-            if (!daodien.isEmpty() && !p.getDaoDien().toLowerCase().contains(daodien.toLowerCase()))
-                ok = false;
+        ResultSet rs = cs.executeQuery();
 
-            if (ngayKC != null && (p.getNgayKhoiChieu() == null ||
-                    !p.getNgayKhoiChieu().equals(ngayKC.toString())))
-                ok = false;
-
-            if (ok) ketQua.add(p);
+        while (rs.next()) {
+            ketQua.add(new phim(
+                    rs.getString("maPhim"),
+                    rs.getString("tenPhim"),
+                    rs.getString("theLoai"),
+                    rs.getString("daoDien"),
+                    rs.getInt("thoiLuong"),
+                    rs.getString("ngayKhoiChieu"),
+                    rs.getInt("doTuoiChoPhep")
+            ));
         }
 
         tablePhim.setItems(ketQua);
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
+
+
 
    
  
