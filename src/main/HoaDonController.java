@@ -117,45 +117,46 @@ public class HoaDonController {
 
     // ===================== THÊM ======================
     @FXML
-    public void onThem() {
-        if (txtMaHD.getText().isEmpty()
-            || txtSoLuong.getText().isEmpty()
-            || dpNgayMua.getValue() == null
-            || txtMaKH.getText().isEmpty()
-            || txtMaCombo.getText().isEmpty()
-            ) {
+public void onThem() {
+    if (txtSoLuong.getText().isEmpty()
+        || dpNgayMua.getValue() == null
+        || txtMaKH.getText().isEmpty()
+        || txtMaCombo.getText().isEmpty()
+        || txtTongTien.getText().isEmpty()
+    ) {
 
-            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
-            return;
-        }
-
-        if (!showConfirmDialog("Xác nhận thêm hóa đơn", "Bạn có chắc muốn thêm không?")) {
-            clearFields();
-            return;
-        }
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "INSERT INTO hoadon VALUES (?,?,?,?,?,?)")) {
-
-            ps.setString(1, txtMaHD.getText());
-            ps.setInt(2, Integer.parseInt(txtSoLuong.getText()));
-            ps.setDate(3, Date.valueOf(dpNgayMua.getValue()));
-            ps.setDouble(4, java.sql.Types.DOUBLE);
-            ps.setString(5, txtMaKH.getText());
-            ps.setString(6, txtMaCombo.getText());
-          
-
-            ps.executeUpdate();
-
-            showAlert("Thành công", "Đã thêm hóa đơn thành công!", AlertType.INFORMATION);
-            onTaiDuLieu();
-            clearFields();
-
-        } catch (SQLException e) {
-            showAlert("Lỗi thêm hóa đơn", e.getMessage(), AlertType.ERROR);
-        }
+        showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", AlertType.WARNING);
+        return;
     }
+
+    if (!showConfirmDialog("Xác nhận thêm hóa đơn", "Bạn có chắc muốn thêm không?")) {
+        clearFields();
+        return;
+    }
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(
+             "INSERT INTO hoadon (soluongcombo, ngaymua, tongtien, khachhang_makhachhang, bapnuoc_macombo) "
+             + "VALUES (?,?,?,?,?)"
+         )) {
+
+        ps.setInt(1, Integer.parseInt(txtSoLuong.getText()));
+        ps.setDate(2, Date.valueOf(dpNgayMua.getValue()));
+        ps.setDouble(3, Double.parseDouble(txtTongTien.getText()));
+        ps.setString(4, txtMaKH.getText().trim());
+        ps.setString(5, txtMaCombo.getText().trim());
+
+        ps.executeUpdate();
+
+        showAlert("Thành công", "Đã thêm hóa đơn thành công!", AlertType.INFORMATION);
+        onTaiDuLieu();   // load lại bảng để thấy mã HD mới sinh
+        clearFields();
+
+    } catch (SQLException e) {
+        showAlert("Lỗi thêm hóa đơn", e.getMessage(), AlertType.ERROR);
+    }
+}
+
 
     // ===================== SỬA ======================
     @FXML

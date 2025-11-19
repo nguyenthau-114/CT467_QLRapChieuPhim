@@ -111,41 +111,47 @@ public void onTaiDuLieu() {
 
     // ---------------- THÊM ----------------
     @FXML
-    public void onThem() {
-        String maKH = tfMaKH.getText().trim();
-        String tenKH = tfTenKH.getText().trim();
-        String sdt = tfSDT.getText().trim();
-        String email = tfEmail.getText().trim();
+public void onThem() {
+    String tenKH = tfTenKH.getText().trim();
+    String sdt = tfSDT.getText().trim();
+    String email = tfEmail.getText().trim();
 
-        if (maKH.isEmpty() || tenKH.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
-            showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Thêm khách hàng mới?", ButtonType.YES, ButtonType.NO);
-        confirm.setHeaderText(null);
-        confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                try (Connection conn = DBConnection.getConnection();
-                     PreparedStatement ps = conn.prepareStatement(
-                             "INSERT INTO khachhang (makhachhang, tenkhachhang, sdt, email) VALUES (?, ?, ?, ?)")) {
-
-                    ps.setString(1, maKH);
-                    ps.setString(2, tenKH);
-                    ps.setString(3, sdt);
-                    ps.setString(4, email);
-                    ps.executeUpdate();
-
-                    onTaiDuLieu();
-                    clearFields();
-                    showAlert("Thành công", "Đã thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
-
-                } catch (SQLException e) {
-                    showAlert("Lỗi thêm khách hàng", e.getMessage(), Alert.AlertType.ERROR);
-                }
-            }
-        });
+    if (tenKH.isEmpty() || sdt.isEmpty() || email.isEmpty()) {
+        showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!", Alert.AlertType.WARNING);
+        return;
     }
+
+    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+            "Thêm khách hàng mới?",
+            ButtonType.YES, ButtonType.NO);
+    confirm.setHeaderText(null);
+
+    confirm.showAndWait().ifPresent(response -> {
+        if (response == ButtonType.YES) {
+
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(
+                         "INSERT INTO khachhang (tenkhachhang, sdt, email) VALUES (?, ?, ?)"
+                 )) {
+
+                ps.setString(1, tenKH);
+                ps.setString(2, sdt);
+                ps.setString(3, email);
+
+                ps.executeUpdate();
+
+                onTaiDuLieu();
+                clearFields();
+
+                showAlert("Thành công", "Đã thêm khách hàng thành công!", Alert.AlertType.INFORMATION);
+
+            } catch (SQLException e) {
+                showAlert("Lỗi thêm khách hàng", e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
+    });
+}
+
 
     // ---------------- SỬA ----------------
     @FXML

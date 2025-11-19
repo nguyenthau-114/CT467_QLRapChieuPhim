@@ -38,7 +38,14 @@
 
             <!-- MAIN CONTENT – GIỐNG 100% NHANVIEN -->
             <VBox fillWidth="true" spacing="0" styleClass="main-content" VBox.vgrow="ALWAYS">
+                <HBox spacing="10">
+    
+                <!-- Đẩy nút Excel sang phải -->
+                <Pane HBox.hgrow="ALWAYS" />
 
+                <!-- Nút bên phải -->
+                <Button onAction="#xuatExcel" style="-fx-background-color:#22c55e;                    -fx-text-fill:white;                    -fx-font-weight:bold;                    -fx-background-radius:6;" text="📤 Xuất Excel" />
+            </HBox>
                 <padding><Insets bottom="15" /></padding>
 
                 <!-- FORM -->

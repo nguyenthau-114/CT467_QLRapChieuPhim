@@ -118,33 +118,44 @@ public class Ve_truycapController {
 
     // ================= THÊM =================
     @FXML
-    private void onThem() {
-        if (tfMaVe.getText().isEmpty()) {
-            showAlert("Thông báo", "Vui lòng nhập mã vé!");
-            return;
-        }
+private void onThem() {
 
-        String sql = "INSERT INTO ve (mave, ngaydat, giave, trangthai, suatchieu_masuatchieu, khachhang_makhachhang, ghe_maghe) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    if (dpNgayDat.getValue() == null ||
+        tfGiaVe.getText().isEmpty() ||
+        tfTrangThai.getText().isEmpty() ||
+        tfMaSuatChieu.getText().isEmpty() ||
+        tfMaKhachHang.getText().isEmpty() ||
+        tfMaGhe.getText().isEmpty()) {
 
-            ps.setString(1, tfMaVe.getText());
-            ps.setDate(2, Date.valueOf(dpNgayDat.getValue()));
-            ps.setDouble(3, Double.parseDouble(tfGiaVe.getText()));
-            ps.setString(4, tfTrangThai.getText());
-            ps.setString(5, tfMaSuatChieu.getText());
-            ps.setString(6, tfMaKhachHang.getText());
-            ps.setString(7, tfMaGhe.getText());
-
-            ps.executeUpdate();
-            taiDuLieu();
-            clearForm();
-            showAlert("Thành công", "Đã thêm vé thành công!");
-
-        } catch (SQLException e) {
-            showAlert("Lỗi", "Không thể thêm vé:\n" + e.getMessage());
-        }
+        showAlert("Thiếu thông tin", "Vui lòng nhập đầy đủ các trường!");
+        return;
     }
+
+    String sql = "INSERT INTO ve (ngaydat, giave, trangthai, suatchieu_masuatchieu, khachhang_makhachhang, ghe_maghe) " +
+                 "VALUES (?, ?, ?, ?, ?, ?)";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setDate(1, Date.valueOf(dpNgayDat.getValue()));
+        ps.setDouble(2, Double.parseDouble(tfGiaVe.getText()));
+        ps.setString(3, tfTrangThai.getText());
+        ps.setString(4, tfMaSuatChieu.getText());
+        ps.setString(5, tfMaKhachHang.getText());
+        ps.setString(6, tfMaGhe.getText());
+
+        ps.executeUpdate();
+
+        taiDuLieu();
+        clearForm();
+
+        showAlert("Thành công", "Đã thêm vé thành công!");
+
+    } catch (SQLException e) {
+        showAlert("Lỗi", "Không thể thêm vé:\n" + e.getMessage());
+    }
+}
+
 
     // ================= SỬA =================
     @FXML
@@ -410,4 +421,67 @@ public class Ve_truycapController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    @FXML
+private void moChonGhe() {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/giaodien/ChonGhe.fxml"));
+        Parent root = loader.load();
+
+        ChonGheController controller = loader.getController();
+        controller.setData(tfMaSuatChieu.getText().trim(), this);
+
+        Stage popup = new Stage();
+        popup.setTitle("Chọn ghế");
+        popup.setResizable(false);
+        popup.setScene(new Scene(root));
+        popup.show();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+public void setGheDuocChon(String maGhe, boolean isVIP) {
+    tfMaGhe.setText(maGhe);
+
+    try (Connection conn = DBConnection.getConnection()) {
+
+        // Lấy giá gốc từ suất chiếu
+        PreparedStatement ps = conn.prepareStatement(
+            "SELECT giave, phongchieu_maphong FROM suatchieu WHERE masuatchieu=?"
+        );
+        ps.setString(1, tfMaSuatChieu.getText());
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) return;
+
+        double giaGoc = rs.getDouble("giave");
+        String maPhong = rs.getString("phongchieu_maphong");
+
+        // Lấy loại phòng
+        ps = conn.prepareStatement(
+            "SELECT loaiphong FROM phongchieu WHERE maphong=?"
+        );
+        ps.setString(1, maPhong);
+        ResultSet rs2 = ps.executeQuery();
+
+        if (!rs2.next()) return;
+
+        String loaiPhong = rs2.getString(1);
+
+        double giaCuoi = giaGoc;
+
+        // Nếu là phòng 2D / 3D và ghế VIP
+        if (!loaiPhong.equalsIgnoreCase("IMAX") && isVIP) {
+            giaCuoi += 10000;
+        }
+
+        // Set vào textbox giá vé
+        tfGiaVe.setText(String.valueOf(giaCuoi));
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+
 }

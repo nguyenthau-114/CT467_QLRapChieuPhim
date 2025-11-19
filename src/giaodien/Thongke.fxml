@@ -39,12 +39,7 @@
             <VBox spacing="15" styleClass="main-content" VBox.vgrow="ALWAYS">
                 <padding><Insets bottom="20" left="20" right="20" top="20" /></padding>
 
-                <!-- Nút hành động -->
-                <HBox spacing="8">
-                    <Button fx:id="btnBaoCao" style="-fx-background-color:#f97316; -fx-text-fill:white;                                    
-                        -fx-background-radius:8; -fx-font-weight:bold;" text="Báo Cáo"
-                    />
-                </HBox>
+                
 
 <!-- ======== THỐNG KÊ TỔNG QUAN ======== -->
 <!-- ======== KHỐI 2 CỘT: TRÁI = 4 BOX, PHẢI = DOANH THU ======== -->

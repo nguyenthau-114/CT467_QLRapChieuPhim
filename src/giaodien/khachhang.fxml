@@ -43,9 +43,7 @@
                 </padding>
 
 <HBox spacing="10">
-    <!-- Nút tìm kiếm bên trái -->
-    <Button onAction="#moTimKiemPopup" styleClass="search-btn" text="🔍 Tìm kiếm" />
-
+    
     <!-- Đẩy nút Excel sang phải -->
     <Pane HBox.hgrow="ALWAYS" />
 

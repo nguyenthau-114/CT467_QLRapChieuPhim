@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/18"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.ChonGheController"
+      style="-fx-padding:15; -fx-background-color:white;">
+
+    <Label text="Sơ đồ ghế" style="-fx-font-size:18; -fx-font-weight:bold;" />
+    <!-- Khung màn hình -->
+    <HBox alignment="CENTER">
+        <Label text="MÀN HÌNH"
+               style="-fx-font-size:20; -fx-font-weight:bold;
+                      -fx-padding:20 60;
+                      -fx-border-color:black;
+                      -fx-background-color:#e2e8f0;
+                      -fx-border-width:2;" />
+    </HBox>
+    <Pane prefHeight="40"/>
+    <GridPane fx:id="gridGhe" hgap="5" vgap="5"
+              style="-fx-background-color:#f1f5f9; -fx-padding:10;
+                     -fx-border-color:#cbd5e1; -fx-border-radius:5;">
+    </GridPane>
+    <HBox spacing="20" alignment="CENTER">
+    <HBox spacing="5">
+        <Pane prefWidth="20" prefHeight="20" style="-fx-background-color:#ef4444; -fx-border-color:black;" />
+        <Label text="Ghế thường" />
+    </HBox>
+
+    <HBox spacing="5">
+        <Pane prefWidth="20" prefHeight="20" style="-fx-background-color:#b91c1c; -fx-border-color:black;" />
+        <Label text="Ghế VIP" />
+    </HBox>
+
+    <HBox spacing="5">
+        <Pane prefWidth="20" prefHeight="20" style="-fx-background-color:#94a3b8; -fx-border-color:black;" />
+        <Label text="Đã đặt" />
+    </HBox>
+</HBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+    <Button fx:id="btnHuy" text="Hủy" onAction="#huyChon"
+            style="-fx-background-color:#ef4444; -fx-text-fill:white;"/>
+
+    <Button fx:id="btnXacNhan" text="Xác nhận" onAction="#xacNhan"
+            style="-fx-background-color:#22c55e; -fx-text-fill:white;"/>
+</HBox>
+
+
+</VBox>

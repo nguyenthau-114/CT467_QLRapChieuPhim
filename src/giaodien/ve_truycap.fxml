@@ -106,8 +106,17 @@
                                    GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                         <Label text="Mã ghế:" GridPane.rowIndex="3" />
-                        <TextField fx:id="tfMaGhe" promptText="VD: PC01_A01"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <children>
+                                    <TextField fx:id="tfMaGhe" prefWidth="150"
+                                               promptText="VD: PC01_A01" />
+
+                                    <Button text="Chọn ghế"
+                                            onAction="#moChonGhe"
+                                            style="-fx-background-color:#ef4444; -fx-text-fill:white; -fx-background-radius:6;" />
+                                </children>
+                            </HBox>
+
                     </children>
                 </GridPane>
 
@@ -121,6 +130,8 @@
                         <Button fx:id="btnSua" onAction="#onSua" styleClass="action-btn" text="Sửa" />
                         <Button fx:id="btnXoa" onAction="#onXoa" styleClass="action-btn" text="Xóa" />
                         <Button fx:id="btnTaiDuLieu" onAction="#taiDuLieu" styleClass="action-btn" text="Tải dữ liệu" />
+                        
+
                     </children>
                 </HBox>
 
